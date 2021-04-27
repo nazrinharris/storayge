@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "122262405301",
+    "project_id": "storayge",
+    "storage_bucket": "storayge.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:122262405301:android:493eeeec993255f4e43efc",
+        "android_client_info": {
+          "package_name": "com.nazrinharris.storayge"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "122262405301-8qrc3v9s9uo8kmuera1l8ucno4k1rukm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nazrinharris.storayge",
+            "certificate_hash": "e8536db8b19a5ad33236f0eca4534ef6185b50e9"
+          }
+        },
+        {
+          "client_id": "122262405301-pom10747ftd8u8qnhifai44helopsdiq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDctqxV-QzW2-f_Vb74e5uIB8yADArdZeM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "122262405301-pom10747ftd8u8qnhifai44helopsdiq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

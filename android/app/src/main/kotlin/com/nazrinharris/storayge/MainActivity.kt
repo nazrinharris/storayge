@@ -1,0 +1,6 @@
+package com.nazrinharris.storayge
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}
