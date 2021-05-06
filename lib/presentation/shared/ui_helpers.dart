@@ -1,4 +1,3 @@
-// Horizontal Spacing
 import 'package:flutter/material.dart';
 
 const Widget horizontalSpaceTiny = SizedBox(width: 5.0);
@@ -7,11 +6,11 @@ const Widget horizontalSpaceRegular = SizedBox(width: 24.0);
 const Widget horizontalSpaceMedium = SizedBox(width: 34.0);
 const Widget horizontalSpaceLarge = SizedBox(width: 40.0);
 
-const Widget verticalSpaceTiny = SizedBox(width: 5.0);
-const Widget verticalSpaceSmall = SizedBox(width: 14.0);
-const Widget verticalSpaceRegular = SizedBox(width: 24.0);
-const Widget verticalSpaceMedium = SizedBox(width: 34.0);
-const Widget verticalSpaceLarge = SizedBox(width: 40.0);
+const Widget verticalSpaceTiny = SizedBox(height: 5.0);
+const Widget verticalSpaceSmall = SizedBox(height: 14.0);
+const Widget verticalSpaceRegular = SizedBox(height: 24.0);
+const Widget verticalSpaceMedium = SizedBox(height: 34.0);
+const Widget verticalSpaceLarge = SizedBox(height: 40.0);
 
 Widget customVerticalSpace({required double height}) => SizedBox(
       height: height,

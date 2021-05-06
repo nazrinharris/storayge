@@ -7,6 +7,7 @@ const Color kcTertiaryColor = Color(0xffFFE2BC);
 
 const Color kcGreen = Color(0xffB0FF7D);
 const Color kcWhite = Color(0xffFFFFFF);
+const Color kcWhitePoint5 = Color(0x7fFFFFFF);
 const Color kcBlack = Color(0xff000000);
 const Color kcBackgroundColor = Color(0xff110A00);
 
@@ -60,9 +61,20 @@ TextStyle ktsSubtitle_1 = TextStyle(
   fontWeight: FontWeight.normal,
   fontStyle: FontStyle.italic,
 );
+TextStyle ktsButtonText = TextStyle(
+  color: kcBlack,
+  fontSize: kParagraphTextSize,
+  fontFamily: 'Montserrat',
+  fontWeight: FontWeight.w500,
+  fontStyle: FontStyle.normal,
+);
 
 // Font Sizes
 const double kPrimaryHeadingTextSize = 40.0;
 const double kSecondaryHeadingTextSize = 30.0;
 const double kTertiaryHeadingTextSize = 20.0;
 const double kParagraphTextSize = 14.0;
+
+InputDecoration kInputDecoration() {
+  return InputDecoration();
+}
