@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../presentation/shared/styles.dart';
 
 class HomeView extends StatelessWidget {

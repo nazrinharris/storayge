@@ -61,7 +61,7 @@ TextStyle ktsSubtitle_1 = TextStyle(
   fontWeight: FontWeight.normal,
   fontStyle: FontStyle.italic,
 );
-TextStyle ktsButtonText = TextStyle(
+TextStyle ktsButtonText = const TextStyle(
   color: kcBlack,
   fontSize: kParagraphTextSize,
   fontFamily: 'Montserrat',
@@ -75,6 +75,19 @@ const double kSecondaryHeadingTextSize = 30.0;
 const double kTertiaryHeadingTextSize = 20.0;
 const double kParagraphTextSize = 14.0;
 
-InputDecoration kInputDecoration() {
-  return InputDecoration();
-}
+InputDecoration kInputDecoration({
+  required String labelText,
+  required String hintText,
+}) =>
+    InputDecoration(
+        focusColor: kcWhite,
+        labelText: labelText,
+        labelStyle: ktsHeadingParagraph,
+        hintText: hintText,
+        hintStyle: ktsSubtitle,
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: kcWhitePoint5),
+        ),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(width: 2, color: kcPrimaryColor),
+        ));
