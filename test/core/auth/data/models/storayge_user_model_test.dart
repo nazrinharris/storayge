@@ -5,18 +5,9 @@ import 'package:storayge/core/auth/data/models/storayge_user_model.dart';
 import 'package:storayge/core/auth/domain/entities/storayge_user.dart';
 
 import '../../../fixtures/fixture_reader.dart';
+import '../../../presets/entities_presets.dart';
 
 void main() {
-  const String tUid = 'test_uid';
-  const String tEmail = 'test@test.com';
-  const String tUsername = 'test_username';
-
-  StoraygeUserModel tStoraygeUserModel = StoraygeUserModel(
-    uid: tUid,
-    email: tEmail,
-    username: tUsername,
-  );
-
   test(
     'should be a subclass of StoraygeUser entity',
     () async {

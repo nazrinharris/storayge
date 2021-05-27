@@ -1,33 +1,22 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:storayge/core/auth/data/datasources/auth_local_data_source.dart';
-import 'package:storayge/core/auth/data/models/storayge_user_model.dart';
-import 'package:storayge/core/constants/app_paths.dart';
 import 'package:storayge/core/errors/exceptions.dart';
 
 import '../../../mock_classes/mock_hive/mock_hive.mocks.dart';
+import '../../../presets/entities_presets.dart';
 
 void main() {
   late AuthLocalDataSourceImpl dataSourceImpl;
   late MockHiveInterface mockHiveInterface;
   late MockBox mockBox;
 
-  late StoraygeUserModel tStoraygeUserModel;
-  late String tUid;
-
   setUp(() {
     mockHiveInterface = MockHiveInterface();
     mockBox = MockBox();
     dataSourceImpl = AuthLocalDataSourceImpl(
       hiveInterface: mockHiveInterface,
-      box: mockBox,
     );
-    tStoraygeUserModel = StoraygeUserModel(
-      username: 'test_username',
-      email: 'test@test.com',
-      uid: 'test_uid',
-    );
-    tUid = 'test_uid';
   });
 
   group('getCachedStoraygeUser', () {
@@ -55,7 +44,7 @@ void main() {
         // act
         final call = dataSourceImpl.getCachedStoraygeUser;
         // assert
-        expect(call(), throwsA(isA<CacheException>()));
+        expect(() => call(), throwsA(isA<CacheException>()));
       },
     );
   });

@@ -1,21 +1,51 @@
 import 'package:equatable/equatable.dart';
 
 abstract class Failure extends Equatable {
-  final List<Object> properties;
+  final String? code;
+  final String? message;
 
-  const Failure({required this.properties});
+  const Failure({this.code, this.message});
 
   @override
-  List<Object> get props => properties;
+  List<Object> get props {
+    return [
+      code ?? 'UNKNOWN CODE',
+      message ?? 'Unknown message for this failure',
+    ];
+  }
 }
 
 // General Failures
 class FirestoreFailure extends Failure {
-  final String message;
+  const FirestoreFailure({
+    String? code,
+    String? message,
+  }) : super(
+          code: code,
+          message: message,
+        );
+}
 
-  FirestoreFailure(this.message) : super(properties: [message]);
+class FirebaseAuthFailure extends Failure {
+  const FirebaseAuthFailure({
+    String? code,
+    String? message,
+  }) : super(
+          code: code,
+          message: message,
+        );
+}
+
+class ServerFailure extends Failure {
+  const ServerFailure({
+    String? code,
+    String? message,
+  }) : super(
+          code: code,
+          message: message,
+        );
 }
 
 class CacheFailure extends Failure {
-  CacheFailure() : super(properties: []);
+  const CacheFailure() : super();
 }

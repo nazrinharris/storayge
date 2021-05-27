@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:storayge/core/constants/app_paths.dart';
+import 'package:storayge/core/constants/app_const.dart';
 import 'package:storayge/core/errors/exceptions.dart';
 
 import '../models/storayge_user_model.dart';
@@ -11,11 +11,9 @@ abstract class AuthLocalDataSource {
 
 class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   final HiveInterface hiveInterface;
-  final Box box;
 
   AuthLocalDataSourceImpl({
     required this.hiveInterface,
-    required this.box,
   });
 
   @override

@@ -1,29 +1,18 @@
 import 'package:dartz/dartz.dart';
 import 'package:mockito/mockito.dart';
-import 'package:storayge/core/auth/domain/entities/storayge_user.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storayge/core/auth/domain/usecases/login_with_email_and_password.dart';
 import 'package:storayge/core/usecases/params.dart';
 import '../../../mock_classes/mock_app_auth/mock_app_auth.mocks.dart';
+import '../../../presets/entities_presets.dart';
 
 void main() {
   late MockAuthRepository mockAuthRepository;
   late LoginWithEmailAndPassword usecase;
-  late StoraygeUser storaygeUser;
-
-  late String tEmail;
-  late String tPassword;
 
   setUp(() {
     mockAuthRepository = MockAuthRepository();
     usecase = LoginWithEmailAndPassword(repository: mockAuthRepository);
-    storaygeUser = StoraygeUser(
-      username: 'test_username',
-      email: 'test@test.com',
-      uid: 'test_uid',
-    );
-    tEmail = 'test@test.com';
-    tPassword = 'test_password';
   });
 
   test(
@@ -33,14 +22,14 @@ void main() {
       when(mockAuthRepository.loginWithEmailAndPassword(
         email: anyNamed('email'),
         password: anyNamed('password'),
-      )).thenAnswer((_) async => Right(storaygeUser));
+      )).thenAnswer((_) async => Right(tStoraygeUser));
       // act
       final result = await usecase(LoginParams(
         email: tEmail,
         password: tPassword,
       ));
       // assert
-      expect(result, equals(Right(storaygeUser)));
+      expect(result, equals(Right(tStoraygeUser)));
       verify(mockAuthRepository.loginWithEmailAndPassword(
         email: tEmail,
         password: tPassword,

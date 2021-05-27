@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:storayge/core/constants/app_paths.dart';
+import 'package:storayge/core/constants/app_const.dart';
 
 import '../models/storayge_user_model.dart';
 
@@ -23,15 +23,23 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   });
 
   @override
-  Future<StoraygeUserModel> getStoraygeUserDataFromRemote(
-      {required String uid}) async {
-    final Map<String, dynamic>? storaygeUserJson = (await firebaseFirestore
-            .collection(FIRESTORE_USER_COLLECTION)
-            .doc(uid)
-            .get())
-        .data();
-    final storaygeUserModel = StoraygeUserModel.fromJson(storaygeUserJson);
-    return Future.value(storaygeUserModel);
+  Future<StoraygeUserModel> getStoraygeUserDataFromRemote({
+    required String uid,
+  }) async {
+    try {
+      final storaygeUserModel = await firebaseFirestore
+          .collection(FIRESTORE_USER_COLLECTION)
+          .doc(uid)
+          .get()
+          .then((snapshot) => snapshot.data())
+          .then((json) => StoraygeUserModel.fromJson(json));
+      return storaygeUserModel;
+    } on FirebaseException catch (e) {
+      throw FirebaseException(
+          plugin: FIRESTORE_PLUGIN,
+          code: e.code,
+          message: e.message ?? 'No message');
+    }
   }
 
   @override

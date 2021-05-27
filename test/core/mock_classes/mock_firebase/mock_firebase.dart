@@ -4,7 +4,6 @@ import 'package:mockito/annotations.dart';
 
 @GenerateMocks([
   FirebaseFirestore,
-  FirebaseAuth,
   CollectionReference,
   DocumentReference,
   DocumentSnapshot,

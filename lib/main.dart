@@ -5,17 +5,17 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:storayge/core/auth/domain/entities/storayge_user.dart';
-import 'package:storayge/core/constants/app_paths.dart';
+import 'package:storayge/core/auth/auth_cubit/auth_cubit.dart';
+import 'package:storayge/presentation/views/home/home_view.dart';
 
 import 'app_router.dart';
 import 'auth_domain_blocs/auth_bloc/authentication_bloc.dart';
 import 'auth_domain_blocs/register_bloc/register_cubit.dart';
 import 'core/auth/data/models/storayge_user_model.dart';
-import 'core/utility/app_bloc_observer.dart';
+import 'core/util/app_bloc_observer.dart';
 import 'locator.dart';
 
-Future main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
@@ -29,7 +29,7 @@ Future main() async {
 
   await Firebase.initializeApp();
 
-  setupLocator();
+  await setupLocator();
 
   runApp(StoraygeApp(
     appRouter: AppRouter(),
@@ -49,17 +49,15 @@ class StoraygeApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          lazy: false,
-          create: (context) => AuthenticationBloc(),
-        ),
-        BlocProvider(
-          create: (context) => RegisterCubit(),
+          //lazy: false,
+          create: (context) => locator<AuthCubit>(),
         ),
       ],
       child: MaterialApp(
         theme: ThemeData.dark(),
         title: 'Storayge',
-        onGenerateRoute: appRouter.onGenerateRoute,
+        home: const HomeView(),
+        //onGenerateRoute: appRouter.onGenerateRoute,
       ),
     );
   }

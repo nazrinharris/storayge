@@ -1,8 +1,16 @@
-class FirestoreException implements Exception {
-  final String message;
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:storayge/core/constants/app_const.dart';
 
-  FirestoreException(this.message);
-}
+// class FirestoreException extends FirebaseException {
+//   FirestoreException({
+//     required String code,
+//     required String message,
+//   }) : super(
+//           plugin: FIRESTORE_PLUGIN,
+//           code: code,
+//           message: message,
+//         );
+// }
 
 class CacheException implements Exception {}
 
