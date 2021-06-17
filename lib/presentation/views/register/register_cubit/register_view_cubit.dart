@@ -1,27 +1,33 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:simple_animations/simple_animations.dart';
+import 'package:supercharged/supercharged.dart';
 
 part 'register_view_state.dart';
 
 class RegisterViewCubit extends Cubit<RegisterViewState> {
-  late CustomAnimationControl controlFirstPage;
-  late CustomAnimationControl controlSecondPage;
+  late PageController pageController;
 
-  RegisterViewCubit() : super(RegisterViewFirstPage()) {
-    controlFirstPage = CustomAnimationControl.play;
-    controlSecondPage = CustomAnimationControl.stop;
-  }
+  RegisterViewCubit({
+    required this.pageController,
+  }) : super(RegisterViewFirstPage());
 
   void triggerFirstPage() {
-    controlFirstPage = CustomAnimationControl.play;
-    controlSecondPage = CustomAnimationControl.playReverse;
+    pageController.animateToPage(
+      0,
+      duration: 750.milliseconds,
+      curve: Curves.easeOutExpo,
+    );
     emit(RegisterViewFirstPage());
   }
 
   void triggerSecondPage() {
-    controlSecondPage = CustomAnimationControl.play;
-    controlFirstPage = CustomAnimationControl.playReverse;
+    pageController.animateToPage(
+      1,
+      duration: 750.milliseconds,
+      curve: Curves.easeOutExpo,
+    );
     emit(RegisterViewSecondPage());
   }
 }

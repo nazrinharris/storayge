@@ -22,7 +22,9 @@ class RegisterView extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    bool isFirstPage = true;
+    //bool isFirstPage = true;
+
+    final PageController pageController = PageController();
 
     return MultiBlocProvider(
       providers: [
@@ -31,7 +33,9 @@ class RegisterView extends StatelessWidget {
                   screenHeight: screenHeight,
                   screenWidth: screenWidth,
                 )),
-        BlocProvider(create: (context) => RegisterViewCubit())
+        BlocProvider(
+            create: (context) =>
+                RegisterViewCubit(pageController: pageController))
       ],
       child: Scaffold(
           extendBodyBehindAppBar: true,
@@ -47,61 +51,26 @@ class RegisterView extends StatelessWidget {
               height: 1.sh,
               width: 1.sw,
               child: SafeArea(
-                child: BlocBuilder<RegisterViewCubit, RegisterViewState>(
-                  builder: (context, state) {
-                    Widget? _buildContent;
-
-                    if (state is RegisterViewFirstPage) {
-                      _buildContent = _BuildFirstPageContent();
-                    } else if (state is RegisterViewSecondPage) {
-                      _buildContent = _BuildSecondPageContent();
-                    }
-
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        AnimatedSwitcher(
-                          duration: 500.milliseconds,
-                          reverseDuration: 500.milliseconds,
-                          switchInCurve: Curves.easeOutExpo,
-                          switchOutCurve: Curves.easeInExpo,
-                          transitionBuilder: (child, animation) {
-                            final inAnimation = Tween<Offset>(
-                                    begin: const Offset(-1.0, 0.0),
-                                    end: const Offset(0.0, 0.0))
-                                .animate(animation);
-
-                            final outAnimation = Tween<Offset>(
-                                    begin: const Offset(1.0, 0.0),
-                                    end: const Offset(0.0, 0.0))
-                                .animate(animation);
-
-                            if (child is _BuildFirstPageContent) {
-                              return SlideTransition(
-                                position: inAnimation,
-                                child: FadeTransition(
-                                  opacity: animation,
-                                  child: child,
-                                ),
-                              );
-                            } else if (child is _BuildSecondPageContent) {
-                              return SlideTransition(
-                                position: outAnimation,
-                                child: FadeTransition(
-                                  opacity: animation,
-                                  child: child,
-                                ),
-                              );
-                            } else {
-                              return const CircularProgressIndicator();
-                            }
-                          },
-                          child: _buildContent,
+                child: Builder(
+                  builder: (context) => Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: PageView(
+                          controller:
+                              context.watch<RegisterViewCubit>().pageController,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: [
+                            _BuildFirstPageContent(),
+                            _BuildSecondPageContent(),
+                          ],
                         ),
-                        const _BuildSecondPageButtons(),
-                      ],
-                    );
-                  },
+                      ),
+                      _BuildBottomButtons(
+                        pageController: pageController,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -216,9 +185,12 @@ class _BuildSecondPageContent extends StatelessWidget {
   }
 }
 
-class _BuildSecondPageButtons extends StatelessWidget {
-  const _BuildSecondPageButtons({
+class _BuildBottomButtons extends StatelessWidget {
+  final PageController pageController;
+
+  const _BuildBottomButtons({
     Key? key,
+    required this.pageController,
   }) : super(key: key);
 
   @override
