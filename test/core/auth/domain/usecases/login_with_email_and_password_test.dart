@@ -1,10 +1,12 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:dartz/dartz.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storayge/core/auth/domain/usecases/login_with_email_and_password.dart';
 import 'package:storayge/core/usecases/params.dart';
+import '../../../../presets/entities_presets.dart';
 import '../../../mock_classes/mock_app_auth/mock_app_auth.mocks.dart';
-import '../../../presets/entities_presets.dart';
 
 void main() {
   late MockAuthRepository mockAuthRepository;
@@ -24,7 +26,7 @@ void main() {
         password: anyNamed('password'),
       )).thenAnswer((_) async => Right(tStoraygeUser));
       // act
-      final result = await usecase(LoginParams(
+      final result = await usecase(const LoginParams(
         email: tEmail,
         password: tPassword,
       ));

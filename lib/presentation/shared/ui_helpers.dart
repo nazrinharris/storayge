@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
-const Widget horizontalSpaceTiny = SizedBox(width: 5.0);
-const Widget horizontalSpaceSmall = SizedBox(width: 14.0);
-const Widget horizontalSpaceRegular = SizedBox(width: 24.0);
-const Widget horizontalSpaceMedium = SizedBox(width: 34.0);
-const Widget horizontalSpaceLarge = SizedBox(width: 40.0);
+const Widget horizontalSpace5 = SizedBox(width: 5.0);
+const Widget horizontalSpace10 = SizedBox(width: 10.0);
+const Widget horizontalSpace14 = SizedBox(width: 14.0);
+const Widget horizontalSpace24 = SizedBox(width: 24.0);
+const Widget horizontalSpace34 = SizedBox(width: 34.0);
+const Widget horizontalSpace40 = SizedBox(width: 40.0);
 
-const Widget verticalSpaceTiny = SizedBox(height: 5.0);
-const Widget verticalSpaceSmall = SizedBox(height: 14.0);
-const Widget verticalSpaceRegular = SizedBox(height: 24.0);
-const Widget verticalSpaceMedium = SizedBox(height: 34.0);
-const Widget verticalSpaceLarge = SizedBox(height: 40.0);
+const Widget verticalSpace5 = SizedBox(height: 5.0);
+const Widget verticalSpace10 = SizedBox(height: 10.0);
+const Widget verticalSpace14 = SizedBox(height: 14.0);
+const Widget verticalSpace24 = SizedBox(height: 24.0);
+const Widget verticalSpace34 = SizedBox(height: 34.0);
+const Widget verticalSpace40 = SizedBox(height: 40.0);
 
 Widget customVerticalSpace({required double height}) => SizedBox(
       height: height,

@@ -1,10 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:storayge/core/auth/data/datasources/auth_local_data_source.dart';
+import 'package:storayge/core/constants/app_const.dart';
 import 'package:storayge/core/errors/exceptions.dart';
 
+import '../../../../presets/entities_presets.dart';
 import '../../../mock_classes/mock_hive/mock_hive.mocks.dart';
-import '../../../presets/entities_presets.dart';
 
 void main() {
   late AuthLocalDataSourceImpl dataSourceImpl;
@@ -25,12 +26,12 @@ void main() {
       () async {
         // arrange
         when(mockHiveInterface.openBox(any)).thenAnswer((_) async => mockBox);
-        when(mockBox.getAt(any)).thenAnswer((_) async => tStoraygeUserModel);
+        when(mockBox.get(any)).thenAnswer((_) async => tStoraygeUserModel);
         // act
         final result = await dataSourceImpl.getCachedStoraygeUser();
         // assert
         verify(mockHiveInterface.openBox(any));
-        verify(mockBox.getAt(any));
+        verify(mockBox.get(any));
         expect(result, equals(tStoraygeUserModel));
       },
     );
@@ -40,7 +41,7 @@ void main() {
       () async {
         // arrange
         when(mockHiveInterface.openBox(any)).thenAnswer((_) async => mockBox);
-        when(mockBox.getAt(any)).thenAnswer((_) async => null);
+        when(mockBox.get(any)).thenAnswer((_) async => null);
         // act
         final call = dataSourceImpl.getCachedStoraygeUser;
         // assert
@@ -49,19 +50,18 @@ void main() {
     );
   });
 
-  // TODO : Implement test for cacheStoraygeUser. See Mockito Issues 412, 401 and 404 for updates
-  // group('cacheStoraygeUser', () {
-  //   test(
-  //     'should call HiveInterface and Box to cache data',
-  //     () async {
-  //       when(mockHiveInterface.openBox(any)).thenAnswer((_) async => mockBox);
-  //       when(mockBox.put(0, tStoraygeUserModel)).thenAnswer((_) async => {});
-  //       // act
-  //       await dataSourceImpl.cacheStoraygeUser(tStoraygeUserModel);
-  //       // assert
-  //       verify(mockHiveInterface.openBox(STORAYGE_USER_BOX));
-  //       verify(mockBox.put(STORAYGE_USER_ENTRY, tStoraygeUserModel));
-  //     },
-  //   );
-  // });
+  group('cacheStoraygeUser', () {
+    test(
+      'should call HiveInterface and Box to cache data',
+      () async {
+        when(mockHiveInterface.openBox(any)).thenAnswer((_) async => mockBox);
+        when(mockBox.put(any, any)).thenAnswer((_) async => Future.value());
+        // act
+        await dataSourceImpl.cacheStoraygeUser(tStoraygeUserModel);
+        // assert
+        verify(mockHiveInterface.openBox(HIVE_BOX_STORAYGE_USER));
+        verify(mockBox.put(HIVE_KEY_STORAYGE_USER, tStoraygeUserModel));
+      },
+    );
+  });
 }

@@ -1,3 +1,7 @@
+# CAUTION : DO NOT USE PUBSPEC ASSIST. ADD DEPENDENCIES MANUALLY. DONT BE LAZY. PUBSPEC ASSIST WILL
+# OVERWRITE THE DEPENDENCIES AND DELETE THE COMMENTS AND YOU WILL HAVE TO ORGANIZE IT AGAIN AND
+# IT WILL BE A PAIN.
+
 name: storayge
 description: A new Flutter project.
 
@@ -17,9 +21,9 @@ dependencies:
   auto_route: ^2.2.0
 
   # Firebase Suite
-  cloud_firestore: ^2.2.0
-  firebase_auth: ^1.2.0
-  firebase_core: ^1.2.0
+  cloud_firestore: ^2.2.2
+  firebase_auth: ^1.4.1
+  firebase_core: ^1.3.0
   google_sign_in: ^5.0.4
 
   # Functional Programming
@@ -29,8 +33,8 @@ dependencies:
   equatable: ^2.0.2
 
   # Business Logic and Dependency Injection
-  flutter_bloc: ^7.0.0
-  hydrated_bloc: ^7.0.0
+  flutter_bloc: ^7.0.1
+  hydrated_bloc: ^7.0.1
   get_it: ^7.1.3
 
   # Local Storage
@@ -43,11 +47,15 @@ dependencies:
 
   # Render
   flutter_svg: ^0.22.0
+  flutter_screenutil: ^5.0.0+2
+  entry: ^0.0.4
+  simple_animations: ^3.1.1
 
   # Misc
   lint: ^1.5.3
   logger: ^1.0.0
   path_provider: ^2.0.2
+  supercharged: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -60,9 +68,8 @@ dev_dependencies:
   json_serializable: ^4.1.3
 
   # Mocking and Testing
-  mockito: ^5.0.9
-  bloc_test: ^8.0.1
-  firebase_auth_mocks: ^0.6.0
+  mockito: ^5.0.10
+  bloc_test: ^8.0.2
 
 flutter:
   uses-material-design: true
@@ -80,6 +87,8 @@ flutter:
           weight: 600
         - asset: assets/fonts/Montserrat-Medium.ttf
           weight: 500
+        - asset: assets/fonts/Montserrat-Bold.ttf
+          weight: 700
 
     - family: Montserrat_Alt
       fonts:
@@ -87,3 +96,7 @@ flutter:
           weight: 600
         - asset: assets/fonts/MontserratAlternates-Bold.ttf
           weight: 700
+
+    - family: StoraygeIcons
+      fonts:
+        - asset: assets/fonts/StoraygeIcons.ttf

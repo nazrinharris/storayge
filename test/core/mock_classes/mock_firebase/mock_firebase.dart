@@ -7,5 +7,8 @@ import 'package:mockito/annotations.dart';
   CollectionReference,
   DocumentReference,
   DocumentSnapshot,
+  FirebaseAuth,
+  UserCredential,
+  User,
 ])
 class MockFirebase {}

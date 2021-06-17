@@ -76,18 +76,19 @@ const double kTertiaryHeadingTextSize = 20.0;
 const double kParagraphTextSize = 14.0;
 
 InputDecoration kInputDecoration({
-  required String labelText,
+  String? labelText,
   required String hintText,
-}) =>
-    InputDecoration(
-        focusColor: kcWhite,
-        labelText: labelText,
-        labelStyle: ktsHeadingParagraph,
-        hintText: hintText,
-        hintStyle: ktsSubtitle,
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: kcWhitePoint5),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(width: 2, color: kcPrimaryColor),
-        ));
+}) {
+  return InputDecoration(
+      focusColor: kcWhite,
+      labelText: labelText,
+      labelStyle: ktsHeadingParagraph,
+      hintText: hintText,
+      hintStyle: ktsSubtitle,
+      enabledBorder: const UnderlineInputBorder(
+        borderSide: BorderSide(color: kcWhitePoint5),
+      ),
+      focusedBorder: const UnderlineInputBorder(
+        borderSide: BorderSide(width: 2, color: kcPrimaryColor),
+      ));
+}

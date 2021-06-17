@@ -1,19 +1,21 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:storayge/core/auth/auth_cubit/auth_cubit.dart';
-import 'package:storayge/presentation/views/home/home_view.dart';
 
 import 'app_router.dart';
-import 'auth_domain_blocs/auth_bloc/authentication_bloc.dart';
-import 'auth_domain_blocs/register_bloc/register_cubit.dart';
+import 'core/auth/auth_cubit/auth_cubit.dart';
 import 'core/auth/data/models/storayge_user_model.dart';
 import 'core/util/app_bloc_observer.dart';
+import 'features/cabinet/bloc/cabinet_cubit.dart';
+import 'features/cabinet/data/models/shelf_model.dart';
 import 'locator.dart';
+import 'presentation/views/register/register_view.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +23,7 @@ Future<void> main() async {
   await Hive.initFlutter();
 
   Hive.registerAdapter(StoraygeUserModelAdapter());
+  Hive.registerAdapter(ShelfModelAdapter());
 
   HydratedBloc.storage = await HydratedStorage.build(
       storageDirectory: await getApplicationDocumentsDirectory());
@@ -31,9 +34,11 @@ Future<void> main() async {
 
   await setupLocator();
 
-  runApp(StoraygeApp(
-    appRouter: AppRouter(),
-  ));
+  runApp(
+    StoraygeApp(
+      appRouter: AppRouter(),
+    ),
+  );
 }
 
 class StoraygeApp extends StatelessWidget {
@@ -45,19 +50,25 @@ class StoraygeApp extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          //lazy: false,
-          create: (context) => locator<AuthCubit>(),
+  Widget build(BuildContext widgetContext) {
+    return ScreenUtilInit(
+      designSize: const Size(414, 893),
+      builder: () => MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            //lazy: false,
+            create: (context) => locator<CabinetCubit>(),
+          ),
+          BlocProvider(
+            create: (context) => locator<AuthCubit>(),
+          ),
+        ],
+        child: MaterialApp(
+          theme: ThemeData.dark(),
+          title: 'Storayge',
+          home: RegisterView(),
+          //onGenerateRoute: appRouter.onGenerateRoute,
         ),
-      ],
-      child: MaterialApp(
-        theme: ThemeData.dark(),
-        title: 'Storayge',
-        home: const HomeView(),
-        //onGenerateRoute: appRouter.onGenerateRoute,
       ),
     );
   }

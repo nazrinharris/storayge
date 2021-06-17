@@ -18,11 +18,15 @@ import 'package:storayge/core/auth/domain/repository/auth_repository.dart'
     as _i7;
 import 'package:storayge/core/auth/domain/usecases/get_storayge_userdata_from_remote.dart'
     as _i12;
+import 'package:storayge/core/auth/domain/usecases/get_uid.dart' as _i16;
 import 'package:storayge/core/auth/domain/usecases/login_with_email_and_password.dart'
     as _i14;
+import 'package:storayge/core/auth/domain/usecases/register_with_email_and_password.dart'
+    as _i15;
 import 'package:storayge/core/errors/failures.dart' as _i9;
 import 'package:storayge/core/network/network_info.dart' as _i5;
 import 'package:storayge/core/usecases/params.dart' as _i13;
+import 'package:storayge/core/usecases/usecase.dart' as _i17;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: comment_references
@@ -42,6 +46,8 @@ class _FakeNetworkInfo extends _i1.Fake implements _i5.NetworkInfo {}
 
 class _FakeStoraygeUserModel extends _i1.Fake implements _i6.StoraygeUserModel {
 }
+
+class _FakeUnit extends _i1.Fake implements _i2.Unit {}
 
 class _FakeAuthRepository extends _i1.Fake implements _i7.AuthRepository {}
 
@@ -72,6 +78,32 @@ class MockAuthRepository extends _i1.Mock implements _i7.AuthRepository {
                       Future<_i2.Either<_i9.Failure, _i10.StoraygeUser>>.value(
                           _FakeEither<_i9.Failure, _i10.StoraygeUser>()))
           as _i8.Future<_i2.Either<_i9.Failure, _i10.StoraygeUser>>);
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, _i10.StoraygeUser>>
+      registerWithEmailAndPassword(
+              {String? email, String? password, String? username}) =>
+          (super.noSuchMethod(
+                  Invocation.method(#registerWithEmailAndPassword, [], {
+                    #email: email,
+                    #password: password,
+                    #username: username
+                  }),
+                  returnValue:
+                      Future<_i2.Either<_i9.Failure, _i10.StoraygeUser>>.value(
+                          _FakeEither<_i9.Failure, _i10.StoraygeUser>()))
+              as _i8.Future<_i2.Either<_i9.Failure, _i10.StoraygeUser>>);
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, String>> getUid() =>
+      (super.noSuchMethod(Invocation.method(#getUid, []),
+              returnValue: Future<_i2.Either<_i9.Failure, String>>.value(
+                  _FakeEither<_i9.Failure, String>()))
+          as _i8.Future<_i2.Either<_i9.Failure, String>>);
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, _i2.Unit>> signOut() =>
+      (super.noSuchMethod(Invocation.method(#signOut, []),
+              returnValue: Future<_i2.Either<_i9.Failure, _i2.Unit>>.value(
+                  _FakeEither<_i9.Failure, _i2.Unit>()))
+          as _i8.Future<_i2.Either<_i9.Failure, _i2.Unit>>);
 }
 
 /// A class which mocks [AuthRepositoryImpl].
@@ -114,6 +146,32 @@ class MockAuthRepositoryImpl extends _i1.Mock
                       Future<_i2.Either<_i9.Failure, _i10.StoraygeUser>>.value(
                           _FakeEither<_i9.Failure, _i10.StoraygeUser>()))
           as _i8.Future<_i2.Either<_i9.Failure, _i10.StoraygeUser>>);
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, _i10.StoraygeUser>>
+      registerWithEmailAndPassword(
+              {String? email, String? password, String? username}) =>
+          (super.noSuchMethod(
+                  Invocation.method(#registerWithEmailAndPassword, [], {
+                    #email: email,
+                    #password: password,
+                    #username: username
+                  }),
+                  returnValue:
+                      Future<_i2.Either<_i9.Failure, _i10.StoraygeUser>>.value(
+                          _FakeEither<_i9.Failure, _i10.StoraygeUser>()))
+              as _i8.Future<_i2.Either<_i9.Failure, _i10.StoraygeUser>>);
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, String>> getUid() =>
+      (super.noSuchMethod(Invocation.method(#getUid, []),
+              returnValue: Future<_i2.Either<_i9.Failure, String>>.value(
+                  _FakeEither<_i9.Failure, String>()))
+          as _i8.Future<_i2.Either<_i9.Failure, String>>);
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, _i2.Unit>> signOut() =>
+      (super.noSuchMethod(Invocation.method(#signOut, []),
+              returnValue: Future<_i2.Either<_i9.Failure, _i2.Unit>>.value(
+                  _FakeEither<_i9.Failure, _i2.Unit>()))
+          as _i8.Future<_i2.Either<_i9.Failure, _i2.Unit>>);
 }
 
 /// A class which mocks [AuthRemoteDataSource].
@@ -141,6 +199,24 @@ class MockAuthRemoteDataSource extends _i1.Mock
               returnValue:
                   Future<_i6.StoraygeUserModel>.value(_FakeStoraygeUserModel()))
           as _i8.Future<_i6.StoraygeUserModel>);
+  @override
+  _i8.Future<_i6.StoraygeUserModel> registerWithEmailAndPassword(
+          {String? email, String? password, String? username}) =>
+      (super.noSuchMethod(
+              Invocation.method(#registerWithEmailAndPassword, [],
+                  {#email: email, #password: password, #username: username}),
+              returnValue:
+                  Future<_i6.StoraygeUserModel>.value(_FakeStoraygeUserModel()))
+          as _i8.Future<_i6.StoraygeUserModel>);
+  @override
+  _i8.Future<String> getUid() =>
+      (super.noSuchMethod(Invocation.method(#getUid, []),
+          returnValue: Future<String>.value('')) as _i8.Future<String>);
+  @override
+  _i8.Future<_i2.Unit> signOut() =>
+      (super.noSuchMethod(Invocation.method(#signOut, []),
+              returnValue: Future<_i2.Unit>.value(_FakeUnit()))
+          as _i8.Future<_i2.Unit>);
 }
 
 /// A class which mocks [AuthLocalDataSource].
@@ -209,4 +285,46 @@ class MockLoginWithEmailAndPassword extends _i1.Mock
           returnValue: Future<_i2.Either<_i9.Failure, _i10.StoraygeUser>>.value(
               _FakeEither<_i9.Failure, _i10.StoraygeUser>())) as _i8
           .Future<_i2.Either<_i9.Failure, _i10.StoraygeUser>>);
+}
+
+/// A class which mocks [RegisterWithEmailAndPassword].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockRegisterWithEmailAndPassword extends _i1.Mock
+    implements _i15.RegisterWithEmailAndPassword {
+  MockRegisterWithEmailAndPassword() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i7.AuthRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeAuthRepository()) as _i7.AuthRepository);
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, _i10.StoraygeUser>> call(
+          _i13.RegisterParams? params) =>
+      (super.noSuchMethod(Invocation.method(#call, [params]),
+          returnValue: Future<_i2.Either<_i9.Failure, _i10.StoraygeUser>>.value(
+              _FakeEither<_i9.Failure, _i10.StoraygeUser>())) as _i8
+          .Future<_i2.Either<_i9.Failure, _i10.StoraygeUser>>);
+}
+
+/// A class which mocks [GetUid].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetUid extends _i1.Mock implements _i16.GetUid {
+  MockGetUid() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i7.AuthRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeAuthRepository()) as _i7.AuthRepository);
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, String>> call(_i17.NoParams? params) =>
+      (super.noSuchMethod(Invocation.method(#call, [params]),
+              returnValue: Future<_i2.Either<_i9.Failure, String>>.value(
+                  _FakeEither<_i9.Failure, String>()))
+          as _i8.Future<_i2.Either<_i9.Failure, String>>);
 }

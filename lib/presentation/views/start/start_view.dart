@@ -26,16 +26,16 @@ class StartView extends StatelessWidget {
         children: [
           Column(
             children: [
-              verticalSpaceMedium,
+              verticalSpace34,
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text('Storayge', style: ktsPrimaryHeading),
-                  horizontalSpaceSmall,
+                  horizontalSpace14,
                   logoWidget,
                 ],
               ),
-              verticalSpaceRegular,
+              verticalSpace24,
               const Text(
                 'Manage your storage. Whether in the \nkitchen, bedroom or warehouse',
                 style: ktsParagraph,
@@ -49,7 +49,7 @@ class StartView extends StatelessWidget {
                   Navigator.of(context).pushNamed('/register');
                 },
               ),
-              verticalSpaceRegular,
+              verticalSpace24,
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

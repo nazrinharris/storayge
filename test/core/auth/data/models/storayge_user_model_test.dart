@@ -4,8 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:storayge/core/auth/data/models/storayge_user_model.dart';
 import 'package:storayge/core/auth/domain/entities/storayge_user.dart';
 
+import '../../../../presets/entities_presets.dart';
 import '../../../fixtures/fixture_reader.dart';
-import '../../../presets/entities_presets.dart';
 
 void main() {
   test(

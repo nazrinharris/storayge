@@ -12,4 +12,18 @@ abstract class AuthRepository {
     required String email,
     required String password,
   });
+
+  Future<Either<Failure, StoraygeUser>> registerWithEmailAndPassword({
+    required String email,
+    required String password,
+    required String username,
+  });
+
+  Future<Either<Failure, String>> getUid();
+
+  Future<Either<Failure, Unit>> signOut();
+
+  Future<Either<Failure, bool>> isFirstTimeOpeningApp();
+
+  Future<Either<Failure, StoraygeUser>> isLoggedIn();
 }

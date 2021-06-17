@@ -46,6 +46,28 @@ class ServerFailure extends Failure {
         );
 }
 
+class StorageFailure extends Failure {
+  const StorageFailure({
+    String? code,
+    String? message,
+  }) : super(
+          code: code,
+          message: message,
+        );
+}
+
+class UserFailure extends Failure {
+  const UserFailure({
+    String? code,
+    String? message,
+  }) : super(
+          code: code,
+          message: message,
+        );
+}
+
+class UserNotFoundFailure extends Failure {}
+
 class CacheFailure extends Failure {
   const CacheFailure() : super();
 }

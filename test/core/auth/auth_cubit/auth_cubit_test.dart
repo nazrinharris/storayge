@@ -7,19 +7,28 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:storayge/core/auth/auth_cubit/auth_cubit.dart';
 import 'package:storayge/core/usecases/params.dart';
 
+import '../../../presets/entities_presets.dart';
+import '../../../presets/failures_exceptions_presets.dart';
 import '../../mock_classes/mock_app_auth/mock_app_auth.mocks.dart';
-import '../../presets/entities_presets.dart';
-import '../../presets/failures_exceptions_presets.dart';
 
 void main() {
   late AuthCubit cubit;
   late MockGetStoraygeUserDataFromRemote mockGetStoraygeUserDataFromRemote;
+  late MockLoginWithEmailAndPassword mockLoginWithEmailAndPassword;
+  late MockRegisterWithEmailAndPassword mockRegisterWithEmailAndPassword;
+  late MockAuthRepositoryImpl mockAuthRepositoryImpl;
 
   setUp(() {
     mockGetStoraygeUserDataFromRemote = MockGetStoraygeUserDataFromRemote();
+    mockLoginWithEmailAndPassword = MockLoginWithEmailAndPassword();
+    mockRegisterWithEmailAndPassword = MockRegisterWithEmailAndPassword();
+    mockAuthRepositoryImpl = MockAuthRepositoryImpl();
 
     cubit = AuthCubit(
       getStoraygeUserDataFromRemote: mockGetStoraygeUserDataFromRemote,
+      loginWithEmailAndPassword: mockLoginWithEmailAndPassword,
+      registerWithEmailAndPassword: mockRegisterWithEmailAndPassword,
+      authRepository: mockAuthRepositoryImpl,
     );
   });
 
@@ -27,11 +36,15 @@ void main() {
     bloc.blocTest(
       'emits [] upon creation',
       build: () => AuthCubit(
-          getStoraygeUserDataFromRemote: mockGetStoraygeUserDataFromRemote),
+        getStoraygeUserDataFromRemote: mockGetStoraygeUserDataFromRemote,
+        loginWithEmailAndPassword: mockLoginWithEmailAndPassword,
+        registerWithEmailAndPassword: mockRegisterWithEmailAndPassword,
+        authRepository: mockAuthRepositoryImpl,
+      ),
       expect: () => [],
     );
 
-    group('GetStoraygeUserDataFromRemote', () {
+    group('getStoraygeUserDataRun', () {
       test(
         'should retrieve data from the GetStoraygeUserDataFromRemote usecase',
         () async {
@@ -39,7 +52,7 @@ void main() {
           when(mockGetStoraygeUserDataFromRemote(any))
               .thenAnswer((_) async => Right(tStoraygeUser));
           // act
-          cubit.getStoraygeUserData(uid: tUid);
+          cubit.getStoraygeUserDataRun(uid: tUid);
           await untilCalled(mockGetStoraygeUserDataFromRemote(any));
           // assert
           verify(mockGetStoraygeUserDataFromRemote(UidParams(uid: tUid)));
@@ -49,44 +62,106 @@ void main() {
       bloc.blocTest(
           'should emit [AuthLoading, AuthGetStoraygeUserCompleted] when succesfull',
           build: () => AuthCubit(
-              getStoraygeUserDataFromRemote: mockGetStoraygeUserDataFromRemote),
+                getStoraygeUserDataFromRemote:
+                    mockGetStoraygeUserDataFromRemote,
+                loginWithEmailAndPassword: mockLoginWithEmailAndPassword,
+                registerWithEmailAndPassword: mockRegisterWithEmailAndPassword,
+                authRepository: mockAuthRepositoryImpl,
+              ),
           act: (AuthCubit cubit) {
             when(mockGetStoraygeUserDataFromRemote(any))
                 .thenAnswer((_) async => Right(tStoraygeUser));
-            cubit.getStoraygeUserData(uid: tUid);
+            cubit.getStoraygeUserDataRun(uid: tUid);
           },
           expect: () => [
                 // AuthIdle(), //TODO : Should find out why initial state of cubit is not emitted in this scenario
                 AuthLoading(),
-                AuthGetStoraygeUserCompleted(storaygeUser: tStoraygeUser)
-              ]);
-
-      bloc.blocTest('should emit [AuthLoading, AuthError] when fail',
-          build: () => AuthCubit(
-              getStoraygeUserDataFromRemote: mockGetStoraygeUserDataFromRemote),
-          act: (AuthCubit cubit) {
-            when(mockGetStoraygeUserDataFromRemote(any))
-                .thenAnswer((_) async => Left(testFirestoreFailure));
-            cubit.getStoraygeUserData(uid: tUid);
-          },
-          expect: () => [
-                AuthLoading(),
-                AuthError(message: 'test_message', code: 'TEST'),
+                AuthLoaded(storaygeUser: tStoraygeUser)
               ]);
 
       bloc.blocTest(
-          'should emit [AuthLoading, AuthError] with proper error message',
+          'should emit [AuthLoading, AuthError] when fail with proper error code',
           build: () => AuthCubit(
-              getStoraygeUserDataFromRemote: mockGetStoraygeUserDataFromRemote),
+                getStoraygeUserDataFromRemote:
+                    mockGetStoraygeUserDataFromRemote,
+                loginWithEmailAndPassword: mockLoginWithEmailAndPassword,
+                registerWithEmailAndPassword: mockRegisterWithEmailAndPassword,
+                authRepository: mockAuthRepositoryImpl,
+              ),
           act: (AuthCubit cubit) {
             when(mockGetStoraygeUserDataFromRemote(any))
                 .thenAnswer((_) async => Left(testFirestoreFailure));
-            cubit.getStoraygeUserData(uid: tUid);
+            cubit.getStoraygeUserDataRun(uid: tUid);
           },
           expect: () => [
                 AuthLoading(),
                 AuthError(message: 'test_message', code: 'TEST'),
               ]);
+    });
+
+    group('loginWithEmailAndPasswordRun', () {
+      test(
+        'should retrieve data from the GetStoraygeUserDataFromRemote usecase',
+        () async {
+          // arrange
+          when(mockLoginWithEmailAndPassword(any))
+              .thenAnswer((_) async => Right(tStoraygeUser));
+          // act
+          cubit.loginWithEmailAndPasswordRun(
+            email: tEmail,
+            password: tPassword,
+          );
+          await untilCalled(mockLoginWithEmailAndPassword(any));
+          // assert
+          verify(mockLoginWithEmailAndPassword(LoginParams(
+            email: tEmail,
+            password: tPassword,
+          )));
+        },
+      );
+      bloc.blocTest(
+        'should emit [AuthLoading, AuthLoaded] when succesfull',
+        build: () => AuthCubit(
+          getStoraygeUserDataFromRemote: mockGetStoraygeUserDataFromRemote,
+          loginWithEmailAndPassword: mockLoginWithEmailAndPassword,
+          registerWithEmailAndPassword: mockRegisterWithEmailAndPassword,
+          authRepository: mockAuthRepositoryImpl,
+        ),
+        act: (AuthCubit cubit) {
+          when(mockLoginWithEmailAndPassword(any))
+              .thenAnswer((_) async => Right(tStoraygeUser));
+          cubit.loginWithEmailAndPasswordRun(
+            email: tEmail,
+            password: tPassword,
+          );
+        },
+        expect: () => [
+          AuthLoading(),
+          AuthLoaded(storaygeUser: tStoraygeUser),
+        ],
+      );
+
+      bloc.blocTest(
+        'should emit [AuthLoading, AuthError] when fail',
+        build: () => AuthCubit(
+          getStoraygeUserDataFromRemote: mockGetStoraygeUserDataFromRemote,
+          loginWithEmailAndPassword: mockLoginWithEmailAndPassword,
+          registerWithEmailAndPassword: mockRegisterWithEmailAndPassword,
+          authRepository: mockAuthRepositoryImpl,
+        ),
+        act: (AuthCubit cubit) {
+          when(mockLoginWithEmailAndPassword(any))
+              .thenAnswer((_) async => Left(testFirebaseAuthFailure));
+          cubit.loginWithEmailAndPasswordRun(
+            email: tEmail,
+            password: tPassword,
+          );
+        },
+        expect: () => [
+          AuthLoading(),
+          AuthError(message: 'test_message', code: 'TEST'),
+        ],
+      );
     });
   });
 }

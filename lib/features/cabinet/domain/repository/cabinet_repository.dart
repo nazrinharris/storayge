@@ -1,0 +1,15 @@
+import 'package:dartz/dartz.dart';
+import '../../../../core/errors/failures.dart';
+import '../entities/shelf.dart';
+
+abstract class CabinetRepository {
+  Future<Either<Failure, Shelf>> getShelf({
+    required String uid,
+    required String shelfId,
+  });
+
+  Future<Either<Failure, Unit>> storeShelf({
+    required Shelf shelf,
+    required String uid,
+  });
+}

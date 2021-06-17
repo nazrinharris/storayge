@@ -15,3 +15,5 @@
 class CacheException implements Exception {}
 
 class AppException implements Exception {}
+
+class UserNotFoundException implements Exception {}

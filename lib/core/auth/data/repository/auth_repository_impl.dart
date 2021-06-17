@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:storayge/core/auth/data/models/storayge_user_model.dart';
-import 'package:storayge/core/constants/app_const.dart';
 
+import '../../../constants/app_const.dart';
 import '../../../errors/exceptions.dart';
 import '../../../errors/failures.dart';
 import '../../../network/network_info.dart';
@@ -11,6 +10,7 @@ import '../../domain/entities/storayge_user.dart';
 import '../../domain/repository/auth_repository.dart';
 import '../datasources/auth_local_data_source.dart';
 import '../datasources/auth_remote_data_source.dart';
+import '../models/storayge_user_model.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource remoteDataSource;
@@ -87,6 +87,91 @@ class AuthRepositoryImpl implements AuthRepository {
         code: ERROR_NO_INTERNET_CONNECTION,
         message: MESSAGE_NO_INTERNET_CONNECTION,
       ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, StoraygeUser>> registerWithEmailAndPassword({
+    required String email,
+    required String password,
+    required String username,
+  }) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.registerWithEmailAndPassword(
+          email: email,
+          password: password,
+          username: username,
+        );
+        await localDataSource.cacheStoraygeUser(result);
+        final storaygeUser = StoraygeUser(
+          username: result.username,
+          email: result.email,
+          uid: result.uid,
+        );
+        return Right(storaygeUser);
+      } on FirebaseAuthException catch (e) {
+        return Left(FirebaseAuthFailure(
+          code: e.code,
+          message: e.message,
+        ));
+      }
+    } else {
+      return const Left(ServerFailure(
+        code: ERROR_NO_INTERNET_CONNECTION,
+        message: MESSAGE_NO_INTERNET_CONNECTION,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> getUid() async {
+    try {
+      final uid = await remoteDataSource.getUid();
+      return Right(uid);
+    } on UserNotFoundException {
+      return const Left(UserFailure(
+        code: ERROR_USER_NOT_FOUND,
+        message: MESSAGE_USER_NOT_FOUND,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> signOut() async {
+    try {
+      await remoteDataSource.signOut();
+      return const Right(unit);
+    } on FirebaseAuthException catch (e) {
+      return Left(FirebaseAuthFailure(
+        code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> isFirstTimeOpeningApp() async {
+    // TODO: create tests
+    try {
+      final bool isNewUser = await localDataSource.isFirstTimeOpeningApp();
+      return Right(isNewUser);
+    } catch (e) {
+      return const Left(StorageFailure(
+        message: 'Unknown Storage Failure',
+        code: ERROR_UNKNOWN_OCCURED,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, StoraygeUser>> isLoggedIn() async {
+    // TODO: create tests
+    try {
+      final userFromRemote = await remoteDataSource.isLoggedIn();
+      return Right(userFromRemote);
+    } on UserNotFoundException {
+      return Left(UserNotFoundFailure());
     }
   }
 }
