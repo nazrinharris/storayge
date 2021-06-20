@@ -37,26 +37,30 @@ import 'two_pagination_progress_cubit.dart';
 BlocBuilder<TwoPaginationProgressCubit, TwoPaginationProgressState>
     buildTwoPaginationProgress(double screenWidth) {
   return BlocBuilder<TwoPaginationProgressCubit, TwoPaginationProgressState>(
-    builder: (cubit, context) => TwoPaginationProgress(
+    builder: (context, state) => TwoPaginationProgress(
       screenWidth: screenWidth,
       leftSideLength:
-          cubit.read<TwoPaginationProgressCubit>().state.leftSideLength,
+          context.read<TwoPaginationProgressCubit>().state.leftSideLength,
       firstCircleLength:
-          cubit.read<TwoPaginationProgressCubit>().state.firstCircleLength,
+          context.read<TwoPaginationProgressCubit>().state.firstCircleLength,
       firstCircleOpacity:
-          cubit.read<TwoPaginationProgressCubit>().state.firstCircleOpacity,
+          context.read<TwoPaginationProgressCubit>().state.firstCircleOpacity,
       firstCircleNumber:
-          cubit.read<TwoPaginationProgressCubit>().state.firstCircleNumber,
-      firstCircleNumberSize:
-          cubit.read<TwoPaginationProgressCubit>().state.firstCircleNumberSize,
+          context.read<TwoPaginationProgressCubit>().state.firstCircleNumber,
+      firstCircleNumberSize: context
+          .read<TwoPaginationProgressCubit>()
+          .state
+          .firstCircleNumberSize,
       secondCircleLength:
-          cubit.read<TwoPaginationProgressCubit>().state.secondCircleLength,
+          context.read<TwoPaginationProgressCubit>().state.secondCircleLength,
       secondCircleOpacity:
-          cubit.read<TwoPaginationProgressCubit>().state.secondCircleOpacity,
+          context.read<TwoPaginationProgressCubit>().state.secondCircleOpacity,
       secondCircleNumber:
-          cubit.read<TwoPaginationProgressCubit>().state.secondCircleNumber,
-      secondCircleNumberSize:
-          cubit.read<TwoPaginationProgressCubit>().state.secondCircleNumberSize,
+          context.read<TwoPaginationProgressCubit>().state.secondCircleNumber,
+      secondCircleNumberSize: context
+          .read<TwoPaginationProgressCubit>()
+          .state
+          .secondCircleNumberSize,
     ),
   );
 }
@@ -129,8 +133,7 @@ class TwoPaginationProgress extends StatelessWidget {
                 ),
               ),
             ),
-            horizontalSpace5,
-            horizontalSpace5,
+            horizontalSpace10,
             AnimatedOpacity(
               opacity: secondCircleOpacity,
               duration: const Duration(milliseconds: 500),

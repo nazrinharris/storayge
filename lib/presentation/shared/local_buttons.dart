@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:storayge/core/util/storayge_icons.dart';
 
 import '../../presentation/shared/styles.dart';
 import '../../presentation/shared/ui_helpers.dart';
@@ -209,10 +210,49 @@ class PressableText extends StatelessWidget {
 }
 
 class ThirdPartySignUpButton extends StatelessWidget {
-  const ThirdPartySignUpButton({Key? key}) : super(key: key);
+  final Function()? onPressed;
+  final String content;
+  final double width;
+
+  const ThirdPartySignUpButton({
+    Key? key,
+    required this.content,
+    required this.onPressed,
+    required this.width,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(kcWhite),
+        overlayColor: MaterialStateProperty.all(kcGrey.withOpacity(0.5)),
+      ),
+      onPressed: onPressed,
+      child: Container(
+        alignment: Alignment.center,
+        height: 36,
+        width: width,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              StoraygeIcons.google,
+              color: Colors.blue,
+              size: 16,
+            ),
+            horizontalSpace10,
+            Text(
+              content,
+              style: ktsButtonText.copyWith(
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+                color: kcGrey,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 //colors
 const Color kcPrimaryColor = Color(0xffFF916E);
+const Color kcPrimaryColorDarker = Color(0xff8c6051);
 const Color kcSecondaryColor = Color(0xff271700);
 const Color kcTertiaryColor = Color(0xffFFE2BC);
 
@@ -9,6 +10,7 @@ const Color kcGreen = Color(0xffB0FF7D);
 const Color kcWhite = Color(0xffFFFFFF);
 const Color kcWhitePoint5 = Color(0x7fFFFFFF);
 const Color kcBlack = Color(0xff000000);
+const Color kcGrey = Color(0xff707070);
 const Color kcBackgroundColor = Color(0xff110A00);
 
 // TextStyle

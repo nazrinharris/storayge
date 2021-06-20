@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:supercharged/supercharged.dart';
 
 import '../../../constants/app_const.dart';
 import '../../../errors/exceptions.dart';
@@ -173,5 +174,14 @@ class AuthRepositoryImpl implements AuthRepository {
     } on UserNotFoundException {
       return Left(UserNotFoundFailure());
     }
+  }
+
+  @override
+  Future<Either<Failure, bool>> isEmailNotRegistered() async {
+    // TODO: implement isEmailNotRegistered
+    // TODO: create tests
+    bool isEmailNotRegistered =
+        await Future.delayed(2.seconds).then((_) => true);
+    return Right(isEmailNotRegistered);
   }
 }

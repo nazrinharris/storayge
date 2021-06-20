@@ -116,6 +116,24 @@ class AuthCubit extends Cubit<AuthState> {
             )));
   }
 
+  Future<void> isEmailNotRegisteredRun() async {
+    //TODO:create tests
+    emit(const AuthLoading(
+        currentOperationMessage:
+            'Currently verifying if your email is available'));
+    final failureOrBool = await authRepository.isEmailNotRegistered();
+    emit(
+      failureOrBool.fold(
+        (failure) => const AuthError(message: 'Unknown error occured'),
+        (retrievedBool) => AuthGeneralCompleted(content: retrievedBool),
+      ),
+    );
+  }
+
+  void emitIdle() {
+    emit(AuthIdle());
+  }
+
   // @override
   // void onChange(Change<AuthState> change) {
   //   print('Emitted state : $change');
