@@ -108,7 +108,7 @@ class AppBarWithTwoPaginationProgress extends StatelessWidget
           SizedBox(
             height: MediaQuery.of(context).padding.top,
             child: Container(
-              color: Colors.black,
+              color: Theme.of(context).backgroundColor,
             ),
           ),
           Stack(
@@ -121,8 +121,8 @@ class AppBarWithTwoPaginationProgress extends StatelessWidget
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Colors.black,
-                      Colors.black.withOpacity(0.0),
+                      Theme.of(context).backgroundColor,
+                      Theme.of(context).backgroundColor.withOpacity(0.0),
                     ],
                   ),
                 ),

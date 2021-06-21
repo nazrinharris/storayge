@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:simple_animations/simple_animations.dart';
 import 'package:storayge/core/auth/auth_cubit/auth_cubit.dart';
 import 'package:storayge/core/util/storayge_icons.dart';
 import 'package:storayge/presentation/shared/local_buttons.dart';
+import 'package:storayge/presentation/shared/local_theme.dart';
 import 'package:storayge/presentation/views/register/register_cubit/register_view_cubit.dart';
 import 'package:supercharged/supercharged.dart';
 import '../../../presentation/shared/styles.dart';
@@ -12,8 +12,6 @@ import '../../../presentation/shared/ui_helpers.dart';
 import '../../shared/local_appbar.dart';
 import '../../smart_widgets/two_pagination_progress/two_pagination_progress.dart';
 import '../../smart_widgets/two_pagination_progress/two_pagination_progress_cubit.dart';
-
-enum _AniProps { xPosition, opacity }
 
 class RegisterView extends StatelessWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -23,8 +21,10 @@ class RegisterView extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    //bool isFirstPage = true;
-
+    final FocusNode userNameFocusNode = FocusNode();
+    final FocusNode emailFocusNode = FocusNode();
+    final FocusNode passwordFocusNode = FocusNode();
+    final FocusNode confirmPasswordFocusNode = FocusNode();
     final PageController pageController = PageController();
 
     return MultiBlocProvider(
@@ -35,51 +35,67 @@ class RegisterView extends StatelessWidget {
                   screenWidth: screenWidth,
                 )),
         BlocProvider(
-            create: (context) =>
-                RegisterViewCubit(pageController: pageController))
+            create: (context) => RegisterViewCubit(
+                  pageController: pageController,
+                  usernameFocusNode: userNameFocusNode,
+                  emailFocusNode: emailFocusNode,
+                  passwordFocusNode: passwordFocusNode,
+                  confirmPasswordFocusNode: confirmPasswordFocusNode,
+                ))
       ],
       child: Builder(
         builder: (context) => Scaffold(
           extendBodyBehindAppBar: true,
-          backgroundColor: kcBackgroundColor,
           appBar: AppBarWithTwoPaginationProgress(
             twoPaginationProgress: buildTwoPaginationProgress(screenWidth),
             backButton: () {
+              context.read<RegisterViewCubit>().triggerAllNodesUnfocus();
               context.read<TwoPaginationProgressCubit>().triggerFirstPage();
               context.read<RegisterViewCubit>().triggerFirstPage();
             },
-            closeButton: () {},
+            closeButton: () {
+              context.read<RegisterViewCubit>().triggerAllNodesUnfocus();
+            },
           ),
-          body: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              height: 1.sh,
-              width: 1.sw,
-              child: SafeArea(
-                child: Builder(
-                  builder: (context) => Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: PageView.builder(
-                          controller:
-                              context.read<RegisterViewCubit>().pageController,
-                          itemCount: 2,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return _BuildPageContent(
-                              index: index,
-                            );
-                          },
-                        ),
+          body: Stack(
+            children: [
+              SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: SizedBox(
+                  height: 1.sh,
+                  width: 1.sw,
+                  child: SafeArea(
+                    left: false,
+                    right: false,
+                    child: Builder(
+                      builder: (context) => Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: PageView.builder(
+                              controller: context
+                                  .read<RegisterViewCubit>()
+                                  .pageController,
+                              itemCount: 2,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return _BuildPageContent(
+                                  index: index,
+                                );
+                              },
+                            ),
+                          ),
+                          Padding(
+                              padding:
+                                  EdgeInsets.symmetric(horizontal: 0.058.sw),
+                              child: const _BuildBottomButtons()),
+                        ],
                       ),
-                      const _BuildBottomButtons(),
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
         ),
       ),
@@ -98,11 +114,11 @@ class _BuildPageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (index == 0) {
-      return _BuildFirstPageContent();
+      return const _BuildFirstPageContent();
     } else if (index == 1) {
-      return _BuildSecondPageContent();
+      return const _BuildSecondPageContent();
     } else {
-      return CircularProgressIndicator();
+      return const CircularProgressIndicator();
     }
   }
 }
@@ -120,29 +136,46 @@ class _BuildFirstPageContent extends StatelessWidget {
         key: const Key('First'),
         children: [
           Container(
+            padding: EdgeInsets.symmetric(horizontal: 0.058.sw),
             alignment: Alignment.centerLeft,
-            child: const Text(
+            child: Text(
               'Welcome to \nStorayge!',
-              style: ktsSecondaryHeading,
+              style: appTextTheme(context).headline2!.copyWith(fontSize: 36.sp),
               textAlign: TextAlign.left,
             ),
           ),
-          customVerticalSpace(height: 0.067.sh),
+          customVerticalSpace(height: 0.08.sh),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
+            padding: EdgeInsets.symmetric(horizontal: 0.073.sw),
             child: const RegisterFormFirstPage(),
           ),
           Container(
-            constraints: BoxConstraints.loose(Size(double.infinity, 0.35.sh)),
+            constraints: BoxConstraints.loose(Size(double.infinity, 0.25.sh)),
             child: Column(
               children: [
                 verticalSpace24,
-                const Text('or', style: ktsHeadingParagraph),
+                Text('or', style: appTextTheme(context).headline3),
                 verticalSpace24,
                 ThirdPartySignUpButton(
                   content: 'Sign up with Google',
                   onPressed: () {},
-                  width: 0.437.sw,
+                  width: 0.5.sw,
+                ),
+                verticalSpace24,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Already have an account?',
+                      style: appTextTheme(context).caption,
+                    ),
+                    customHorizontalSpace(width: 5),
+                    PressableText(
+                        content: 'Login here',
+                        onTap: () {
+                          print('hye');
+                        })
+                  ],
                 )
               ],
             ),
@@ -168,20 +201,21 @@ class _BuildSecondPageContent extends StatelessWidget {
         key: const Key('second'),
         children: [
           Container(
+            padding: EdgeInsets.symmetric(horizontal: 0.058.sw),
             alignment: Alignment.centerLeft,
-            child: const Text(
+            child: Text(
               "Make sure \nit's secure!",
-              style: ktsSecondaryHeading,
+              style: appTextTheme(context).headline2!.copyWith(fontSize: 36.sp),
               textAlign: TextAlign.left,
             ),
           ),
-          customVerticalSpace(height: 0.067.sh),
+          customVerticalSpace(height: 0.08.sh),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
+            padding: EdgeInsets.symmetric(horizontal: 0.073.sw),
             child: const RegisterFormSecondPage(),
           ),
           Container(
-            constraints: BoxConstraints.loose(Size(double.infinity, 0.35.sh)),
+            constraints: BoxConstraints.loose(Size(double.infinity, 0.25.sh)),
           )
         ],
       ),
@@ -219,8 +253,8 @@ class _BuildBottomButtons extends StatelessWidget {
                 final int index =
                     context.watch<RegisterViewCubit>().currentPageIndex;
                 final inAnimation = Tween<Offset>(
-                  begin: Offset(0.0, 1.0),
-                  end: Offset(0.0, 0.0),
+                  begin: const Offset(0.0, 1.0),
+                  end: const Offset(0.0, 0.0),
                 ).animate(animation);
 
                 return SlideTransition(
@@ -245,6 +279,7 @@ class _BuildBottomButtons extends StatelessWidget {
             ),
             customWidth: 0.41.sw,
             firstPageOnPressed: () {
+              context.read<RegisterViewCubit>().triggerAllNodesUnfocus();
               context.read<AuthCubit>().isEmailNotRegisteredRun();
             },
             secondPageOnPressed: () {},
@@ -258,6 +293,7 @@ class _BuildBottomButtons extends StatelessWidget {
     return SecondaryButton(
       content: 'Back',
       onPressed: () {
+        context.read<RegisterViewCubit>().triggerAllNodesUnfocus();
         context.read<TwoPaginationProgressCubit>().triggerFirstPage();
         context.read<RegisterViewCubit>().triggerFirstPage();
       },
@@ -334,14 +370,6 @@ class PrimaryButtonAware extends StatelessWidget implements PrimaryButton {
           onPressed: activeOnPressed,
           style: ButtonStyle(
             padding: MaterialStateProperty.all(EdgeInsets.zero),
-            backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-              if (states.contains(MaterialState.hovered) ||
-                  states.contains(MaterialState.pressed)) return kcPrimaryColor;
-              if (states.contains(MaterialState.disabled)) {
-                return kcPrimaryColor;
-              }
-              return kcPrimaryColor;
-            }),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16.0),
@@ -354,9 +382,9 @@ class PrimaryButtonAware extends StatelessWidget implements PrimaryButton {
             child: AnimatedSwitcher(
               duration: 500.milliseconds,
               child: isLoading
-                  ? _buildLoading()
-                  : _buildNormalContent(
-                      context.read<RegisterViewCubit>().state),
+                  ? _buildLoading(context)
+                  : _buildNormalButtonContent(
+                      context.read<RegisterViewCubit>().state, context),
             ),
           ),
         );
@@ -364,7 +392,8 @@ class PrimaryButtonAware extends StatelessWidget implements PrimaryButton {
     );
   }
 
-  AnimatedSwitcher _buildNormalContent(RegisterViewState state) {
+  AnimatedSwitcher _buildNormalButtonContent(
+      RegisterViewState state, BuildContext context) {
     bool isFirstPage = true;
 
     if (state is RegisterViewFirstPage) {
@@ -375,18 +404,20 @@ class PrimaryButtonAware extends StatelessWidget implements PrimaryButton {
 
     return AnimatedSwitcher(
       duration: 250.milliseconds,
-      child: isFirstPage ? _buildFirstPageContent() : _buildSecondPageContent(),
+      child: isFirstPage
+          ? _buildFirstPageButtonContent(context)
+          : _buildSecondPageButtonContent(context),
     );
   }
 
-  Row _buildFirstPageContent() {
+  Row _buildFirstPageButtonContent(BuildContext context) {
     return Row(
       key: const Key('build_first_page_content'),
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           content,
-          style: ktsButtonText,
+          style: appTextTheme(context).bodyText1!.copyWith(color: Colors.black),
         ),
         horizontalSpace14,
         buttonIcon!,
@@ -394,14 +425,14 @@ class PrimaryButtonAware extends StatelessWidget implements PrimaryButton {
     );
   }
 
-  Row _buildSecondPageContent() {
+  Row _buildSecondPageButtonContent(BuildContext context) {
     return Row(
       key: const Key('build_second_page_content'),
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           'Confirm',
-          style: ktsButtonText,
+          style: appTextTheme(context).bodyText1!.copyWith(color: Colors.black),
         ),
         horizontalSpace5,
         const Icon(
@@ -412,13 +443,13 @@ class PrimaryButtonAware extends StatelessWidget implements PrimaryButton {
     );
   }
 
-  Widget _buildLoading() {
+  Widget _buildLoading(BuildContext context) {
     return Container(
       width: 24,
       height: 24,
-      child: const CircularProgressIndicator(
+      child: CircularProgressIndicator(
         strokeWidth: 2.7,
-        color: kcBlack,
+        color: Theme.of(context).indicatorColor,
       ),
     );
   }
@@ -444,16 +475,20 @@ class _RegisterFormFirstPageState extends State<RegisterFormFirstPage> {
         children: [
           textFieldLabelText('Username'),
           TextFormField(
-              style: ktsParagraph,
+              focusNode: context.read<RegisterViewCubit>().usernameFocusNode,
+              style: appTextTheme(context).bodyText1,
               decoration: kInputDecoration(
+                context: context,
                 hintText: 'Enter your desired username',
               )),
           verticalSpace34,
           textFieldLabelText('Email'),
           TextFormField(
+              focusNode: context.read<RegisterViewCubit>().emailFocusNode,
               keyboardAppearance: Brightness.dark,
-              style: ktsParagraph,
+              style: appTextTheme(context).bodyText1,
               decoration: kInputDecoration(
+                context: context,
                 hintText: 'Enter your email',
               )),
           verticalSpace14,
@@ -467,7 +502,7 @@ class _RegisterFormFirstPageState extends State<RegisterFormFirstPage> {
       alignment: Alignment.centerLeft,
       child: Text(
         labelText,
-        style: ktsHeadingParagraph,
+        style: appTextTheme(context).headline3,
       ),
     );
   }
@@ -493,18 +528,23 @@ class _RegisterFormSecondPageState extends State<RegisterFormSecondPage> {
         children: [
           textFieldLabelText('Password'),
           TextFormField(
+              focusNode: context.read<RegisterViewCubit>().passwordFocusNode,
               obscureText: true,
-              style: ktsParagraph,
+              style: appTextTheme(context).bodyText1,
               decoration: kInputDecoration(
+                context: context,
                 hintText: 'Enter your desired username',
               )),
           verticalSpace34,
           textFieldLabelText('Confirm Password'),
           TextFormField(
+              focusNode:
+                  context.read<RegisterViewCubit>().confirmPasswordFocusNode,
               obscureText: true,
               keyboardAppearance: Brightness.dark,
-              style: ktsParagraph,
+              style: appTextTheme(context).bodyText1,
               decoration: kInputDecoration(
+                context: context,
                 hintText: 'Enter your email',
               )),
           verticalSpace14,
@@ -518,7 +558,7 @@ class _RegisterFormSecondPageState extends State<RegisterFormSecondPage> {
       alignment: Alignment.centerLeft,
       child: Text(
         labelText,
-        style: ktsHeadingParagraph,
+        style: appTextTheme(context).headline3,
       ),
     );
   }

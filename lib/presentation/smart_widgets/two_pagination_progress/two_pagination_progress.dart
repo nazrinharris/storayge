@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:storayge/presentation/shared/local_theme.dart';
 import '../../shared/styles.dart';
 import '../../shared/ui_helpers.dart';
 import 'two_pagination_progress_cubit.dart';
@@ -113,7 +114,7 @@ class TwoPaginationProgress extends StatelessWidget {
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeOutExpo,
               child: Material(
-                color: kcTertiaryColor,
+                color: Theme.of(context).accentColor,
                 borderRadius: BorderRadius.circular(100),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 500),
@@ -124,9 +125,8 @@ class TwoPaginationProgress extends StatelessWidget {
                   child: AnimatedDefaultTextStyle(
                     duration: const Duration(milliseconds: 500),
                     curve: Curves.easeOutExpo,
-                    style: ktsHeadingParagraph.copyWith(
+                    style: appTextTheme(context).headline4!.copyWith(
                         fontSize: firstCircleNumberSize,
-                        color: Colors.black,
                         fontWeight: FontWeight.w700),
                     child: Text('$firstCircleNumber'),
                   ),
@@ -139,7 +139,7 @@ class TwoPaginationProgress extends StatelessWidget {
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeOutExpo,
               child: Material(
-                color: kcTertiaryColor,
+                color: Theme.of(context).accentColor,
                 borderRadius: BorderRadius.circular(100),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 500),
@@ -150,9 +150,8 @@ class TwoPaginationProgress extends StatelessWidget {
                   child: AnimatedDefaultTextStyle(
                     duration: const Duration(milliseconds: 500),
                     curve: Curves.easeOutExpo,
-                    style: ktsHeadingParagraph.copyWith(
+                    style: appTextTheme(context).headline4!.copyWith(
                         fontSize: secondCircleNumberSize,
-                        color: Colors.black,
                         fontWeight: FontWeight.w700),
                     child: Text('$secondCircleNumber'),
                   ),

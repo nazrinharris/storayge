@@ -28,7 +28,6 @@ class HomeView extends StatelessWidget {
     );
 
     return Scaffold(
-      backgroundColor: kcBackgroundColor,
       body: Center(
         child: BlocBuilder<CabinetCubit, CabinetState>(
           builder: (context, state) {

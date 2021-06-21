@@ -11,7 +11,6 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: defaultAppBar(hasBackButton: true, context: context),
-      backgroundColor: kcBackgroundColor,
       body: SafeArea(
           child: Center(
         child: Text('Bruh login'),

@@ -11,7 +11,6 @@ class SplashView extends StatelessWidget {
     context.read<AuthCubit>().isLoggedInRun();
 
     return Scaffold(
-      backgroundColor: kcBackgroundColor,
       body: SafeArea(
         child: BlocListener<AuthCubit, AuthState>(
           listener: (context, state) {

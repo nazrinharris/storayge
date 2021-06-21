@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_animations/simple_animations.dart';
 import 'package:supercharged/supercharged.dart';
 
 part 'register_view_state.dart';
@@ -13,9 +12,28 @@ class RegisterViewCubit extends Cubit<RegisterViewState> {
   late double secondPageOpacity;
   late int currentPageIndex;
 
+  late String usernameValue;
+  late String emailValue;
+
+  late FocusNode usernameFocusNode;
+  late FocusNode emailFocusNode;
+  late FocusNode passwordFocusNode;
+  late FocusNode confirmPasswordFocusNode;
+
   RegisterViewCubit({
     required this.pageController,
-  }) : super(RegisterViewFirstPage()) {
+    required this.usernameFocusNode,
+    required this.emailFocusNode,
+    required this.passwordFocusNode,
+    required this.confirmPasswordFocusNode,
+  }) : super(
+          const RegisterViewFirstPage(
+            usernameValue: '',
+            emailValue: '',
+            passwordValue: '',
+            confirmPasswordValue: '',
+          ),
+        ) {
     currentPageValue = 0;
     currentPageIndex = 0;
     pageController.addListener(() {
@@ -34,7 +52,14 @@ class RegisterViewCubit extends Cubit<RegisterViewState> {
     currentPageIndex = 0;
     firstPageOpacity = 1.0;
     secondPageOpacity = 0.0;
-    emit(RegisterViewFirstPage());
+    emit(
+      const RegisterViewFirstPage(
+        usernameValue: '',
+        emailValue: '',
+        passwordValue: '',
+        confirmPasswordValue: '',
+      ),
+    );
   }
 
   void triggerSecondPage() {
@@ -47,5 +72,21 @@ class RegisterViewCubit extends Cubit<RegisterViewState> {
     firstPageOpacity = 0.0;
     secondPageOpacity = 1.0;
     emit(RegisterViewSecondPage());
+  }
+
+  void triggerAllNodesUnfocus() {
+    usernameFocusNode.unfocus();
+    emailFocusNode.unfocus();
+    passwordFocusNode.unfocus();
+    confirmPasswordFocusNode.unfocus();
+  }
+
+  @override
+  Future<void> close() {
+    usernameFocusNode.dispose();
+    emailFocusNode.dispose();
+    passwordFocusNode.dispose();
+    confirmPasswordFocusNode.dispose();
+    return super.close();
   }
 }

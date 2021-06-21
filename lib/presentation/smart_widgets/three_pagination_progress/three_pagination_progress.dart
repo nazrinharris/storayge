@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:storayge/presentation/shared/local_theme.dart';
 import '../../shared/styles.dart';
 import '../../shared/ui_helpers.dart';
 import 'three_pagination_progress_cubit.dart';
@@ -105,7 +106,7 @@ class ThreePaginationProgress extends StatelessWidget {
               duration: const Duration(milliseconds: 250),
               curve: Curves.easeOutExpo,
               child: Material(
-                color: kcTertiaryColor,
+                color: Theme.of(context).accentColor,
                 borderRadius: BorderRadius.circular(100),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
@@ -116,7 +117,7 @@ class ThreePaginationProgress extends StatelessWidget {
                   child: AnimatedDefaultTextStyle(
                     duration: const Duration(milliseconds: 250),
                     curve: Curves.easeOutExpo,
-                    style: ktsHeadingParagraph.copyWith(
+                    style: appTextTheme(context).headline3!.copyWith(
                         fontSize: firstCircleNumberSize,
                         color: Colors.black,
                         fontWeight: FontWeight.w700),
@@ -131,7 +132,7 @@ class ThreePaginationProgress extends StatelessWidget {
               duration: const Duration(milliseconds: 250),
               curve: Curves.easeOutExpo,
               child: Material(
-                color: kcTertiaryColor,
+                color: Theme.of(context).accentColor,
                 borderRadius: BorderRadius.circular(100),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
@@ -142,7 +143,7 @@ class ThreePaginationProgress extends StatelessWidget {
                   child: AnimatedDefaultTextStyle(
                     duration: const Duration(milliseconds: 250),
                     curve: Curves.easeOutExpo,
-                    style: ktsHeadingParagraph.copyWith(
+                    style: appTextTheme(context).headline3!.copyWith(
                         fontSize: secondCircleNumberSize,
                         color: Colors.black,
                         fontWeight: FontWeight.w700),
@@ -157,7 +158,7 @@ class ThreePaginationProgress extends StatelessWidget {
               duration: const Duration(milliseconds: 250),
               curve: Curves.easeOutExpo,
               child: Material(
-                color: kcTertiaryColor,
+                color: Theme.of(context).accentColor,
                 borderRadius: BorderRadius.circular(100),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
@@ -168,7 +169,7 @@ class ThreePaginationProgress extends StatelessWidget {
                   child: AnimatedDefaultTextStyle(
                     duration: const Duration(milliseconds: 250),
                     curve: Curves.easeOutExpo,
-                    style: ktsHeadingParagraph.copyWith(
+                    style: appTextTheme(context).headline3!.copyWith(
                         fontSize: thirdCircleNumberSize,
                         color: Colors.black,
                         fontWeight: FontWeight.w700),
