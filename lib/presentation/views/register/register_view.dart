@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:storayge/core/auth/auth_cubit/auth_cubit.dart';
@@ -27,6 +28,9 @@ class RegisterView extends StatelessWidget {
     final FocusNode confirmPasswordFocusNode = FocusNode();
     final PageController pageController = PageController();
 
+    final GlobalKey<FormState> firstPageFormKey = GlobalKey<FormState>();
+    final GlobalKey<FormState> secondPageFormKey = GlobalKey<FormState>();
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -36,66 +40,80 @@ class RegisterView extends StatelessWidget {
                 )),
         BlocProvider(
             create: (context) => RegisterViewCubit(
+                  authCubit: context.read<AuthCubit>(),
                   pageController: pageController,
                   usernameFocusNode: userNameFocusNode,
                   emailFocusNode: emailFocusNode,
                   passwordFocusNode: passwordFocusNode,
                   confirmPasswordFocusNode: confirmPasswordFocusNode,
+                  firstPageFormKey: firstPageFormKey,
+                  secondPageFormKey: secondPageFormKey,
                 ))
       ],
       child: Builder(
-        builder: (context) => Scaffold(
-          extendBodyBehindAppBar: true,
-          appBar: AppBarWithTwoPaginationProgress(
-            twoPaginationProgress: buildTwoPaginationProgress(screenWidth),
-            backButton: () {
-              context.read<RegisterViewCubit>().triggerAllNodesUnfocus();
-              context.read<TwoPaginationProgressCubit>().triggerFirstPage();
-              context.read<RegisterViewCubit>().triggerFirstPage();
-            },
-            closeButton: () {
-              context.read<RegisterViewCubit>().triggerAllNodesUnfocus();
-            },
-          ),
-          body: Stack(
-            children: [
-              SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: SizedBox(
-                  height: 1.sh,
-                  width: 1.sw,
-                  child: SafeArea(
-                    left: false,
-                    right: false,
-                    child: Builder(
-                      builder: (context) => Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: PageView.builder(
-                              controller: context
-                                  .read<RegisterViewCubit>()
-                                  .pageController,
-                              itemCount: 2,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                return _BuildPageContent(
-                                  index: index,
-                                );
-                              },
+        builder: (context) => WillPopScope(
+          onWillPop: () async {
+            if (readRegisterViewCubit(context).currentPageIndex == 0) {
+              Navigator.of(context).pop();
+              return true;
+            } else {
+              readRegisterViewCubit(context).triggerFirstPage();
+              return false;
+            }
+          },
+          child: Scaffold(
+            extendBodyBehindAppBar: true,
+            appBar: AppBarWithTwoPaginationProgress(
+              twoPaginationProgress: buildTwoPaginationProgress(screenWidth),
+              backButton: () {
+                context.read<RegisterViewCubit>().triggerAllNodesUnfocus();
+                context.read<TwoPaginationProgressCubit>().triggerFirstPage();
+                context.read<RegisterViewCubit>().triggerFirstPage();
+              },
+              closeButton: () {
+                context.read<RegisterViewCubit>().triggerAllNodesUnfocus();
+              },
+            ),
+            body: Stack(
+              children: [
+                SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: SizedBox(
+                    height: 1.sh,
+                    width: 1.sw,
+                    child: SafeArea(
+                      left: false,
+                      right: false,
+                      child: Builder(
+                        builder: (context) => Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: PageView.builder(
+                                controller: context
+                                    .read<RegisterViewCubit>()
+                                    .pageController,
+                                itemCount: 2,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return _BuildPageContent(
+                                    index: index,
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                          Padding(
-                              padding:
-                                  EdgeInsets.symmetric(horizontal: 0.058.sw),
-                              child: const _BuildBottomButtons()),
-                        ],
+                            Padding(
+                                padding:
+                                    EdgeInsets.symmetric(horizontal: 0.058.sw),
+                                child: const _BuildBottomButtons()),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -231,7 +249,8 @@ class _BuildBottomButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isFirstPage;
-    final currentPageIndex = context.read<RegisterViewCubit>().currentPageIndex;
+    final currentPageIndex =
+        context.watch<RegisterViewCubit>().currentPageIndex;
     if (currentPageIndex == 0) {
       isFirstPage = true;
     } else {
@@ -250,8 +269,6 @@ class _BuildBottomButtons extends StatelessWidget {
               switchInCurve: Curves.easeOutExpo,
               switchOutCurve: Curves.easeOutExpo,
               transitionBuilder: (child, animation) {
-                final int index =
-                    context.watch<RegisterViewCubit>().currentPageIndex;
                 final inAnimation = Tween<Offset>(
                   begin: const Offset(0.0, 1.0),
                   end: const Offset(0.0, 0.0),
@@ -280,13 +297,22 @@ class _BuildBottomButtons extends StatelessWidget {
             customWidth: 0.41.sw,
             firstPageOnPressed: () {
               context.read<RegisterViewCubit>().triggerAllNodesUnfocus();
-              context.read<AuthCubit>().isEmailNotRegisteredRun();
+              readRegisterViewCubit(context).validateUsernameField();
+              readRegisterViewCubit(context).validateEmailField();
+              checkIfUsernameAndEmailIsValid(context);
             },
             secondPageOnPressed: () {},
           ),
         ],
       ),
     );
+  }
+
+  void checkIfUsernameAndEmailIsValid(BuildContext context) {
+    if (context.read<RegisterViewCubit>().validateFirstForm() == false) {
+    } else {
+      context.read<AuthCubit>().isEmailNotRegisteredRun();
+    }
   }
 
   SecondaryButton createSecondaryButton(BuildContext context) {
@@ -384,7 +410,7 @@ class PrimaryButtonAware extends StatelessWidget implements PrimaryButton {
               child: isLoading
                   ? _buildLoading(context)
                   : _buildNormalButtonContent(
-                      context.read<RegisterViewCubit>().state, context),
+                      context.watch<RegisterViewCubit>().state, context),
             ),
           ),
         );
@@ -465,17 +491,31 @@ class RegisterFormFirstPage extends StatefulWidget {
 }
 
 class _RegisterFormFirstPageState extends State<RegisterFormFirstPage> {
-  final _globalFormKey = GlobalKey<_RegisterFormFirstPageState>();
-
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _globalFormKey,
+      key: readRegisterViewCubit(context).firstPageFormKey,
       child: Column(
         children: [
           textFieldLabelText('Username'),
           TextFormField(
               focusNode: context.read<RegisterViewCubit>().usernameFocusNode,
+              onChanged: (value) {
+                readRegisterViewCubit(context)
+                    .triggerUsernameAndOrEmailValueChanged(
+                        newUsernameValue: value);
+              },
+              onFieldSubmitted: (value) {
+                readRegisterViewCubit(context).focusOnEmailTextField();
+                setState(() {
+                  readRegisterViewCubit(context).validateUsernameField();
+                });
+              },
+              textInputAction: TextInputAction.next,
+              validator: validateUsername,
+              autovalidateMode:
+                  watchRegisterViewCubit(context).autovalidateModeUsernameField,
+              initialValue: readRegisterViewCubit(context).usernameValue,
               style: appTextTheme(context).bodyText1,
               decoration: kInputDecoration(
                 context: context,
@@ -484,8 +524,23 @@ class _RegisterFormFirstPageState extends State<RegisterFormFirstPage> {
           verticalSpace34,
           textFieldLabelText('Email'),
           TextFormField(
+              // controller: readRegisterViewCubit(context).emailFieldController,
               focusNode: context.read<RegisterViewCubit>().emailFocusNode,
-              keyboardAppearance: Brightness.dark,
+              onChanged: (value) {
+                readRegisterViewCubit(context)
+                    .triggerUsernameAndOrEmailValueChanged(
+                        newEmailValue: value);
+              },
+              onFieldSubmitted: (value) {
+                readRegisterViewCubit(context).validateEmailField();
+                setState(() {
+                  readRegisterViewCubit(context).validateEmailField();
+                });
+              },
+              validator: validateEmail,
+              autovalidateMode:
+                  watchRegisterViewCubit(context).autovalidateModeEmailField,
+              initialValue: readRegisterViewCubit(context).emailValue,
               style: appTextTheme(context).bodyText1,
               decoration: kInputDecoration(
                 context: context,
@@ -495,6 +550,29 @@ class _RegisterFormFirstPageState extends State<RegisterFormFirstPage> {
         ],
       ),
     );
+  }
+
+  String? validateEmail(String? value) {
+    const emailRegex =
+        r"""^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+""";
+    if (value == null || value.isEmpty) {
+      return 'Please enter an email';
+    } else {
+      if (RegExp(emailRegex).hasMatch(value)) {
+        return null;
+      } else {
+        return 'Please enter a valid email';
+      }
+    }
+  }
+
+  String? validateUsername(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a username';
+    } else if (value.length <= 3) {
+      return 'Usernames must be longer than 3 characters';
+    }
+    return null;
   }
 
   Align textFieldLabelText(String labelText) {
@@ -518,17 +596,21 @@ class RegisterFormSecondPage extends StatefulWidget {
 }
 
 class _RegisterFormSecondPageState extends State<RegisterFormSecondPage> {
-  final _globalFormKey = GlobalKey<_RegisterFormSecondPageState>();
-
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _globalFormKey,
+      key: readRegisterViewCubit(context).secondPageFormKey,
       child: Column(
         children: [
           textFieldLabelText('Password'),
           TextFormField(
               focusNode: context.read<RegisterViewCubit>().passwordFocusNode,
+              onChanged: (value) {
+                readRegisterViewCubit(context)
+                    .triggerPasswordAndOrConfirmPasswordValueChanged(
+                        newPasswordValue: value);
+              },
+              initialValue: readRegisterViewCubit(context).passwordValue,
               obscureText: true,
               style: appTextTheme(context).bodyText1,
               decoration: kInputDecoration(
@@ -540,6 +622,12 @@ class _RegisterFormSecondPageState extends State<RegisterFormSecondPage> {
           TextFormField(
               focusNode:
                   context.read<RegisterViewCubit>().confirmPasswordFocusNode,
+              onChanged: (value) {
+                readRegisterViewCubit(context)
+                    .triggerPasswordAndOrConfirmPasswordValueChanged(
+                        newConfirmPasswordValue: value);
+              },
+              initialValue: readRegisterViewCubit(context).confirmPasswordValue,
               obscureText: true,
               keyboardAppearance: Brightness.dark,
               style: appTextTheme(context).bodyText1,
@@ -552,6 +640,9 @@ class _RegisterFormSecondPageState extends State<RegisterFormSecondPage> {
       ),
     );
   }
+
+  RegisterViewCubit readRegisterViewCubit(BuildContext context) =>
+      context.read<RegisterViewCubit>();
 
   Align textFieldLabelText(String labelText) {
     return Align(

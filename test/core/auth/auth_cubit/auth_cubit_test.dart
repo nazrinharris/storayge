@@ -75,7 +75,7 @@ void main() {
           },
           expect: () => [
                 // AuthIdle(), //TODO : Should find out why initial state of cubit is not emitted in this scenario
-                AuthLoading(),
+                AuthLoading(currentOperationMessage: 'message'),
                 AuthLoaded(storaygeUser: tStoraygeUser)
               ]);
 
@@ -94,7 +94,7 @@ void main() {
             cubit.getStoraygeUserDataRun(uid: tUid);
           },
           expect: () => [
-                AuthLoading(),
+                AuthLoading(currentOperationMessage: 'message'),
                 AuthError(message: 'test_message', code: 'TEST'),
               ]);
     });
@@ -136,7 +136,7 @@ void main() {
           );
         },
         expect: () => [
-          AuthLoading(),
+          AuthLoading(currentOperationMessage: 'message'),
           AuthLoaded(storaygeUser: tStoraygeUser),
         ],
       );
@@ -158,7 +158,7 @@ void main() {
           );
         },
         expect: () => [
-          AuthLoading(),
+          AuthLoading(currentOperationMessage: 'message'),
           AuthError(message: 'test_message', code: 'TEST'),
         ],
       );
