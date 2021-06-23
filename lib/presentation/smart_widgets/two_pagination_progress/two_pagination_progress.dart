@@ -16,7 +16,8 @@ import 'two_pagination_progress_cubit.dart';
 /// `buildTwoPaginationProgress(screenWidth)`
 /// and provide it with the screenWidth
 ///
-/// Second, the widget works by first creating a Row with an undefined width and height. Take that into account.
+/// Second, the widget works by first creating a Row with an undefined width and height. Take that into account. It will try
+/// to take up as much space as it could, but if the width is any less than the screenWidth, this widget might break.
 ///
 /// Third, make sure that the `BuildContext` of this widget's ancestor has the cubit [TwoPaginationProgressCubit].
 /// You may use the [Builder] widget to access the correct context.

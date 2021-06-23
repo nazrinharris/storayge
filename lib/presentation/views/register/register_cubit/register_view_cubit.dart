@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storayge/core/auth/auth_cubit/auth_cubit.dart';
@@ -22,11 +23,13 @@ class RegisterViewCubit extends Cubit<RegisterViewState> {
   late double secondPageOpacity;
   late int currentPageIndex;
 
+  late ValueNotifier<bool> isFirstInteractionWithUsernameField;
+  late ValueNotifier<bool> isFirstInteractionWithEmailField;
+  late AutovalidateMode autovalidateModeUsernameField;
+  late AutovalidateMode autovalidateModeEmailField;
+
   late GlobalKey<FormState> firstPageFormKey;
   late GlobalKey<FormState> secondPageFormKey;
-
-  late bool isFirstInteractionWithUsernameField;
-  late bool isFirstInteractionWithEmailField;
 
   late FocusNode usernameFocusNode;
   late FocusNode emailFocusNode;
@@ -37,9 +40,6 @@ class RegisterViewCubit extends Cubit<RegisterViewState> {
   late String? emailValue;
   late String? passwordValue;
   late String? confirmPasswordValue;
-
-  late AutovalidateMode autovalidateModeUsernameField;
-  late AutovalidateMode autovalidateModeEmailField;
 
   RegisterViewCubit({
     required this.pageController,
@@ -65,8 +65,8 @@ class RegisterViewCubit extends Cubit<RegisterViewState> {
     emailValue = null;
     passwordValue = null;
     confirmPasswordValue = null;
-    isFirstInteractionWithUsernameField = true;
-    isFirstInteractionWithEmailField = true;
+    isFirstInteractionWithUsernameField = ValueNotifier<bool>(true);
+    isFirstInteractionWithEmailField = ValueNotifier<bool>(true);
     autovalidateModeUsernameField = AutovalidateMode.disabled;
     autovalidateModeEmailField = AutovalidateMode.disabled;
   }
@@ -114,14 +114,12 @@ class RegisterViewCubit extends Cubit<RegisterViewState> {
 
   void validateUsernameField() {
     autovalidateModeUsernameField = AutovalidateMode.always;
+    isFirstInteractionWithUsernameField.value = false;
   }
 
   void validateEmailField() {
     autovalidateModeEmailField = AutovalidateMode.always;
-  }
-
-  void toggleIsFirstInteractionWithUsernameField() {
-    isFirstInteractionWithUsernameField = false;
+    isFirstInteractionWithEmailField.value = false;
   }
 
   void focusOnEmailTextField() {

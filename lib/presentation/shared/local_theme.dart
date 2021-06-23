@@ -21,6 +21,10 @@ double _kTertiaryHeadingTextSize = 20.0.sp;
 double _kParagraphTextSize = 16.0.sp;
 
 TextTheme appTextTheme(BuildContext context) => Theme.of(context).textTheme;
+TextStyle appBodyText1(BuildContext context) =>
+    Theme.of(context).textTheme.bodyText1!;
+TextStyle appHeadline3(BuildContext context) =>
+    Theme.of(context).textTheme.headline3!;
 
 mixin AppTheme {
   static ThemeData get darkTheme {

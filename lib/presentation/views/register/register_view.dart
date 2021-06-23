@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:storayge/core/auth/auth_cubit/auth_cubit.dart';
+import 'package:storayge/core/helper_widgets/two_value_listenable_builder.dart';
 import 'package:storayge/core/util/storayge_icons.dart';
 import 'package:storayge/presentation/shared/local_buttons.dart';
 import 'package:storayge/presentation/shared/local_theme.dart';
@@ -58,6 +59,7 @@ class RegisterView extends StatelessWidget {
               return true;
             } else {
               readRegisterViewCubit(context).triggerFirstPage();
+              context.read<TwoPaginationProgressCubit>().triggerFirstPage();
               return false;
             }
           },
@@ -493,62 +495,74 @@ class RegisterFormFirstPage extends StatefulWidget {
 class _RegisterFormFirstPageState extends State<RegisterFormFirstPage> {
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: readRegisterViewCubit(context).firstPageFormKey,
-      child: Column(
-        children: [
-          textFieldLabelText('Username'),
-          TextFormField(
-              focusNode: context.read<RegisterViewCubit>().usernameFocusNode,
-              onChanged: (value) {
-                readRegisterViewCubit(context)
-                    .triggerUsernameAndOrEmailValueChanged(
-                        newUsernameValue: value);
-              },
-              onFieldSubmitted: (value) {
-                readRegisterViewCubit(context).focusOnEmailTextField();
-                setState(() {
-                  readRegisterViewCubit(context).validateUsernameField();
-                });
-              },
-              textInputAction: TextInputAction.next,
-              validator: validateUsername,
-              autovalidateMode:
-                  watchRegisterViewCubit(context).autovalidateModeUsernameField,
-              initialValue: readRegisterViewCubit(context).usernameValue,
-              style: appTextTheme(context).bodyText1,
-              decoration: kInputDecoration(
-                context: context,
-                hintText: 'Enter your desired username',
-              )),
-          verticalSpace34,
-          textFieldLabelText('Email'),
-          TextFormField(
-              // controller: readRegisterViewCubit(context).emailFieldController,
-              focusNode: context.read<RegisterViewCubit>().emailFocusNode,
-              onChanged: (value) {
-                readRegisterViewCubit(context)
-                    .triggerUsernameAndOrEmailValueChanged(
-                        newEmailValue: value);
-              },
-              onFieldSubmitted: (value) {
-                readRegisterViewCubit(context).validateEmailField();
-                setState(() {
-                  readRegisterViewCubit(context).validateEmailField();
-                });
-              },
-              validator: validateEmail,
-              autovalidateMode:
-                  watchRegisterViewCubit(context).autovalidateModeEmailField,
-              initialValue: readRegisterViewCubit(context).emailValue,
-              style: appTextTheme(context).bodyText1,
-              decoration: kInputDecoration(
-                context: context,
-                hintText: 'Enter your email',
-              )),
-          verticalSpace14,
-        ],
-      ),
+    return TwoValueListenableBuilder(
+      firstListenable:
+          readRegisterViewCubit(context).isFirstInteractionWithUsernameField,
+      secondListenable:
+          readRegisterViewCubit(context).isFirstInteractionWithEmailField,
+      builder: (context, first, second, child) {
+        return Form(
+          key: readRegisterViewCubit(context).firstPageFormKey,
+          child: Column(
+            children: [
+              TextFieldLabelText('Username'),
+              TextFormField(
+                  focusNode:
+                      context.read<RegisterViewCubit>().usernameFocusNode,
+                  onChanged: (value) {
+                    // Should update the cubit's local username value.
+                    readRegisterViewCubit(context)
+                        .triggerUsernameAndOrEmailValueChanged(
+                            newUsernameValue: value);
+                  },
+                  onFieldSubmitted: (value) {
+                    // Should validate the current value and proceed to focus on the next field.
+                    readRegisterViewCubit(context).focusOnEmailTextField();
+                    readRegisterViewCubit(context).validateUsernameField();
+                  },
+                  textInputAction: TextInputAction.next,
+                  validator: validateUsername,
+                  // Should read this TextField's validation mode from cubit.
+                  autovalidateMode: readRegisterViewCubit(context)
+                      .autovalidateModeUsernameField,
+                  // Should read the cubit's local username value
+                  initialValue: readRegisterViewCubit(context).usernameValue,
+                  style: appTextTheme(context).bodyText1,
+                  decoration: kInputDecoration(
+                    context: context,
+                    hintText: 'Enter your desired username',
+                  )),
+              verticalSpace34,
+              TextFieldLabelText('Email'),
+              TextFormField(
+                  // controller: readRegisterViewCubit(context).emailFieldController,
+                  focusNode: context.read<RegisterViewCubit>().emailFocusNode,
+                  onChanged: (value) {
+                    readRegisterViewCubit(context)
+                        .triggerUsernameAndOrEmailValueChanged(
+                            newEmailValue: value);
+                  },
+                  onFieldSubmitted: (value) {
+                    readRegisterViewCubit(context).validateEmailField();
+                    setState(() {
+                      readRegisterViewCubit(context).validateEmailField();
+                    });
+                  },
+                  validator: validateEmail,
+                  autovalidateMode: watchRegisterViewCubit(context)
+                      .autovalidateModeEmailField,
+                  initialValue: readRegisterViewCubit(context).emailValue,
+                  style: appTextTheme(context).bodyText1,
+                  decoration: kInputDecoration(
+                    context: context,
+                    hintText: 'Enter your email',
+                  )),
+              verticalSpace14,
+            ],
+          ),
+        );
+      },
+      child: const SizedBox(),
     );
   }
 
@@ -574,8 +588,14 @@ class _RegisterFormFirstPageState extends State<RegisterFormFirstPage> {
     }
     return null;
   }
+}
 
-  Align textFieldLabelText(String labelText) {
+class TextFieldLabelText extends StatelessWidget {
+  final String labelText;
+  const TextFieldLabelText(this.labelText, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(
