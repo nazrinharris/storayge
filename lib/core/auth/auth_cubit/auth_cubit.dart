@@ -116,7 +116,9 @@ class AuthCubit extends Cubit<AuthState> {
             )));
   }
 
-  Future<void> isEmailNotRegisteredRun() async {
+  Future<void> isEmailNotRegisteredRun({
+    required String email,
+  }) async {
     //TODO:create tests
     emit(const AuthLoading(
         currentOperationMessage:

@@ -23,61 +23,23 @@ class RegisterViewCubit extends Cubit<RegisterViewState> {
   late double secondPageOpacity;
   late int currentPageIndex;
 
-  late ValueNotifier<bool> isFirstInteractionWithUsernameField;
-  late ValueNotifier<bool> isFirstInteractionWithEmailField;
-  late AutovalidateMode autovalidateModeUsernameField;
-  late AutovalidateMode autovalidateModeEmailField;
-
-  late GlobalKey<FormState> firstPageFormKey;
-  late GlobalKey<FormState> secondPageFormKey;
-
-  late FocusNode usernameFocusNode;
-  late FocusNode emailFocusNode;
-  late FocusNode passwordFocusNode;
-  late FocusNode confirmPasswordFocusNode;
-
-  late String? usernameValue;
-  late String? emailValue;
-  late String? passwordValue;
-  late String? confirmPasswordValue;
-
   RegisterViewCubit({
     required this.pageController,
-    required this.usernameFocusNode,
-    required this.emailFocusNode,
-    required this.passwordFocusNode,
-    required this.confirmPasswordFocusNode,
     required this.authCubit,
-    required this.firstPageFormKey,
-    required this.secondPageFormKey,
   }) : super(
-          const RegisterViewFirstPage(
-            usernameValue: '',
-            emailValue: '',
-          ),
+          RegisterViewFirstPage(),
         ) {
     listenToPageController();
     currentPageValue = 0;
     currentPageIndex = 0;
     firstPageOpacity = 1.0;
     secondPageOpacity = 0.0;
-    usernameValue = null;
-    emailValue = null;
-    passwordValue = null;
-    confirmPasswordValue = null;
-    isFirstInteractionWithUsernameField = ValueNotifier<bool>(true);
-    isFirstInteractionWithEmailField = ValueNotifier<bool>(true);
-    autovalidateModeUsernameField = AutovalidateMode.disabled;
-    autovalidateModeEmailField = AutovalidateMode.disabled;
   }
 
   void triggerFirstPage() {
     animateToFirstPage();
     emit(
-      RegisterViewFirstPage(
-        usernameValue: usernameValue,
-        emailValue: emailValue,
-      ),
+      RegisterViewFirstPage(),
     );
   }
 
@@ -90,10 +52,7 @@ class RegisterViewCubit extends Cubit<RegisterViewState> {
     currentPageIndex = 1;
     firstPageOpacity = 0.0;
     secondPageOpacity = 1.0;
-    emit(RegisterViewSecondPage(
-      passwordValue: passwordValue,
-      confirmPasswordValue: confirmPasswordValue,
-    ));
+    emit(RegisterViewSecondPage());
   }
 
   void animateToFirstPage() {
@@ -107,72 +66,14 @@ class RegisterViewCubit extends Cubit<RegisterViewState> {
     secondPageOpacity = 0.0;
   }
 
-  bool validateFirstForm() {
-    bool validationResult = firstPageFormKey.currentState!.validate();
-    return validationResult;
-  }
-
-  void validateUsernameField() {
-    autovalidateModeUsernameField = AutovalidateMode.always;
-    isFirstInteractionWithUsernameField.value = false;
-  }
-
-  void validateEmailField() {
-    autovalidateModeEmailField = AutovalidateMode.always;
-    isFirstInteractionWithEmailField.value = false;
-  }
-
-  void focusOnEmailTextField() {
-    emailFocusNode.requestFocus();
-  }
-
   void listenToPageController() {
     pageController.addListener(() {
       currentPageValue = pageController.page;
     });
   }
 
-  void triggerAllNodesUnfocus() {
-    usernameFocusNode.unfocus();
-    emailFocusNode.unfocus();
-    passwordFocusNode.unfocus();
-    confirmPasswordFocusNode.unfocus();
-  }
-
-  void triggerUsernameAndOrEmailValueChanged({
-    String? newUsernameValue,
-    String? newEmailValue,
-  }) {
-    if (newUsernameValue == null) {
-      emailValue = newEmailValue!;
-    } else if (newEmailValue == null) {
-      usernameValue = newUsernameValue;
-    } else {
-      usernameValue = newUsernameValue;
-      emailValue = newEmailValue;
-    }
-  }
-
-  void triggerPasswordAndOrConfirmPasswordValueChanged({
-    String? newPasswordValue,
-    String? newConfirmPasswordValue,
-  }) {
-    if (newPasswordValue == null) {
-      confirmPasswordValue = newConfirmPasswordValue;
-    } else if (newConfirmPasswordValue == null) {
-      passwordValue = newPasswordValue;
-    } else {
-      passwordValue = newPasswordValue;
-      confirmPasswordValue = newConfirmPasswordValue;
-    }
-  }
-
   @override
   Future<void> close() {
-    usernameFocusNode.dispose();
-    emailFocusNode.dispose();
-    passwordFocusNode.dispose();
-    confirmPasswordFocusNode.dispose();
     return super.close();
   }
 }
