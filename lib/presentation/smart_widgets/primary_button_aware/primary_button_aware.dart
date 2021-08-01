@@ -47,28 +47,6 @@ class PrimaryButtonAware extends StatelessWidget {
           activeOnPressed = thirdPageOnPressed;
         }
 
-        // if (state is AuthIdle) {
-        //   if (context.read<RegisterViewCubit>().state
-        //       is RegisterViewSecondPage) {
-        //     activeOnPressed = secondPageOnPressed;
-        //   } else {
-        //     activeOnPressed = firstPageOnPressed;
-        //   }
-        //   isLoading = false;
-        // } else if (state is AuthLoading) {
-        //   activeOnPressed = null;
-        //   isLoading = true;
-        // } else if (state is AuthGeneralCompleted) {
-        //   activeOnPressed = () {};
-        //   isLoading = false;
-        //   context.read<TwoPaginationProgressCubit>().triggerSecondPage();
-        //   context.read<RegisterViewCubit>().triggerSecondPage();
-        //   context.read<AuthCubit>().emitIdle();
-        // } else {
-        //   activeOnPressed = firstPageOnPressed;
-        //   isLoading = false;
-        // }
-
         return ElevatedButton(
           onPressed: activeOnPressed,
           style: ButtonStyle(

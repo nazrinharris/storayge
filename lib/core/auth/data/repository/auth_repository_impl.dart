@@ -181,7 +181,8 @@ class AuthRepositoryImpl implements AuthRepository {
     // TODO: implement isEmailNotRegistered
     // TODO: create tests
     bool isEmailNotRegistered =
-        await Future.delayed(2.seconds).then((_) => true);
-    return Right(isEmailNotRegistered);
+        await Future.delayed(5.seconds).then((_) => true);
+    return Left(FirestoreFailure(
+        message: 'An unfortunate error occured', code: 'TEST_ERROR_LOL'));
   }
 }

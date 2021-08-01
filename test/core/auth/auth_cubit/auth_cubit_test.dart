@@ -74,7 +74,6 @@ void main() {
             cubit.getStoraygeUserDataRun(uid: tUid);
           },
           expect: () => [
-                // AuthIdle(), //TODO : Should find out why initial state of cubit is not emitted in this scenario
                 AuthLoading(currentOperationMessage: 'message'),
                 AuthLoaded(storaygeUser: tStoraygeUser)
               ]);

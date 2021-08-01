@@ -20,7 +20,7 @@ part 'primary_button_aware.dart';
 /// REMEMBER :- Provide the [PrimaryButtonAwareCubit] to one of it's ancestors. Use [Builder] if
 /// you can't access the cubit eventhough it has been provided.
 ///
-/// This is done through the use of it's public methods :
+/// It's state change is done through the use of it's public methods :
 ///
 /// [triggerLoading()]
 /// Call this method when you want to update the button's state to loading.
@@ -39,7 +39,7 @@ part 'primary_button_aware.dart';
 /// supports up to three pages, but newer versions may be made to support even more pages.
 ///
 /// Caution! : If you are not utilising [triggerThirdPage] do NOT use it at all. Unnecesarry calls
-/// on the method will at best, cause unexpected behaviour and at worst, crash the app.
+/// on the method will at best, cause unexpected behaviour and at worst, crash the app. Tbh i never tried.
 ///
 /// Upon it's creation, this cubit will emit [_stateInitialPage]
 ///

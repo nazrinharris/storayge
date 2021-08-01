@@ -28,7 +28,7 @@ class TwoFieldsForm<T extends Bloc<TwoFieldsFormEvent, TwoFieldsFormState>>
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<T, TwoFieldsFormState>(
-      builder: (mainContext, state) {
+      builder: (context, state) {
         TwoFieldsFormState _readBlocState(BuildContext mainContext) =>
             BlocProvider.of<T>(mainContext).state;
 
@@ -36,63 +36,57 @@ class TwoFieldsForm<T extends Bloc<TwoFieldsFormEvent, TwoFieldsFormState>>
             BlocProvider.of<T>(mainContext);
 
         return Form(
-          key: _readBlocState(mainContext).props.formKey,
+          key: _readBlocState(context).props.formKey,
           child: Column(
             children: [
               _TextFieldLabelText(firstFieldLabel),
               TextFormField(
-                  focusNode:
-                      _readBlocState(mainContext).props.firstFieldFocusNode,
+                  focusNode: _readBlocState(context).props.firstFieldFocusNode,
                   onChanged: (input) {
                     // Should update the cubit's local username value.
-                    _readBloc(mainContext).add(
+                    _readBloc(context).add(
                         TwoFieldsFormEvent.firstFieldValueChanged(
                             input: input));
                   },
                   onFieldSubmitted: (value) {
                     // Should validate the current value and proceed to focus on the next field.
-                    _readBloc(mainContext)
+                    _readBloc(context)
                         .add(const TwoFieldsFormEvent.firstFieldSubmitted());
                   },
                   textInputAction: TextInputAction.next,
                   validator: validateFirstField,
                   // Should read this TextField's validation mode from cubit.
-                  autovalidateMode: _readBlocState(mainContext)
-                      .props
-                      .autovalidateModeFirstField,
+                  autovalidateMode:
+                      _readBlocState(context).props.autovalidateModeFirstField,
                   // Should read the cubit's local username value
-                  initialValue:
-                      _readBlocState(mainContext).props.firstFieldValue,
-                  style: appBodyText1(mainContext),
+                  initialValue: _readBlocState(context).props.firstFieldValue,
+                  style: appBodyText1(context),
                   obscureText: isFirstFieldObscured ?? false,
                   decoration: kInputDecoration(
-                    context: mainContext,
+                    context: context,
                     hintText: firstFieldHintText,
                   )),
               verticalSpace34,
               _TextFieldLabelText(secondFieldLabel),
               TextFormField(
-                  focusNode:
-                      _readBlocState(mainContext).props.secondFieldFocusNode,
+                  focusNode: _readBlocState(context).props.secondFieldFocusNode,
                   onChanged: (input) {
-                    _readBloc(mainContext).add(
+                    _readBloc(context).add(
                         TwoFieldsFormEvent.secondFieldValueChanged(
                             input: input));
                   },
                   onFieldSubmitted: (value) {
-                    _readBloc(mainContext)
+                    _readBloc(context)
                         .add(const TwoFieldsFormEvent.secondFieldSubmitted());
                   },
                   validator: validateSecondField,
-                  autovalidateMode: _readBlocState(mainContext)
-                      .props
-                      .autovalidateModeSecondField,
-                  initialValue:
-                      _readBlocState(mainContext).props.secondFieldValue,
-                  style: appTextTheme(mainContext).bodyText1,
+                  autovalidateMode:
+                      _readBlocState(context).props.autovalidateModeSecondField,
+                  initialValue: _readBlocState(context).props.secondFieldValue,
+                  style: appTextTheme(context).bodyText1,
                   obscureText: isSecondFieldObscured ?? false,
                   decoration: kInputDecoration(
-                    context: mainContext,
+                    context: context,
                     hintText: secondFieldHintText,
                   )),
               verticalSpace14,

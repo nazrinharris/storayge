@@ -3,7 +3,7 @@
 # IT WILL BE A PAIN.
 
 name: storayge
-description: A new Flutter project.
+description: todo - add desc.
 
 publish_to: "none"
 
@@ -49,7 +49,6 @@ dependencies:
   # Render
   flutter_svg: ^0.22.0
   flutter_screenutil: ^5.0.0+2
-  entry: ^0.0.4
   simple_animations: ^3.1.1
 
   # Misc

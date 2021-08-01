@@ -3,10 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:simple_animations/simple_animations.dart';
 import 'package:storayge/core/auth/auth_cubit/auth_cubit.dart';
 import 'package:storayge/core/util/storayge_icons.dart';
 import 'package:storayge/presentation/shared/local_buttons.dart';
 import 'package:storayge/presentation/shared/local_theme.dart';
+import 'package:storayge/presentation/smart_widgets/info_tile/bloc/info_tile_bloc.dart';
+import 'package:storayge/presentation/smart_widgets/info_tile/info_tile.dart';
 import 'package:storayge/presentation/smart_widgets/primary_button_aware/primary_button_aware_cubit.dart';
 import 'package:storayge/presentation/smart_widgets/two_fields_form.dart/two_fields_form_bloc.dart';
 import 'package:storayge/presentation/views/register/register_cubit/register_view_cubit.dart';
@@ -16,12 +19,42 @@ import '../../shared/local_appbar.dart';
 import '../../smart_widgets/two_pagination_progress/two_pagination_progress.dart';
 import '../../smart_widgets/two_pagination_progress/two_pagination_progress_cubit.dart';
 
-class RegisterView extends StatelessWidget {
+class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
+
+  @override
+  _RegisterViewState createState() => _RegisterViewState();
+}
+
+class _RegisterViewState extends State<RegisterView> with AnimationMixin {
+  late AnimationController _infoTileVisibilityController;
+  late Animation<double> _infoTileHeightFactor;
+
+  @override
+  void initState() {
+    super.initState();
+    _infoTileVisibilityController = createController();
+    _infoTileHeightFactor = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _infoTileVisibilityController,
+        curve: Curves.easeOutExpo,
+        reverseCurve: Curves.easeInExpo,
+      ),
+    );
+  }
+
+  void showInfoTile() {
+    _infoTileVisibilityController.play(duration: 500.milliseconds);
+  }
+
+  void hideInfoTile() {
+    _infoTileVisibilityController.playReverse(duration: 500.milliseconds);
+  }
 
   @override
   Widget build(BuildContext context) {
     final PageController pageController = PageController();
+    bool isVisible = false;
 
     return MultiBlocProvider(
       providers: [
@@ -41,6 +74,18 @@ class RegisterView extends StatelessWidget {
             create: (context) => TwoFieldsFormBloc()),
         BlocProvider<SecondTwoFieldsFormBloc>(
             create: (context) => TwoFieldsFormBloc()),
+        BlocProvider(
+          create: (context) => InfoTileBloc(
+            infoTileProps: const InfoTileProps(
+              leadingText: 'No operation running',
+              child: Text(
+                  'In all seriousness, you should never have seen this text. Like how did you even get here?'),
+              isAbleToExpand: true,
+              isExpanded: false,
+              currentStatus: InfoTileStatus.loading,
+            ),
+          ),
+        ),
       ],
       child: Builder(
         builder: (context) => WillPopScope(
@@ -51,6 +96,8 @@ class RegisterView extends StatelessWidget {
             } else {
               readRegisterViewCubit(context).triggerFirstPage();
               context.read<TwoPaginationProgressCubit>().triggerFirstPage();
+              context.read<PrimaryButtonAwareCubit>().triggerFirstPage();
+              hideInfoTile();
               return false;
             }
           },
@@ -65,6 +112,7 @@ class RegisterView extends StatelessWidget {
                 context.read<TwoPaginationProgressCubit>().triggerFirstPage();
                 context.read<PrimaryButtonAwareCubit>().triggerFirstPage();
                 context.read<RegisterViewCubit>().triggerFirstPage();
+                hideInfoTile();
               },
               closeButton: () {
                 readFirstFormBloc(context).add(unfocusAllNodes);
@@ -86,9 +134,13 @@ class RegisterView extends StatelessWidget {
                           builder: (context) => Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const InfoBar(
-                                isNotVisible: true,
+                              ClipRect(
+                                child: Align(
+                                  heightFactor: _infoTileHeightFactor.value,
+                                  child: const InfoTile(),
+                                ),
                               ),
+                              verticalSpace24,
                               Expanded(
                                 child: PageView.builder(
                                   controller: context
@@ -99,6 +151,15 @@ class RegisterView extends StatelessWidget {
                                   itemBuilder: (context, index) {
                                     return _BuildPageContent(
                                       index: index,
+                                      onPressedThirdPartyButton: () {
+                                        if (isVisible) {
+                                          isVisible = !isVisible;
+                                          hideInfoTile();
+                                        } else {
+                                          isVisible = !isVisible;
+                                          showInfoTile();
+                                        }
+                                      },
                                     );
                                   },
                                 ),
@@ -117,9 +178,12 @@ class RegisterView extends StatelessWidget {
                     alignment: Alignment.bottomCenter,
                     child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 0.058.sw),
-                        child: const _BuildBottomButtons()),
+                        child: _BuildBottomButtons(
+                          showInfoTile: showInfoTile,
+                          hideInfoTile: hideInfoTile,
+                        )),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -129,42 +193,22 @@ class RegisterView extends StatelessWidget {
   }
 }
 
-class InfoBar extends StatelessWidget {
-  final bool isNotVisible;
-
-  const InfoBar({
-    Key? key,
-    required this.isNotVisible,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    const _emptySpace = SizedBox.shrink();
-
-    return AnimatedSwitcher(
-      duration: 500.milliseconds,
-      child: isNotVisible
-          ? _emptySpace
-          : Container(
-              height: 52.0,
-              color: Colors.red,
-            ),
-    );
-  }
-}
-
 class _BuildPageContent extends StatelessWidget {
   final int index;
+  final Function() onPressedThirdPartyButton;
 
   const _BuildPageContent({
     Key? key,
     required this.index,
+    required this.onPressedThirdPartyButton,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (index == 0) {
-      return const _BuildFirstPageContent();
+      return _BuildFirstPageContent(
+        onPressedThirdPartyButton: onPressedThirdPartyButton,
+      );
     } else if (index == 1) {
       return const _BuildSecondPageContent();
     } else {
@@ -174,7 +218,12 @@ class _BuildPageContent extends StatelessWidget {
 }
 
 class _BuildFirstPageContent extends StatelessWidget {
-  const _BuildFirstPageContent({Key? key}) : super(key: key);
+  final Function() onPressedThirdPartyButton;
+
+  const _BuildFirstPageContent({
+    Key? key,
+    required this.onPressedThirdPartyButton,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -208,7 +257,7 @@ class _BuildFirstPageContent extends StatelessWidget {
                 verticalSpace24,
                 ThirdPartySignUpButton(
                   content: 'Sign up with Google',
-                  onPressed: () {},
+                  onPressed: onPressedThirdPartyButton,
                   width: 0.5.sw,
                 ),
                 verticalSpace24,
@@ -221,10 +270,11 @@ class _BuildFirstPageContent extends StatelessWidget {
                     ),
                     customHorizontalSpace(width: 5),
                     PressableText(
-                        content: 'Login here',
-                        onTap: () {
-                          print('hye');
-                        })
+                      content: 'Login here',
+                      onTap: () {
+                        print('Login here pressed');
+                      },
+                    ),
                   ],
                 )
               ],
@@ -274,8 +324,13 @@ class _BuildSecondPageContent extends StatelessWidget {
 }
 
 class _BuildBottomButtons extends StatelessWidget {
+  final Function() showInfoTile;
+  final Function() hideInfoTile;
+
   const _BuildBottomButtons({
     Key? key,
+    required this.showInfoTile,
+    required this.hideInfoTile,
   }) : super(key: key);
 
   @override
@@ -372,6 +427,20 @@ class _BuildBottomButtons extends StatelessWidget {
       final String? currentEmail =
           readFirstFormBloc(context).state.props.firstFieldValue;
       context.read<PrimaryButtonAwareCubit>().triggerLoading();
+      context
+          .read<InfoTileBloc>()
+          .add(InfoTileEvent.triggerStateChange(InfoTileProps(
+            leadingText: 'Give us a few moments...',
+            isAbleToExpand: true,
+            isExpanded: false,
+            currentStatus: InfoTileStatus.loading,
+            child: Container(
+              alignment: Alignment.topLeft,
+              child: const Text(
+                  "We're currently checking if your email can be used, it may take longer if your internet connection is weak."),
+            ),
+          )));
+      showInfoTile();
       await context
           .read<AuthCubit>()
           .isEmailNotRegisteredRun(email: currentEmail!)
@@ -381,8 +450,28 @@ class _BuildBottomButtons extends StatelessWidget {
           context.read<PrimaryButtonAwareCubit>().triggerSecondPage();
           context.read<TwoPaginationProgressCubit>().triggerSecondPage();
           readRegisterViewCubit(context).triggerSecondPage();
+          context
+              .read<InfoTileBloc>()
+              .add(const InfoTileEvent.triggerStateChange(InfoTileProps(
+                leadingText: 'Great! Your email can be used.',
+                child: SizedBox.shrink(),
+                isAbleToExpand: false,
+                isExpanded: false,
+                currentStatus: InfoTileStatus.success,
+              )));
         } else if (currentAuthState is AuthError) {
-          //TODO: Implement error handling
+          context.read<PrimaryButtonAwareCubit>().triggerFirstPage();
+          context
+              .read<InfoTileBloc>()
+              .add(InfoTileEvent.triggerStateChange(InfoTileProps(
+                leadingText: 'Uh oh, something went wrong.',
+                child: Container(
+                  child: Text(currentAuthState.message),
+                ),
+                isAbleToExpand: true,
+                isExpanded: false,
+                currentStatus: InfoTileStatus.error,
+              )));
         }
       });
     } else {
@@ -417,6 +506,7 @@ class _BuildBottomButtons extends StatelessWidget {
         context.read<TwoPaginationProgressCubit>().triggerFirstPage();
         context.read<PrimaryButtonAwareCubit>().triggerFirstPage();
         context.read<RegisterViewCubit>().triggerFirstPage();
+        hideInfoTile();
       },
       width: 0.41.sw,
     );
@@ -496,7 +586,7 @@ class _RegisterFormSecondPageState extends State<RegisterFormSecondPage> {
       secondFieldHintText: "Make sure it's the same as above",
       isSecondFieldObscured: true,
       validateFirstField: validatePassword,
-      validateSecondField: validateNotEmpty,
+      validateSecondField: validateConfirmPassword,
     );
   }
 
@@ -521,9 +611,12 @@ class _RegisterFormSecondPageState extends State<RegisterFormSecondPage> {
     }
   }
 
-  String? validateNotEmpty(String? input) {
+  String? validateConfirmPassword(String? input) {
     if (input == null || input.isEmpty) {
       return 'Sorry but this cannot be empty';
+    } else if ((input != null && !input.isEmpty) &&
+        input != readSecondFormBloc(context).state.props.firstFieldValue) {
+      return 'Your passwords do not match';
     } else {
       return null;
     }
