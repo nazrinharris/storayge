@@ -5,84 +5,64 @@ import 'package:storayge/presentation/smart_widgets/two_pagination_progress/two_
 import 'package:storayge/presentation/views/register/register_cubit/register_view_cubit.dart';
 import 'package:supercharged/supercharged.dart';
 
-AppBar defaultAppBar({
-  required bool hasBackButton,
-  required BuildContext context,
-}) =>
-    AppBar(
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      ),
-      backgroundColor: Colors.transparent,
-      elevation: 0.0,
-      flexibleSpace: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            tileMode: TileMode.repeated,
-            colors: [
-              Colors.black,
-              Colors.black.withOpacity(0.0),
-            ],
-          ),
-        ),
-      ),
-    );
+class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final Function() closeButton;
 
-/// Guide on [appBarWithTwoPaginationProgress]
-///
-///
-PreferredSize appBarWithTwoPaginationProgress({
-  required BuildContext context,
-  required Widget twoPaginationProgress,
-}) {
-  return PreferredSize(
-    preferredSize: const Size(double.maxFinite, 80),
-    child: Column(
-      children: [
-        SizedBox(
-          height: MediaQuery.of(context).padding.top,
-          child: Container(
-            color: Colors.black,
+  const DefaultAppBar({
+    Key? key,
+    required this.closeButton,
+  }) : super(key: key);
+
+  @override
+  Size get preferredSize => const Size(double.maxFinite, 80);
+
+  @override
+  Widget build(BuildContext context) {
+    return PreferredSize(
+      preferredSize: const Size(double.maxFinite, 80),
+      child: Column(
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).padding.top,
+            child: Container(
+              color: Theme.of(context).backgroundColor,
+            ),
           ),
-        ),
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              constraints: const BoxConstraints.expand(height: 80),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.black,
-                    Colors.black.withOpacity(0.0),
-                  ],
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                constraints: const BoxConstraints.expand(height: 80),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Theme.of(context).backgroundColor,
+                      Theme.of(context).backgroundColor.withOpacity(0.0),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Row(
-              children: [
-                AnimatedSwitcher(
-                  duration: 500.milliseconds,
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.arrow_back),
-                  ),
-                )
-              ],
-            ),
-            twoPaginationProgress,
-          ],
-        ),
-      ],
-    ),
-  );
+              Row(
+                children: [
+                  closeIconButton(),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  IconButton closeIconButton() {
+    return IconButton(
+      key: const Key('close_icon_button'),
+      onPressed: closeButton,
+      icon: const Icon(Icons.close),
+    );
+  }
 }
 
 class AppBarWithTwoPaginationProgress extends StatelessWidget
@@ -98,6 +78,9 @@ class AppBarWithTwoPaginationProgress extends StatelessWidget
       required this.backButton,
       required this.closeButton})
       : super(key: key);
+
+  @override
+  Size get preferredSize => const Size(double.maxFinite, 80);
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +171,4 @@ class AppBarWithTwoPaginationProgress extends StatelessWidget
       icon: const Icon(Icons.close),
     );
   }
-
-  @override
-  Size get preferredSize => const Size(double.maxFinite, 80);
 }

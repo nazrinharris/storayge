@@ -123,8 +123,9 @@ class MockAuthRepository extends _i1.Mock implements _i7.AuthRepository {
               _FakeEither<_i9.Failure, _i10.StoraygeUser>())) as _i8
           .Future<_i2.Either<_i9.Failure, _i10.StoraygeUser>>);
   @override
-  _i8.Future<_i2.Either<_i9.Failure, bool>> isEmailNotRegistered() =>
-      (super.noSuchMethod(Invocation.method(#isEmailNotRegistered, []),
+  _i8.Future<_i2.Either<_i9.Failure, bool>> isEmailNotRegistered(
+          String? email) =>
+      (super.noSuchMethod(Invocation.method(#isEmailNotRegistered, [email]),
               returnValue: Future<_i2.Either<_i9.Failure, bool>>.value(
                   _FakeEither<_i9.Failure, bool>()))
           as _i8.Future<_i2.Either<_i9.Failure, bool>>);
@@ -209,8 +210,9 @@ class MockAuthRepositoryImpl extends _i1.Mock
               _FakeEither<_i9.Failure, _i10.StoraygeUser>())) as _i8
           .Future<_i2.Either<_i9.Failure, _i10.StoraygeUser>>);
   @override
-  _i8.Future<_i2.Either<_i9.Failure, bool>> isEmailNotRegistered() =>
-      (super.noSuchMethod(Invocation.method(#isEmailNotRegistered, []),
+  _i8.Future<_i2.Either<_i9.Failure, bool>> isEmailNotRegistered(
+          String? email) =>
+      (super.noSuchMethod(Invocation.method(#isEmailNotRegistered, [email]),
               returnValue: Future<_i2.Either<_i9.Failure, bool>>.value(
                   _FakeEither<_i9.Failure, bool>()))
           as _i8.Future<_i2.Either<_i9.Failure, bool>>);
@@ -256,6 +258,10 @@ class MockAuthRemoteDataSource extends _i1.Mock
               returnValue:
                   Future<_i6.StoraygeUserModel>.value(_FakeStoraygeUserModel()))
           as _i8.Future<_i6.StoraygeUserModel>);
+  @override
+  _i8.Future<bool> isEmailNotRegistered(String? email) =>
+      (super.noSuchMethod(Invocation.method(#isEmailNotRegistered, [email]),
+          returnValue: Future<bool>.value(false)) as _i8.Future<bool>);
   @override
   _i8.Future<String> getUid() =>
       (super.noSuchMethod(Invocation.method(#getUid, []),

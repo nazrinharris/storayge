@@ -386,6 +386,7 @@ class _BuildBottomButtons extends StatelessWidget {
             ),
           ),
           PrimaryButtonAware(
+            type: PrimaryButtonAwareType.twoPage,
             firstPageContent: 'Next',
             firstPageButtonIcon: const Icon(
               StoraygeIcons.storayge_arrow_right,
