@@ -12,6 +12,10 @@
 ///       - asset: fonts/StoraygeIcons.ttf
 ///
 /// 
+/// * Font Awesome 4, Copyright (C) 2016 by Dave Gandy
+///         Author:    Dave Gandy
+///         License:   SIL ()
+///         Homepage:  http://fortawesome.github.com/Font-Awesome/
 ///
 import 'package:flutter/widgets.dart';
 
@@ -22,4 +26,5 @@ class StoraygeIcons {
   static const String? _kFontPkg = null;
 
   static const IconData storayge_arrow_right = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData google = IconData(0xf1a0, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

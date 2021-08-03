@@ -9,7 +9,7 @@ class AppRouter {
   Route onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       case '/':
-        return CupertinoPageRoute(builder: (_) => const SplashView());
+        return CupertinoPageRoute(builder: (_) => SplashView());
       case '/start':
         return CupertinoPageRoute(builder: (_) => const StartView());
       case '/login':

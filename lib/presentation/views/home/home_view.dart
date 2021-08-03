@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:storayge/presentation/smart_widgets/info_tile/bloc/info_tile_bloc.dart';
+import 'package:storayge/presentation/smart_widgets/info_tile/info_tile.dart';
 import '../../../features/cabinet/bloc/cabinet_cubit.dart';
 import '../../../features/cabinet/domain/entities/shelf.dart';
 
@@ -27,66 +29,82 @@ class HomeView extends StatelessWidget {
       itemAmount: 1,
     );
 
-    return Scaffold(
-      backgroundColor: kcBackgroundColor,
-      body: Center(
-        child: BlocBuilder<CabinetCubit, CabinetState>(
-          builder: (context, state) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                if (state is CabinetInitial)
-                  InitialStateWidget(
-                    storeShelf: () {
-                      storeShelf(context, shelf, uid);
-                    },
-                    getShelf: () {
-                      getShelf(context, shelfId, uid);
-                    },
-                  ),
-                if (state is CabinetLoading)
-                  const LoadingWidget(message: 'Retrieving shelf'),
-                if (state is GetShelfCompleted)
-                  LoadedWidget(
-                    successMessage: 'shelf retrieved with details below',
-                    shelf: state.shelf,
-                    buttonMessage: 'Store Shelf',
-                    buttonMessage2: 'Get Shelf',
-                    storeShelf: () {
-                      storeShelf(context, shelf, uid);
-                    },
-                    getShelf: () => getShelf(context, shelfId, uid),
-                  ),
-                if (state is GetShelfError)
-                  ErrorMessage(
-                    message: state.message ?? 'No error message',
-                    code: state.code ?? 'No error code',
-                    storeShelf: () => storeShelf(context, shelf, uid),
-                    getShelf: () => getShelf(context, shelfId, uid),
-                  ),
-                if (state is StoreShelfCompleted)
-                  LoadedWidget(
-                    successMessage: 'Shelf stored with the details below',
-                    shelf: shelf,
-                    buttonMessage: 'Store Shelf',
-                    buttonMessage2: 'Get Shelf',
-                    storeShelf: () {
-                      storeShelf(context, shelf, uid);
-                    },
-                    getShelf: () => getShelf(context, shelfId, uid),
-                  ),
-                if (state is StoreShelfError)
-                  ErrorMessage(
-                    message: state.message ?? 'No error message',
-                    code: state.code ?? 'No error code',
-                    storeShelf: () => storeShelf(context, shelf, uid),
-                    getShelf: () => getShelf(context, shelfId, uid),
-                  ),
-              ],
-            );
-          },
+    return BlocProvider(
+      create: (context) => InfoTileBloc(
+        infoTileProps: const InfoTileProps(
+          leadingText: 'A testament to a test.',
+          child: Text(
+              'This text is meant to be long. The words here do not have and will never have any significance aside from making this particular widget longer.'),
+          isAbleToExpand: true,
+          isExpanded: false,
+          currentStatus: InfoTileStatus.loading,
         ),
       ),
+      child: Scaffold(
+          body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [InfoTile()],
+      )),
+    );
+  }
+
+  BlocBuilder<CabinetCubit, CabinetState> _buildPrototype(
+      Shelf shelf, String uid, String shelfId) {
+    return BlocBuilder<CabinetCubit, CabinetState>(
+      builder: (context, state) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            if (state is CabinetInitial)
+              InitialStateWidget(
+                storeShelf: () {
+                  storeShelf(context, shelf, uid);
+                },
+                getShelf: () {
+                  getShelf(context, shelfId, uid);
+                },
+              ),
+            if (state is CabinetLoading)
+              const LoadingWidget(message: 'Retrieving shelf'),
+            if (state is GetShelfCompleted)
+              LoadedWidget(
+                successMessage: 'shelf retrieved with details below',
+                shelf: state.shelf,
+                buttonMessage: 'Store Shelf',
+                buttonMessage2: 'Get Shelf',
+                storeShelf: () {
+                  storeShelf(context, shelf, uid);
+                },
+                getShelf: () => getShelf(context, shelfId, uid),
+              ),
+            if (state is GetShelfError)
+              ErrorMessage(
+                message: state.message ?? 'No error message',
+                code: state.code ?? 'No error code',
+                storeShelf: () => storeShelf(context, shelf, uid),
+                getShelf: () => getShelf(context, shelfId, uid),
+              ),
+            if (state is StoreShelfCompleted)
+              LoadedWidget(
+                successMessage: 'Shelf stored with the details below',
+                shelf: shelf,
+                buttonMessage: 'Store Shelf',
+                buttonMessage2: 'Get Shelf',
+                storeShelf: () {
+                  storeShelf(context, shelf, uid);
+                },
+                getShelf: () => getShelf(context, shelfId, uid),
+              ),
+            if (state is StoreShelfError)
+              ErrorMessage(
+                message: state.message ?? 'No error message',
+                code: state.code ?? 'No error code',
+                storeShelf: () => storeShelf(context, shelf, uid),
+                getShelf: () => getShelf(context, shelfId, uid),
+              ),
+          ],
+        );
+      },
     );
   }
 

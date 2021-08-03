@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:storayge/core/util/storayge_icons.dart';
+import 'package:storayge/presentation/shared/local_theme.dart';
 
 import '../../presentation/shared/styles.dart';
 import '../../presentation/shared/ui_helpers.dart';
@@ -23,73 +25,43 @@ class PrimaryButton extends StatelessWidget {
     if (buttonIcon == null && width == null) {
       return ElevatedButton(
         onPressed: onPressed,
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(kcPrimaryColor),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0),
-            ),
-          ),
-        ),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           child: Text(
             content,
-            style: ktsButtonText,
+            style:
+                appTextTheme(context).bodyText1!.copyWith(color: Colors.black),
           ),
         ),
       );
     } else if (buttonIcon == null) {
       return ElevatedButton(
         onPressed: onPressed,
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(kcPrimaryColor),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0),
-            ),
-          ),
-        ),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: Text(
             content,
-            style: ktsButtonText,
+            style:
+                appTextTheme(context).bodyText1!.copyWith(color: Colors.black),
           ),
         ),
       );
     } else if (width == null) {
       return ElevatedButton(
         onPressed: onPressed,
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(kcPrimaryColor),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0),
-            ),
-          ),
-        ),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           child: Text(
             content,
-            style: ktsButtonText,
+            style:
+                appTextTheme(context).bodyText1!.copyWith(color: Colors.black),
           ),
         ),
       );
     } else {
       return ElevatedButton(
         onPressed: onPressed,
-        style: ButtonStyle(
-          padding: MaterialStateProperty.all(EdgeInsets.zero),
-          backgroundColor: MaterialStateProperty.all(kcPrimaryColor),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0),
-            ),
-          ),
-        ),
-        child: Container(
+        child: SizedBox(
           width: width,
           height: 46,
           child: Row(
@@ -97,7 +69,9 @@ class PrimaryButton extends StatelessWidget {
             children: [
               Text(
                 content,
-                style: ktsButtonText,
+                style: appTextTheme(context)
+                    .bodyText1!
+                    .copyWith(color: Colors.black),
               ),
               horizontalSpace14,
               buttonIcon!,
@@ -131,11 +105,8 @@ class SecondaryButton extends StatelessWidget {
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
-              side: const BorderSide(color: kcPrimaryColor),
+              side: BorderSide(color: Theme.of(context).primaryColor),
             ),
-          ),
-          side: MaterialStateProperty.all(
-            const BorderSide(color: kcPrimaryColor),
           ),
         ),
         onPressed: onPressed,
@@ -143,7 +114,7 @@ class SecondaryButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           child: Text(
             content,
-            style: ktsButtonText.copyWith(color: Colors.white),
+            style: appTextTheme(context).bodyText2,
           ),
         ),
       );
@@ -154,15 +125,13 @@ class SecondaryButton extends StatelessWidget {
       return TextButton(
         style: ButtonStyle(
           padding: MaterialStateProperty.all(EdgeInsets.zero),
-          overlayColor: MaterialStateProperty.all(kcWhite.withOpacity(0.25)),
+          overlayColor: MaterialStateProperty.all(
+              Theme.of(context).highlightColor.withOpacity(0.25)),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
-              side: const BorderSide(color: kcPrimaryColor),
+              side: BorderSide(color: Theme.of(context).primaryColor),
             ),
-          ),
-          side: MaterialStateProperty.all(
-            const BorderSide(color: kcPrimaryColor),
           ),
         ),
         onPressed: onPressed,
@@ -172,7 +141,7 @@ class SecondaryButton extends StatelessWidget {
           height: 46,
           child: Text(
             content,
-            style: ktsButtonText.copyWith(color: Colors.white),
+            style: appTextTheme(context).bodyText1,
           ),
         ),
       );
@@ -199,20 +168,62 @@ class PressableText extends StatelessWidget {
       onTap: onTap,
       child: Text(
         content,
-        style: ktsSubtitle.copyWith(
-          color: kcWhite,
-          decoration: TextDecoration.underline,
-        ),
+        style: appTextTheme(context).caption!.copyWith(
+              decoration: TextDecoration.underline,
+            ),
       ),
     );
   }
 }
 
 class ThirdPartySignUpButton extends StatelessWidget {
-  const ThirdPartySignUpButton({Key? key}) : super(key: key);
+  final Function()? onPressed;
+  final String content;
+  final double width;
+
+  const ThirdPartySignUpButton({
+    Key? key,
+    required this.content,
+    required this.onPressed,
+    required this.width,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return ElevatedButton(
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.white),
+          overlayColor: MaterialStateProperty.all(
+              const Color(0xff707070).withOpacity(0.5)),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6.0)))),
+      onPressed: onPressed,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        alignment: Alignment.center,
+        height: 36,
+        width: width,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              StoraygeIcons.google,
+              color: Colors.blue,
+              size: 16,
+            ),
+            horizontalSpace10,
+            Text(
+              content,
+              style: appTextTheme(context).bodyText1!.copyWith(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xff707070),
+                  ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:storayge/presentation/shared/local_theme.dart';
 
 import '../../../presentation/shared/local_buttons.dart';
 import '../../../presentation/shared/styles.dart';
@@ -20,7 +21,6 @@ class StartView extends StatelessWidget {
         screenHeightPercentage(context, percentage: 0.08);
 
     return Scaffold(
-      backgroundColor: kcBackgroundColor,
       body: ListView(
         physics: const BouncingScrollPhysics(),
         children: [
@@ -30,15 +30,15 @@ class StartView extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('Storayge', style: ktsPrimaryHeading),
+                  Text('Storayge', style: appTextTheme(context).headline1),
                   horizontalSpace14,
                   logoWidget,
                 ],
               ),
               verticalSpace24,
-              const Text(
+              Text(
                 'Manage your storage. Whether in the \nkitchen, bedroom or warehouse',
-                style: ktsParagraph,
+                style: appTextTheme(context).bodyText1,
                 textAlign: TextAlign.center,
               ),
               customVerticalSpace(height: _heightBetweenSubtitleAndCharacter),
@@ -55,7 +55,7 @@ class StartView extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     'Already have an account? ',
-                    style: ktsSubtitle,
+                    style: appTextTheme(context).caption,
                   ),
                   PressableText(
                       content: 'Login here',

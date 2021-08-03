@@ -32,7 +32,6 @@ final GetIt locator = GetIt.instance;
 Future<void>? setupLocator() {
   //! Views
   //Bloc and Cubits
-  locator.registerFactory(() => RegisterViewCubit());
 
   //! Features
   // Bloc and Cubits

@@ -3,7 +3,7 @@
 # IT WILL BE A PAIN.
 
 name: storayge
-description: A new Flutter project.
+description: todo - add desc.
 
 publish_to: "none"
 
@@ -31,6 +31,7 @@ dependencies:
 
   # Value Equality
   equatable: ^2.0.2
+  freezed_annotation:
 
   # Business Logic and Dependency Injection
   flutter_bloc: ^7.0.1
@@ -48,7 +49,6 @@ dependencies:
   # Render
   flutter_svg: ^0.22.0
   flutter_screenutil: ^5.0.0+2
-  entry: ^0.0.4
   simple_animations: ^3.1.1
 
   # Misc
@@ -66,6 +66,7 @@ dev_dependencies:
   auto_route_generator: ^2.1.0
   hive_generator: ^1.1.0
   json_serializable: ^4.1.3
+  freezed:
 
   # Mocking and Testing
   mockito: ^5.0.10

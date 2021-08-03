@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:supercharged/supercharged.dart';
 
 import '../../../constants/app_const.dart';
 import '../../../errors/exceptions.dart';
@@ -117,10 +118,7 @@ class AuthRepositoryImpl implements AuthRepository {
         ));
       }
     } else {
-      return const Left(ServerFailure(
-        code: ERROR_NO_INTERNET_CONNECTION,
-        message: MESSAGE_NO_INTERNET_CONNECTION,
-      ));
+      return const Left(NoConnectionFailure());
     }
   }
 
@@ -172,6 +170,28 @@ class AuthRepositoryImpl implements AuthRepository {
       return Right(userFromRemote);
     } on UserNotFoundException {
       return Left(UserNotFoundFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> isEmailNotRegistered(String email) async {
+    // TODO: implement isEmailNotRegistered
+    // TODO: create tests
+    if (await networkInfo.isConnected) {
+      bool isEmailNotRegistered =
+          await remoteDataSource.isEmailNotRegistered(email);
+      if (isEmailNotRegistered) {
+        return const Right(true);
+      } else {
+        return const Left(
+          BoolFailure(
+            code: ERROR_EMAIL_ALREADY_USED,
+            message: MESSAGE_EMAIL_ALREADY_IN_USE,
+          ),
+        );
+      }
+    } else {
+      return const Left(NoConnectionFailure());
     }
   }
 }

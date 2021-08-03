@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:storayge/core/auth/domain/repository/auth_repository.dart';
+import 'package:storayge/locator.dart';
 import '../../../core/auth/auth_cubit/auth_cubit.dart';
 import '../../shared/styles.dart';
 
 class SplashView extends StatelessWidget {
-  const SplashView({Key? key}) : super(key: key);
+  final AuthRepository authRepository = locator();
+
+  SplashView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     context.read<AuthCubit>().isLoggedInRun();
 
     return Scaffold(
-      backgroundColor: kcBackgroundColor,
       body: SafeArea(
         child: BlocListener<AuthCubit, AuthState>(
           listener: (context, state) {
@@ -21,7 +24,20 @@ class SplashView extends StatelessWidget {
               Navigator.of(context).pushNamed('/home');
             }
           },
-          child: const CircularProgressIndicator(),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+                TextButton(
+                  onPressed: () {
+                    authRepository.signOut();
+                  },
+                  child: Text('Logout'),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
