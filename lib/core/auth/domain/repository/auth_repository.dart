@@ -27,5 +27,5 @@ abstract class AuthRepository {
 
   Future<Either<Failure, StoraygeUser>> isLoggedIn();
 
-  Future<Either<Failure, bool>> isEmailNotRegistered();
+  Future<Either<Failure, bool>> isEmailNotRegistered(String email);
 }

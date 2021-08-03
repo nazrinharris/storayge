@@ -123,10 +123,10 @@ class AuthCubit extends Cubit<AuthState> {
     emit(const AuthLoading(
         currentOperationMessage:
             'Currently verifying if your email is available'));
-    final failureOrBool = await authRepository.isEmailNotRegistered();
+    final failureOrBool = await authRepository.isEmailNotRegistered(email);
     emit(
       failureOrBool.fold(
-        (failure) => const AuthError(message: 'Unknown error occured'),
+        (failure) => AuthError(code: failure.code, message: failure.message!),
         (retrievedBool) => AuthGeneralCompleted(content: retrievedBool),
       ),
     );

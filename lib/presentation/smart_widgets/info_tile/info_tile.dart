@@ -48,11 +48,7 @@ class InfoTile extends StatefulWidget {
   /// 2. If you call [triggerStateChange()], and the [isAbleToExpand] property is different from before,
   /// make sure [isExpanded] property is set to [false]. This must be done in order to trigger the state change properly.
   ///
-  /// 3. The [child] is aligned at the center of the space available for it. If you want to set an alignment of your own,
-  /// simply wrap the widget you are providing to the child with a [Container] and set the alignment yourself. Of course,
-  /// this can be whatever you want. The point is, the parent of the widget provided to [child] will take up the available
-  /// space. I think.
-
+  /// 3. No custom alignment is currently allowed. Lazy to do it. Currently the child is aligned to top left.
   const InfoTile({
     Key? key,
   }) : super(key: key);
@@ -150,9 +146,11 @@ class _InfoTileState extends State<InfoTile> with AnimationMixin {
               elevation: 4.0,
               shadowColor: Theme.of(context).backgroundColor,
               child: InkWell(
+                splashColor: _resolveSplashColorForInkWell(),
+                highlightColor: _resolveHighlightColorForInkWell(),
                 borderRadius: BorderRadius.circular(16.0),
                 onTap: () {
-                  bool _isAbleToExpand = context
+                  final bool _isAbleToExpand = context
                       .read<InfoTileBloc>()
                       .state
                       .infoTileProps
@@ -176,28 +174,35 @@ class _InfoTileState extends State<InfoTile> with AnimationMixin {
                               top: _topLeadingPadding.value,
                             ),
                             alignment: Alignment.centerLeft,
-                            height: 54,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  readProps(context).leadingText,
-                                  style:
-                                      appTextTheme(context).headline5!.copyWith(
+                            //height: 54,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      readProps(context).leadingText,
+                                      style: appTextTheme(context)
+                                          .headline5!
+                                          .copyWith(
                                             fontSize: _fontSize.value,
                                             color: _resolveStatusForTextColor(),
                                           ),
-                                ),
-                                AnimatedSwitcher(
-                                    duration: 10.milliseconds,
-                                    child: context
-                                            .read<InfoTileBloc>()
-                                            .state
-                                            .infoTileProps
-                                            .isAbleToExpand
-                                        ? _buildIcon()
-                                        : _buildEmptySpace())
-                              ],
+                                    ),
+                                  ),
+                                  AnimatedSwitcher(
+                                      duration: 10.milliseconds,
+                                      child: context
+                                              .read<InfoTileBloc>()
+                                              .state
+                                              .infoTileProps
+                                              .isAbleToExpand
+                                          ? _buildIcon()
+                                          : _buildEmptySpace())
+                                ],
+                              ),
                             ),
                           ),
                           ClipRect(
@@ -208,10 +213,13 @@ class _InfoTileState extends State<InfoTile> with AnimationMixin {
                                 child: Padding(
                                   padding: const EdgeInsets.only(
                                     left: 24,
-                                    right: 24,
+                                    right: 34,
                                     bottom: 24,
                                   ),
-                                  child: child,
+                                  child: Align(
+                                    alignment: Alignment.topLeft,
+                                    child: child,
+                                  ),
                                 ),
                               ),
                             ),
@@ -256,6 +264,49 @@ class _InfoTileState extends State<InfoTile> with AnimationMixin {
       case InfoTileStatus.error:
         {
           return kcErrorRedText;
+        }
+    }
+  }
+
+  Color _resolveSplashColorForInkWell() {
+    final Color _errorSplashColor = kcErrorRedText.withOpacity(0.25);
+    final Color _successSplashColor = kcSuccessGreenText.withOpacity(0.25);
+    final Color _loadingSplashColor = kcBackgroundColorDark.withOpacity(0.25);
+
+    switch (readProps(context).currentStatus) {
+      case InfoTileStatus.loading:
+        {
+          return _loadingSplashColor;
+        }
+      case InfoTileStatus.success:
+        {
+          return _successSplashColor;
+        }
+      case InfoTileStatus.error:
+        {
+          return _errorSplashColor;
+        }
+    }
+  }
+
+  Color _resolveHighlightColorForInkWell() {
+    final Color _errorHighlightColor = kcErrorRedText.withOpacity(0.15);
+    final Color _successHighlightColor = kcSuccessGreenText.withOpacity(0.15);
+    final Color _loadingHighlightColor =
+        kcBackgroundColorDark.withOpacity(0.15);
+
+    switch (readProps(context).currentStatus) {
+      case InfoTileStatus.loading:
+        {
+          return _loadingHighlightColor;
+        }
+      case InfoTileStatus.success:
+        {
+          return _successHighlightColor;
+        }
+      case InfoTileStatus.error:
+        {
+          return _errorHighlightColor;
         }
     }
   }

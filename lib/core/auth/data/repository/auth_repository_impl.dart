@@ -118,10 +118,7 @@ class AuthRepositoryImpl implements AuthRepository {
         ));
       }
     } else {
-      return const Left(ServerFailure(
-        code: ERROR_NO_INTERNET_CONNECTION,
-        message: MESSAGE_NO_INTERNET_CONNECTION,
-      ));
+      return const Left(NoConnectionFailure());
     }
   }
 
@@ -177,12 +174,24 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> isEmailNotRegistered() async {
+  Future<Either<Failure, bool>> isEmailNotRegistered(String email) async {
     // TODO: implement isEmailNotRegistered
     // TODO: create tests
-    bool isEmailNotRegistered =
-        await Future.delayed(5.seconds).then((_) => true);
-    return Left(FirestoreFailure(
-        message: 'An unfortunate error occured', code: 'TEST_ERROR_LOL'));
+    if (await networkInfo.isConnected) {
+      bool isEmailNotRegistered =
+          await remoteDataSource.isEmailNotRegistered(email);
+      if (isEmailNotRegistered) {
+        return const Right(true);
+      } else {
+        return const Left(
+          BoolFailure(
+            code: ERROR_EMAIL_ALREADY_USED,
+            message: MESSAGE_EMAIL_ALREADY_IN_USE,
+          ),
+        );
+      }
+    } else {
+      return const Left(NoConnectionFailure());
+    }
   }
 }

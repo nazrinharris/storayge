@@ -117,6 +117,7 @@ class _RegisterViewState extends State<RegisterView> with AnimationMixin {
               closeButton: () {
                 readFirstFormBloc(context).add(unfocusAllNodes);
                 readSecondFormBloc(context).add(unfocusAllNodes);
+                Navigator.of(context).pop();
               },
             ),
             body: Stack(
@@ -382,7 +383,6 @@ class _BuildBottomButtons extends StatelessWidget {
               size: 8,
             ),
             firstPageOnPressed: () {
-              print('firstpagepressed');
               checkIfUsernameAndEmailIsValid(context);
             },
             secondPageContent: 'Confirm',
@@ -391,8 +391,7 @@ class _BuildBottomButtons extends StatelessWidget {
               color: Colors.black,
             ),
             secondPageOnPressed: () {
-              print('secondpagepressed');
-              checkIfPasswordIsEqual(context);
+              checkIfPasswordIsEqualAndRegister(context);
             },
             width: 0.41.sw,
           ),
@@ -425,21 +424,17 @@ class _BuildBottomButtons extends StatelessWidget {
 
     if (isFormValid == true) {
       final String? currentEmail =
-          readFirstFormBloc(context).state.props.firstFieldValue;
+          readFirstFormBloc(context).state.props.secondFieldValue;
       context.read<PrimaryButtonAwareCubit>().triggerLoading();
-      context
-          .read<InfoTileBloc>()
-          .add(InfoTileEvent.triggerStateChange(InfoTileProps(
-            leadingText: 'Give us a few moments...',
-            isAbleToExpand: true,
-            isExpanded: false,
-            currentStatus: InfoTileStatus.loading,
-            child: Container(
-              alignment: Alignment.topLeft,
-              child: const Text(
-                  "We're currently checking if your email can be used, it may take longer if your internet connection is weak."),
-            ),
-          )));
+      context.read<InfoTileBloc>().add(InfoTileEvent.triggerStateChange(
+          context.read<InfoTileBloc>().state.infoTileProps.copyWith(
+                leadingText: 'Give us a moment...',
+                isAbleToExpand: true,
+                currentStatus: InfoTileStatus.loading,
+                child: const Text(
+                    "We're currently checking if your email can be used, it may take longer if your internet connection is weak."),
+              )));
+
       showInfoTile();
       await context
           .read<AuthCubit>()
@@ -461,17 +456,14 @@ class _BuildBottomButtons extends StatelessWidget {
               )));
         } else if (currentAuthState is AuthError) {
           context.read<PrimaryButtonAwareCubit>().triggerFirstPage();
-          context
-              .read<InfoTileBloc>()
-              .add(InfoTileEvent.triggerStateChange(InfoTileProps(
-                leadingText: 'Uh oh, something went wrong.',
-                child: Container(
-                  child: Text(currentAuthState.message),
-                ),
-                isAbleToExpand: true,
-                isExpanded: false,
-                currentStatus: InfoTileStatus.error,
-              )));
+          context.read<InfoTileBloc>().add(InfoTileEvent.triggerStateChange(
+              context.read<InfoTileBloc>().state.infoTileProps.copyWith(
+                    leadingText: currentAuthState.message,
+                    isAbleToExpand: false,
+                    isExpanded: false,
+                    currentStatus: InfoTileStatus.error,
+                    child: const SizedBox.shrink(),
+                  )));
         }
       });
     } else {
@@ -479,7 +471,7 @@ class _BuildBottomButtons extends StatelessWidget {
     }
   }
 
-  Future<void> checkIfPasswordIsEqual(BuildContext context) async {
+  Future<void> checkIfPasswordIsEqualAndRegister(BuildContext context) async {
     readSecondFormBloc(context).add(unfocusAllNodes);
     readSecondFormBloc(context).add(enableAlwaysValidation);
     final bool isFormValid = readSecondFormBloc(context)
@@ -489,10 +481,66 @@ class _BuildBottomButtons extends StatelessWidget {
         .currentState!
         .validate();
     if (isFormValid == true) {
-      print('password is same!');
-      // TODO: Implement registration
+      final String _currentUsername =
+          context.read<FirstTwoFieldsFormBloc>().state.props.firstFieldValue!;
+      final String _currentEmail =
+          context.read<FirstTwoFieldsFormBloc>().state.props.secondFieldValue!;
+      final String _currentPassword =
+          context.read<SecondTwoFieldsFormBloc>().state.props.firstFieldValue!;
+      final String _currentConfirmPassword =
+          context.read<SecondTwoFieldsFormBloc>().state.props.secondFieldValue!;
+
+      context.read<InfoTileBloc>().add(InfoTileEvent.triggerStateChange(
+          context.read<InfoTileBloc>().state.infoTileProps.copyWith(
+                leadingText: 'Give us a moment...',
+                isAbleToExpand: true,
+                currentStatus: InfoTileStatus.loading,
+                child: const Text("We're creating your account."),
+              )));
+
+      showInfoTile();
+      context.read<PrimaryButtonAwareCubit>().triggerLoading();
+
+      await context
+          .read<AuthCubit>()
+          .registerWithEmailAndPasswordRun(
+            username: _currentUsername,
+            email: _currentEmail,
+            password: _currentPassword,
+            confirmPassword: _currentConfirmPassword,
+          )
+          .then(
+        (_) {
+          final AuthState _currentAuthState = context.read<AuthCubit>().state;
+          if (_currentAuthState is AuthLoaded) {
+            print('User succesfully registered and logged in with the uid: ');
+
+            context
+                .read<InfoTileBloc>()
+                .add(const InfoTileEvent.triggerStateChange(InfoTileProps(
+                  leadingText: 'Great! Your account has been created.',
+                  child: SizedBox.shrink(),
+                  isAbleToExpand: false,
+                  isExpanded: false,
+                  currentStatus: InfoTileStatus.success,
+                )));
+
+            context.read<PrimaryButtonAwareCubit>().triggerSecondPage();
+          } else if (_currentAuthState is AuthError) {
+            context.read<InfoTileBloc>().add(
+                  InfoTileEvent.triggerStateChange(
+                    context.read<InfoTileBloc>().state.infoTileProps.copyWith(
+                          leadingText: 'Gosh, an error occured.',
+                          isAbleToExpand: true,
+                          currentStatus: InfoTileStatus.error,
+                          child: Text(_currentAuthState.message),
+                        ),
+                  ),
+                );
+          }
+        },
+      );
     } else {
-      print('password is not same!');
       return;
     }
   }
@@ -606,8 +654,8 @@ class _RegisterFormSecondPageState extends State<RegisterFormSecondPage> {
   String? validatePassword(String? input) {
     if (input == null || input.isEmpty) {
       return 'Sorry but this cannot be empty';
-    } else if (input.length <= 4) {
-      return 'Password length must be 5 characters or more';
+    } else if (input.length <= 5) {
+      return 'Password length must be 6 characters or more';
     }
   }
 

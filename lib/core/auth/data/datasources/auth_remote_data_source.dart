@@ -25,6 +25,8 @@ abstract class AuthRemoteDataSource {
 
   Future<StoraygeUserModel> isLoggedIn();
 
+  Future<bool> isEmailNotRegistered(String email);
+
   Future<String> getUid();
 
   Future<Unit> signOut();
@@ -136,6 +138,19 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return storaygeUserModel;
     } else {
       throw UserNotFoundException();
+    }
+  }
+
+  @override
+  Future<bool> isEmailNotRegistered(String email) async {
+    // TODO: implement isEmailNotRegistered
+    final List<String> availableSignInMethods =
+        await firebaseAuth.fetchSignInMethodsForEmail(email);
+
+    if (availableSignInMethods.isEmpty) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

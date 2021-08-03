@@ -8,6 +8,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:storayge/presentation/shared/local_theme.dart';
+import 'package:storayge/presentation/views/home/home_view.dart';
 
 import 'app_router.dart';
 import 'core/auth/auth_cubit/auth_cubit.dart';
@@ -65,10 +66,10 @@ class StoraygeApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
-          theme: AppTheme.lightTheme,
+          theme: AppTheme.darkTheme,
           title: 'Storayge',
-          home: RegisterView(),
-          //onGenerateRoute: appRouter.onGenerateRoute,
+          //home: RegisterView(),
+          onGenerateRoute: appRouter.onGenerateRoute,
         ),
       ),
     );
