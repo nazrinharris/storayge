@@ -66,7 +66,9 @@ mixin AppTheme {
         headline3: TextThemeDark.headline3,
         headline4: TextThemeDark.headline4,
         headline5: TextThemeDark.headline5,
+        headline6: TextThemeDark.headline6,
         bodyText1: TextThemeDark.bodyText1,
+        bodyText2: TextThemeDark.bodyText2,
         caption: TextThemeDark.caption,
       ),
       fontFamily: 'Montserrat',
@@ -122,7 +124,9 @@ mixin AppTheme {
         headline3: TextThemeLight.headline3,
         headline4: TextThemeLight.headline4,
         headline5: TextThemeLight.headline5,
+        headline6: TextThemeLight.headline6,
         bodyText1: TextThemeLight.bodyText1,
+        bodyText2: TextThemeLight.bodyText2,
         caption: TextThemeLight.caption,
       ),
       fontFamily: 'Montserrat',
@@ -164,6 +168,7 @@ mixin TextThemeLight {
   /// [HeadingParagraph - Dark for lightTheme and darkTheme] == [headline5]
   /// [Paragraph] == [bodyText1]
   /// [Paragraph - Inverted Colors] == [bodyText2]
+  /// [ButtonText] == [bodyText3]
   /// [Subtitle] == [caption]
   ///
   ///
@@ -209,6 +214,15 @@ mixin TextThemeLight {
       fontSize: _kParagraphTextSize,
       fontFamily: 'Montserrat',
       fontWeight: FontWeight.w600,
+    );
+  }
+
+  static TextStyle get headline6 {
+    return TextStyle(
+      color: _kcWhite,
+      fontSize: _kParagraphTextSize,
+      fontFamily: 'Montserrat',
+      fontWeight: FontWeight.w500,
     );
   }
 
@@ -295,6 +309,15 @@ mixin TextThemeDark {
       fontSize: _kParagraphTextSize,
       fontFamily: 'Montserrat',
       fontWeight: FontWeight.w600,
+    );
+  }
+
+  static TextStyle get headline6 {
+    return TextStyle(
+      color: _kcBackgroundColorDark,
+      fontSize: _kParagraphTextSize,
+      fontFamily: 'Montserrat',
+      fontWeight: FontWeight.w500,
     );
   }
 

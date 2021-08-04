@@ -12,6 +12,7 @@ import 'package:storayge/presentation/smart_widgets/two_fields_form.dart/two_fie
 import 'package:storayge/presentation/views/login/bloc/login_view_bloc.dart';
 import 'package:supercharged/supercharged.dart';
 
+import '../../../locator.dart';
 import '../../../presentation/shared/styles.dart';
 import '../../../presentation/shared/ui_helpers.dart';
 import '../../shared/local_appbar.dart';
@@ -59,7 +60,14 @@ class _LoginViewState extends State<LoginView> with AnimationMixin {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => LoginViewBloc()),
+        BlocProvider(
+          create: (context) => LoginViewBloc(
+            loginViewProps: const LoginViewProps(
+              isInfoTileVisible: false,
+            ),
+            authCubit: locator(),
+          ),
+        ),
         BlocProvider(create: (context) => PrimaryButtonAwareCubit()),
         BlocProvider<FirstTwoFieldsFormBloc>(
             create: (context) => TwoFieldsFormBloc()),
@@ -109,8 +117,11 @@ class _LoginViewState extends State<LoginView> with AnimationMixin {
                               ),
                             ),
                           ),
-                          const Expanded(
-                            child: _BuildPageContent(),
+                          Expanded(
+                            child: _BuildPageContent(
+                              showInfoTile: showInfoTile,
+                              hideInfoTile: hideInfoTile,
+                            ),
                           ),
                         ],
                       ),
@@ -159,7 +170,9 @@ class _BuildBottomButton extends StatelessWidget {
         children: [
           PrimaryButtonAware(
             firstPageContent: 'Continue',
-            firstPageOnPressed: firstPageOnPressed,
+            firstPageOnPressed: () {
+              _firstPageOnPressed(context, showInfoTile, hideInfoTile);
+            },
             firstPageButtonIcon: const Icon(
               StoraygeIcons.storayge_arrow_right,
               color: Colors.black,
@@ -176,10 +189,31 @@ class _BuildBottomButton extends StatelessWidget {
   }
 }
 
-void firstPageOnPressed() {}
+void _firstPageOnPressed(
+  BuildContext context,
+  Function() showInfoTile,
+  Function() hideInfoTile,
+) {
+  context.read<LoginViewBloc>().add(
+        LoginViewEvent.continuePressed(
+          feedbackOnPressed: () {
+            showInfoTile();
+          },
+          onPressed: () {},
+          onLoading: () {},
+        ),
+      );
+}
 
 class _BuildPageContent extends StatelessWidget {
-  const _BuildPageContent({Key? key}) : super(key: key);
+  final Function() showInfoTile;
+  final Function() hideInfoTile;
+
+  const _BuildPageContent({
+    Key? key,
+    required this.hideInfoTile,
+    required this.showInfoTile,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -212,6 +246,23 @@ class _BuildPageContent extends StatelessWidget {
               content: 'Click here',
               onTap: () {
                 print('Forgot Password Clicked');
+                if (context
+                    .read<LoginViewBloc>()
+                    .state
+                    .loginViewProps
+                    .isInfoTileVisible) {
+                  context
+                      .read<LoginViewBloc>()
+                      .add(const LoginViewEvent.toggleInfoTileVisibility());
+                  hideInfoTile();
+                  print('Hiding Tile');
+                } else {
+                  context
+                      .read<LoginViewBloc>()
+                      .add(const LoginViewEvent.toggleInfoTileVisibility());
+                  showInfoTile();
+                  print('Showing Tile');
+                }
               },
             ),
           ],

@@ -7,7 +7,8 @@ import '../../presentation/shared/styles.dart';
 import '../../presentation/shared/ui_helpers.dart';
 
 class PrimaryButton extends StatelessWidget {
-  final String content;
+  final String? content;
+  final Widget child;
   final double? width;
   final Function()? onPressed;
   final Icon? buttonIcon;
@@ -16,7 +17,8 @@ class PrimaryButton extends StatelessWidget {
 
   const PrimaryButton({
     Key? key,
-    required this.content,
+    this.content,
+    required this.child,
     this.onPressed,
     this.buttonIcon,
     this.width,
@@ -29,20 +31,13 @@ class PrimaryButton extends StatelessWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            content,
-            style:
-                appTextTheme(context).bodyText1!.copyWith(color: Colors.black),
-          ),
+          child,
           horizontalSpace14,
           buttonIcon!,
         ],
       );
     } else {
-      return Text(
-        content,
-        style: appTextTheme(context).bodyText1!.copyWith(color: Colors.black),
-      );
+      return child;
     }
   }
 
@@ -50,11 +45,19 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+      ),
       child: Container(
         padding: EdgeInsets.symmetric(
           vertical: verticalPadding ?? 14,
           horizontal: horizontalPadding ?? 34,
         ),
+        alignment: Alignment.center,
         width: width,
         child: _resolveChild(context),
       ),
@@ -149,6 +152,7 @@ class PressableText extends StatelessWidget {
         content,
         style: appTextTheme(context).caption!.copyWith(
               decoration: TextDecoration.underline,
+              color: Colors.white,
             ),
       ),
     );
