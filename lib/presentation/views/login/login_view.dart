@@ -107,12 +107,12 @@ class _LoginViewState extends State<LoginView> with AnimationMixin {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 24),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(16.0),
-                              child: Align(
-                                heightFactor: _infoTileHeightFactor.value,
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(16.0),
+                            child: Align(
+                              heightFactor: _infoTileHeightFactor.value,
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 24),
                                 child: Opacity(
                                   opacity: _infoTileOpacity.value,
                                   child: const InfoTile(),
