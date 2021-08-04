@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:storayge/presentation/shared/local_theme.dart';
 import 'package:storayge/presentation/views/home/home_view.dart';
 import 'package:storayge/presentation/views/login/login_view.dart';
+import 'package:storayge/presentation/views/main/main_view.dart';
 import 'package:storayge/presentation/views/start/start_view.dart';
 
 import 'app_router.dart';
@@ -68,9 +69,9 @@ class StoraygeApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
-          theme: AppTheme.darkTheme,
+          theme: AppTheme.lightTheme,
           title: 'Storayge',
-          home: LoginView(),
+          home: MainView(),
           // onGenerateRoute: appRouter.onGenerateRoute,
         ),
       ),
