@@ -29,18 +29,24 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> with AnimationMixin {
   late AnimationController _infoTileVisibilityController;
   late Animation<double> _infoTileHeightFactor;
+  late Animation<double> _infoTileOpacity;
+  late CurvedAnimation _infoTileCurve;
 
   @override
   void initState() {
     super.initState();
     _infoTileVisibilityController = createController();
-    _infoTileHeightFactor = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _infoTileVisibilityController,
-        curve: Curves.easeOutExpo,
-        reverseCurve: Curves.easeInExpo,
-      ),
+
+    _infoTileCurve = CurvedAnimation(
+      parent: _infoTileVisibilityController,
+      curve: Curves.easeOutExpo,
+      reverseCurve: Curves.easeInExpo,
     );
+
+    _infoTileHeightFactor =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_infoTileCurve);
+    _infoTileOpacity =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_infoTileCurve);
   }
 
   void showInfoTile() {
@@ -135,10 +141,14 @@ class _RegisterViewState extends State<RegisterView> with AnimationMixin {
                           builder: (context) => Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              ClipRect(
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(16.0),
                                 child: Align(
                                   heightFactor: _infoTileHeightFactor.value,
-                                  child: const InfoTile(),
+                                  child: Opacity(
+                                    opacity: _infoTileOpacity.value,
+                                    child: const InfoTile(),
+                                  ),
                                 ),
                               ),
                               verticalSpace24,
@@ -376,6 +386,7 @@ class _BuildBottomButtons extends StatelessWidget {
             ),
           ),
           PrimaryButtonAware(
+            type: PrimaryButtonAwareType.twoPage,
             firstPageContent: 'Next',
             firstPageButtonIcon: const Icon(
               StoraygeIcons.storayge_arrow_right,

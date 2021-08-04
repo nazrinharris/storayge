@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:storayge/presentation/shared/local_theme.dart';
 
@@ -11,61 +12,110 @@ class StartView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const String logoPath = 'assets/images/svg/storayge_logo.svg';
+    const String iconPath = 'assets/images/svg/storayge_icon.svg';
     const String unboxingCharacterPath =
         'assets/images/svg/character_unboxing.svg';
-    final Widget logoWidget = SvgPicture.asset(logoPath);
-    final Widget unboxingCharacterWidget =
-        SvgPicture.asset(unboxingCharacterPath);
+    final Widget iconWidget = SvgPicture.asset(
+      iconPath,
+      height: 170,
+      width: 170,
+    );
+    final Widget unboxingCharacterWidget = SvgPicture.asset(
+      unboxingCharacterPath,
+      width: 1.5.sw,
+    );
     final _heightBetweenSubtitleAndCharacter =
         screenHeightPercentage(context, percentage: 0.08);
 
     return Scaffold(
-      body: ListView(
-        physics: const BouncingScrollPhysics(),
+      body: Stack(
         children: [
-          Column(
-            children: [
-              verticalSpace34,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Storayge', style: appTextTheme(context).headline1),
-                  horizontalSpace14,
-                  logoWidget,
-                ],
-              ),
-              verticalSpace24,
-              Text(
-                'Manage your storage. Whether in the \nkitchen, bedroom or warehouse',
-                style: appTextTheme(context).bodyText1,
-                textAlign: TextAlign.center,
-              ),
-              customVerticalSpace(height: _heightBetweenSubtitleAndCharacter),
-              unboxingCharacterWidget,
-              PrimaryButton(
-                content: "Start managing!",
-                onPressed: () {
-                  Navigator.of(context).pushNamed('/register');
-                },
-              ),
-              verticalSpace24,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'Already have an account? ',
-                    style: appTextTheme(context).caption,
-                  ),
-                  PressableText(
-                      content: 'Login here',
-                      onTap: () {
-                        Navigator.of(context).pushNamed('/login');
-                      })
-                ],
-              )
-            ],
+          Container(
+            alignment: Alignment.center,
+            height: 1.sh,
+            width: 1.sw,
+            child: unboxingCharacterWidget,
           ),
+          Container(
+            height: 1.sh,
+            width: 1.sw,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.transparent,
+                  Theme.of(context).backgroundColor.withOpacity(0.8),
+                  Theme.of(context).backgroundColor,
+                ],
+              ),
+            ),
+          ),
+          Container(
+            height: 1.sh,
+            width: 1.sw,
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'storayge',
+                        style: appTextTheme(context)
+                            .headline1!
+                            .copyWith(fontSize: 58.sp),
+                      ),
+                      verticalSpace14,
+                      Text(
+                        'Manage your items. Whether in the \nkitchen, bedroom or warehouse.',
+                        style: appBodyText1(context),
+                        textAlign: TextAlign.center,
+                      )
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: iconWidget,
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      PrimaryButton(
+                        onPressed: () {},
+                        width: 0.53.sw,
+                        verticalPadding: 18,
+                        child: Text(
+                          'Start Managing!',
+                          style: appTextTheme(context).headline6,
+                        ),
+                      ),
+                      verticalSpace24,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Already have an account? ',
+                            style: appTextTheme(context).caption,
+                          ),
+                          PressableText(
+                            content: 'Login here',
+                            onTap: () {},
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );

@@ -7,79 +7,61 @@ import '../../presentation/shared/styles.dart';
 import '../../presentation/shared/ui_helpers.dart';
 
 class PrimaryButton extends StatelessWidget {
-  final String content;
+  final String? content;
+  final Widget child;
   final double? width;
   final Function()? onPressed;
   final Icon? buttonIcon;
+  final double? horizontalPadding;
+  final double? verticalPadding;
 
   const PrimaryButton({
     Key? key,
-    required this.content,
+    this.content,
+    required this.child,
     this.onPressed,
     this.buttonIcon,
     this.width,
+    this.horizontalPadding,
+    this.verticalPadding,
   }) : super(key: key);
+
+  Widget _resolveChild(BuildContext context) {
+    if (buttonIcon != null) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          child,
+          horizontalSpace14,
+          buttonIcon!,
+        ],
+      );
+    } else {
+      return child;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (buttonIcon == null && width == null) {
-      return ElevatedButton(
-        onPressed: onPressed,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-          child: Text(
-            content,
-            style:
-                appTextTheme(context).bodyText1!.copyWith(color: Colors.black),
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
         ),
-      );
-    } else if (buttonIcon == null) {
-      return ElevatedButton(
-        onPressed: onPressed,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Text(
-            content,
-            style:
-                appTextTheme(context).bodyText1!.copyWith(color: Colors.black),
-          ),
+      ),
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          vertical: verticalPadding ?? 14,
+          horizontal: horizontalPadding ?? 34,
         ),
-      );
-    } else if (width == null) {
-      return ElevatedButton(
-        onPressed: onPressed,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-          child: Text(
-            content,
-            style:
-                appTextTheme(context).bodyText1!.copyWith(color: Colors.black),
-          ),
-        ),
-      );
-    } else {
-      return ElevatedButton(
-        onPressed: onPressed,
-        child: SizedBox(
-          width: width,
-          height: 46,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                content,
-                style: appTextTheme(context)
-                    .bodyText1!
-                    .copyWith(color: Colors.black),
-              ),
-              horizontalSpace14,
-              buttonIcon!,
-            ],
-          ),
-        ),
-      );
-    }
+        alignment: Alignment.center,
+        width: width,
+        child: _resolveChild(context),
+      ),
+    );
   }
 }
 
@@ -170,6 +152,7 @@ class PressableText extends StatelessWidget {
         content,
         style: appTextTheme(context).caption!.copyWith(
               decoration: TextDecoration.underline,
+              color: Colors.white,
             ),
       ),
     );
