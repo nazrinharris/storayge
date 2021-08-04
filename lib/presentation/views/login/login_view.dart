@@ -107,13 +107,16 @@ class _LoginViewState extends State<LoginView> with AnimationMixin {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(16.0),
-                            child: Align(
-                              heightFactor: _infoTileHeightFactor.value,
-                              child: Opacity(
-                                opacity: _infoTileOpacity.value,
-                                child: const InfoTile(),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 24),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16.0),
+                              child: Align(
+                                heightFactor: _infoTileHeightFactor.value,
+                                child: Opacity(
+                                  opacity: _infoTileOpacity.value,
+                                  child: const InfoTile(),
+                                ),
                               ),
                             ),
                           ),
@@ -194,15 +197,49 @@ void _firstPageOnPressed(
   Function() showInfoTile,
   Function() hideInfoTile,
 ) {
-  context.read<LoginViewBloc>().add(
-        LoginViewEvent.continuePressed(
-          feedbackOnPressed: () {
-            showInfoTile();
-          },
-          onPressed: () {},
-          onLoading: () {},
-        ),
-      );
+  context
+      .read<FirstTwoFieldsFormBloc>()
+      .add(const TwoFieldsFormEvent.enableAlwaysValidation());
+
+  if (context
+      .read<FirstTwoFieldsFormBloc>()
+      .state
+      .props
+      .formKey
+      .currentState!
+      .validate()) {
+    context.read<LoginViewBloc>().add(
+          LoginViewEvent.continuePressed(
+            email: context
+                .read<FirstTwoFieldsFormBloc>()
+                .state
+                .props
+                .firstFieldValue!,
+            password: context
+                .read<FirstTwoFieldsFormBloc>()
+                .state
+                .props
+                .secondFieldValue!,
+            showInfoTile: showInfoTile,
+            hideInfoTile: hideInfoTile,
+            updateInfoTile: (InfoTileProps infoTileProps) {
+              context.read<InfoTileBloc>().add(
+                    InfoTileEvent.triggerStateChange(infoTileProps),
+                  );
+            },
+            triggerLoadingPrimaryButtonAware: () {
+              context.read<PrimaryButtonAwareCubit>().triggerLoading();
+            },
+            triggerFirstPrimaryButtonAware: () {
+              context.read<PrimaryButtonAwareCubit>().triggerFirstPage();
+            },
+            doAfterError: () {},
+            doAfterSuccess: () {},
+          ),
+        );
+  } else {
+    return;
+  }
 }
 
 class _BuildPageContent extends StatelessWidget {

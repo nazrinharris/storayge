@@ -70,7 +70,7 @@ class StoraygeApp extends StatelessWidget {
         child: MaterialApp(
           theme: AppTheme.darkTheme,
           title: 'Storayge',
-          home: StartView(),
+          home: LoginView(),
           // onGenerateRoute: appRouter.onGenerateRoute,
         ),
       ),

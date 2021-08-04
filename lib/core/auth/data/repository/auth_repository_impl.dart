@@ -66,33 +66,29 @@ class AuthRepositoryImpl implements AuthRepository {
     required String email,
     required String password,
   }) async {
-    Future.delayed(2.seconds);
-    return Right(StoraygeUser(
-        username: 'test', email: 'test@test.test', uid: 'test_uid'));
-
-    // if (await networkInfo.isConnected) {
-    //   try {
-    //     final storaygeUserModelAfterLogin = await remoteDataSource
-    //         .loginWithEmailAndPassword(email: email, password: password);
-    //     localDataSource.cacheStoraygeUser(storaygeUserModelAfterLogin);
-    //     final storaygeUser = StoraygeUser(
-    //       username: storaygeUserModelAfterLogin.username,
-    //       email: storaygeUserModelAfterLogin.email,
-    //       uid: storaygeUserModelAfterLogin.uid,
-    //     );
-    //     return Right(storaygeUser);
-    //   } on FirebaseAuthException catch (e) {
-    //     return Left(FirebaseAuthFailure(
-    //       code: e.code,
-    //       message: e.message,
-    //     ));
-    //   }
-    // } else {
-    //   return const Left(ServerFailure(
-    //     code: ERROR_NO_INTERNET_CONNECTION,
-    //     message: MESSAGE_NO_INTERNET_CONNECTION,
-    //   ));
-    // }
+    if (await networkInfo.isConnected) {
+      try {
+        final storaygeUserModelAfterLogin = await remoteDataSource
+            .loginWithEmailAndPassword(email: email, password: password);
+        localDataSource.cacheStoraygeUser(storaygeUserModelAfterLogin);
+        final storaygeUser = StoraygeUser(
+          username: storaygeUserModelAfterLogin.username,
+          email: storaygeUserModelAfterLogin.email,
+          uid: storaygeUserModelAfterLogin.uid,
+        );
+        return Right(storaygeUser);
+      } on FirebaseAuthException catch (e) {
+        return Left(FirebaseAuthFailure(
+          code: e.code,
+          message: e.message,
+        ));
+      }
+    } else {
+      return const Left(ServerFailure(
+        code: ERROR_NO_INTERNET_CONNECTION,
+        message: MESSAGE_NO_INTERNET_CONNECTION,
+      ));
+    }
   }
 
   @override

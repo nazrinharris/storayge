@@ -25,13 +25,25 @@ class _$LoginViewEventTearOff {
   }
 
   _LVEContinuePressed continuePressed(
-      {required dynamic Function() feedbackOnPressed,
-      required dynamic Function() onPressed,
-      required dynamic Function() onLoading}) {
+      {required dynamic Function() showInfoTile,
+      required dynamic Function() hideInfoTile,
+      required dynamic Function() doAfterSuccess,
+      required dynamic Function() doAfterError,
+      required dynamic Function(InfoTileProps) updateInfoTile,
+      required dynamic Function() triggerLoadingPrimaryButtonAware,
+      required dynamic Function() triggerFirstPrimaryButtonAware,
+      required String email,
+      required String password}) {
     return _LVEContinuePressed(
-      feedbackOnPressed: feedbackOnPressed,
-      onPressed: onPressed,
-      onLoading: onLoading,
+      showInfoTile: showInfoTile,
+      hideInfoTile: hideInfoTile,
+      doAfterSuccess: doAfterSuccess,
+      doAfterError: doAfterError,
+      updateInfoTile: updateInfoTile,
+      triggerLoadingPrimaryButtonAware: triggerLoadingPrimaryButtonAware,
+      triggerFirstPrimaryButtonAware: triggerFirstPrimaryButtonAware,
+      email: email,
+      password: password,
     );
   }
 
@@ -49,8 +61,16 @@ mixin _$LoginViewEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() started,
     required TResult Function() idle,
-    required TResult Function(dynamic Function() feedbackOnPressed,
-            dynamic Function() onPressed, dynamic Function() onLoading)
+    required TResult Function(
+            dynamic Function() showInfoTile,
+            dynamic Function() hideInfoTile,
+            dynamic Function() doAfterSuccess,
+            dynamic Function() doAfterError,
+            dynamic Function(InfoTileProps) updateInfoTile,
+            dynamic Function() triggerLoadingPrimaryButtonAware,
+            dynamic Function() triggerFirstPrimaryButtonAware,
+            String email,
+            String password)
         continuePressed,
     required TResult Function() toggleInfoTileVisibility,
   }) =>
@@ -59,8 +79,16 @@ mixin _$LoginViewEvent {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function()? idle,
-    TResult Function(dynamic Function() feedbackOnPressed,
-            dynamic Function() onPressed, dynamic Function() onLoading)?
+    TResult Function(
+            dynamic Function() showInfoTile,
+            dynamic Function() hideInfoTile,
+            dynamic Function() doAfterSuccess,
+            dynamic Function() doAfterError,
+            dynamic Function(InfoTileProps) updateInfoTile,
+            dynamic Function() triggerLoadingPrimaryButtonAware,
+            dynamic Function() triggerFirstPrimaryButtonAware,
+            String email,
+            String password)?
         continuePressed,
     TResult Function()? toggleInfoTileVisibility,
     required TResult orElse(),
@@ -149,8 +177,16 @@ class _$_LVEStarted with DiagnosticableTreeMixin implements _LVEStarted {
   TResult when<TResult extends Object?>({
     required TResult Function() started,
     required TResult Function() idle,
-    required TResult Function(dynamic Function() feedbackOnPressed,
-            dynamic Function() onPressed, dynamic Function() onLoading)
+    required TResult Function(
+            dynamic Function() showInfoTile,
+            dynamic Function() hideInfoTile,
+            dynamic Function() doAfterSuccess,
+            dynamic Function() doAfterError,
+            dynamic Function(InfoTileProps) updateInfoTile,
+            dynamic Function() triggerLoadingPrimaryButtonAware,
+            dynamic Function() triggerFirstPrimaryButtonAware,
+            String email,
+            String password)
         continuePressed,
     required TResult Function() toggleInfoTileVisibility,
   }) {
@@ -162,8 +198,16 @@ class _$_LVEStarted with DiagnosticableTreeMixin implements _LVEStarted {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function()? idle,
-    TResult Function(dynamic Function() feedbackOnPressed,
-            dynamic Function() onPressed, dynamic Function() onLoading)?
+    TResult Function(
+            dynamic Function() showInfoTile,
+            dynamic Function() hideInfoTile,
+            dynamic Function() doAfterSuccess,
+            dynamic Function() doAfterError,
+            dynamic Function(InfoTileProps) updateInfoTile,
+            dynamic Function() triggerLoadingPrimaryButtonAware,
+            dynamic Function() triggerFirstPrimaryButtonAware,
+            String email,
+            String password)?
         continuePressed,
     TResult Function()? toggleInfoTileVisibility,
     required TResult orElse(),
@@ -250,8 +294,16 @@ class _$_LVEIdle with DiagnosticableTreeMixin implements _LVEIdle {
   TResult when<TResult extends Object?>({
     required TResult Function() started,
     required TResult Function() idle,
-    required TResult Function(dynamic Function() feedbackOnPressed,
-            dynamic Function() onPressed, dynamic Function() onLoading)
+    required TResult Function(
+            dynamic Function() showInfoTile,
+            dynamic Function() hideInfoTile,
+            dynamic Function() doAfterSuccess,
+            dynamic Function() doAfterError,
+            dynamic Function(InfoTileProps) updateInfoTile,
+            dynamic Function() triggerLoadingPrimaryButtonAware,
+            dynamic Function() triggerFirstPrimaryButtonAware,
+            String email,
+            String password)
         continuePressed,
     required TResult Function() toggleInfoTileVisibility,
   }) {
@@ -263,8 +315,16 @@ class _$_LVEIdle with DiagnosticableTreeMixin implements _LVEIdle {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function()? idle,
-    TResult Function(dynamic Function() feedbackOnPressed,
-            dynamic Function() onPressed, dynamic Function() onLoading)?
+    TResult Function(
+            dynamic Function() showInfoTile,
+            dynamic Function() hideInfoTile,
+            dynamic Function() doAfterSuccess,
+            dynamic Function() doAfterError,
+            dynamic Function(InfoTileProps) updateInfoTile,
+            dynamic Function() triggerLoadingPrimaryButtonAware,
+            dynamic Function() triggerFirstPrimaryButtonAware,
+            String email,
+            String password)?
         continuePressed,
     TResult Function()? toggleInfoTileVisibility,
     required TResult orElse(),
@@ -312,9 +372,15 @@ abstract class _$LVEContinuePressedCopyWith<$Res> {
           _LVEContinuePressed value, $Res Function(_LVEContinuePressed) then) =
       __$LVEContinuePressedCopyWithImpl<$Res>;
   $Res call(
-      {dynamic Function() feedbackOnPressed,
-      dynamic Function() onPressed,
-      dynamic Function() onLoading});
+      {dynamic Function() showInfoTile,
+      dynamic Function() hideInfoTile,
+      dynamic Function() doAfterSuccess,
+      dynamic Function() doAfterError,
+      dynamic Function(InfoTileProps) updateInfoTile,
+      dynamic Function() triggerLoadingPrimaryButtonAware,
+      dynamic Function() triggerFirstPrimaryButtonAware,
+      String email,
+      String password});
 }
 
 /// @nodoc
@@ -330,23 +396,54 @@ class __$LVEContinuePressedCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? feedbackOnPressed = freezed,
-    Object? onPressed = freezed,
-    Object? onLoading = freezed,
+    Object? showInfoTile = freezed,
+    Object? hideInfoTile = freezed,
+    Object? doAfterSuccess = freezed,
+    Object? doAfterError = freezed,
+    Object? updateInfoTile = freezed,
+    Object? triggerLoadingPrimaryButtonAware = freezed,
+    Object? triggerFirstPrimaryButtonAware = freezed,
+    Object? email = freezed,
+    Object? password = freezed,
   }) {
     return _then(_LVEContinuePressed(
-      feedbackOnPressed: feedbackOnPressed == freezed
-          ? _value.feedbackOnPressed
-          : feedbackOnPressed // ignore: cast_nullable_to_non_nullable
+      showInfoTile: showInfoTile == freezed
+          ? _value.showInfoTile
+          : showInfoTile // ignore: cast_nullable_to_non_nullable
               as dynamic Function(),
-      onPressed: onPressed == freezed
-          ? _value.onPressed
-          : onPressed // ignore: cast_nullable_to_non_nullable
+      hideInfoTile: hideInfoTile == freezed
+          ? _value.hideInfoTile
+          : hideInfoTile // ignore: cast_nullable_to_non_nullable
               as dynamic Function(),
-      onLoading: onLoading == freezed
-          ? _value.onLoading
-          : onLoading // ignore: cast_nullable_to_non_nullable
+      doAfterSuccess: doAfterSuccess == freezed
+          ? _value.doAfterSuccess
+          : doAfterSuccess // ignore: cast_nullable_to_non_nullable
               as dynamic Function(),
+      doAfterError: doAfterError == freezed
+          ? _value.doAfterError
+          : doAfterError // ignore: cast_nullable_to_non_nullable
+              as dynamic Function(),
+      updateInfoTile: updateInfoTile == freezed
+          ? _value.updateInfoTile
+          : updateInfoTile // ignore: cast_nullable_to_non_nullable
+              as dynamic Function(InfoTileProps),
+      triggerLoadingPrimaryButtonAware: triggerLoadingPrimaryButtonAware ==
+              freezed
+          ? _value.triggerLoadingPrimaryButtonAware
+          : triggerLoadingPrimaryButtonAware // ignore: cast_nullable_to_non_nullable
+              as dynamic Function(),
+      triggerFirstPrimaryButtonAware: triggerFirstPrimaryButtonAware == freezed
+          ? _value.triggerFirstPrimaryButtonAware
+          : triggerFirstPrimaryButtonAware // ignore: cast_nullable_to_non_nullable
+              as dynamic Function(),
+      email: email == freezed
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
+      password: password == freezed
+          ? _value.password
+          : password // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -357,25 +454,38 @@ class _$_LVEContinuePressed
     with DiagnosticableTreeMixin
     implements _LVEContinuePressed {
   const _$_LVEContinuePressed(
-      {required this.feedbackOnPressed,
-      required this.onPressed,
-      required this.onLoading});
+      {required this.showInfoTile,
+      required this.hideInfoTile,
+      required this.doAfterSuccess,
+      required this.doAfterError,
+      required this.updateInfoTile,
+      required this.triggerLoadingPrimaryButtonAware,
+      required this.triggerFirstPrimaryButtonAware,
+      required this.email,
+      required this.password});
 
   @override
-
-  /// [feedbackOnPressed] is a method meant to trigger visual state changes in accordance
-  /// to it's state. Basically, this should be a UI-affecting only method.
-  final dynamic Function() feedbackOnPressed;
+  final dynamic Function() showInfoTile;
   @override
-
-  /// [onPressed] is a method meant to communicate with the backend and such.
-  final dynamic Function() onPressed;
+  final dynamic Function() hideInfoTile;
   @override
-  final dynamic Function() onLoading;
+  final dynamic Function() doAfterSuccess;
+  @override
+  final dynamic Function() doAfterError;
+  @override
+  final dynamic Function(InfoTileProps) updateInfoTile;
+  @override
+  final dynamic Function() triggerLoadingPrimaryButtonAware;
+  @override
+  final dynamic Function() triggerFirstPrimaryButtonAware;
+  @override
+  final String email;
+  @override
+  final String password;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'LoginViewEvent.continuePressed(feedbackOnPressed: $feedbackOnPressed, onPressed: $onPressed, onLoading: $onLoading)';
+    return 'LoginViewEvent.continuePressed(showInfoTile: $showInfoTile, hideInfoTile: $hideInfoTile, doAfterSuccess: $doAfterSuccess, doAfterError: $doAfterError, updateInfoTile: $updateInfoTile, triggerLoadingPrimaryButtonAware: $triggerLoadingPrimaryButtonAware, triggerFirstPrimaryButtonAware: $triggerFirstPrimaryButtonAware, email: $email, password: $password)';
   }
 
   @override
@@ -383,32 +493,67 @@ class _$_LVEContinuePressed
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'LoginViewEvent.continuePressed'))
-      ..add(DiagnosticsProperty('feedbackOnPressed', feedbackOnPressed))
-      ..add(DiagnosticsProperty('onPressed', onPressed))
-      ..add(DiagnosticsProperty('onLoading', onLoading));
+      ..add(DiagnosticsProperty('showInfoTile', showInfoTile))
+      ..add(DiagnosticsProperty('hideInfoTile', hideInfoTile))
+      ..add(DiagnosticsProperty('doAfterSuccess', doAfterSuccess))
+      ..add(DiagnosticsProperty('doAfterError', doAfterError))
+      ..add(DiagnosticsProperty('updateInfoTile', updateInfoTile))
+      ..add(DiagnosticsProperty(
+          'triggerLoadingPrimaryButtonAware', triggerLoadingPrimaryButtonAware))
+      ..add(DiagnosticsProperty(
+          'triggerFirstPrimaryButtonAware', triggerFirstPrimaryButtonAware))
+      ..add(DiagnosticsProperty('email', email))
+      ..add(DiagnosticsProperty('password', password));
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _LVEContinuePressed &&
-            (identical(other.feedbackOnPressed, feedbackOnPressed) ||
+            (identical(other.showInfoTile, showInfoTile) ||
                 const DeepCollectionEquality()
-                    .equals(other.feedbackOnPressed, feedbackOnPressed)) &&
-            (identical(other.onPressed, onPressed) ||
+                    .equals(other.showInfoTile, showInfoTile)) &&
+            (identical(other.hideInfoTile, hideInfoTile) ||
                 const DeepCollectionEquality()
-                    .equals(other.onPressed, onPressed)) &&
-            (identical(other.onLoading, onLoading) ||
+                    .equals(other.hideInfoTile, hideInfoTile)) &&
+            (identical(other.doAfterSuccess, doAfterSuccess) ||
                 const DeepCollectionEquality()
-                    .equals(other.onLoading, onLoading)));
+                    .equals(other.doAfterSuccess, doAfterSuccess)) &&
+            (identical(other.doAfterError, doAfterError) ||
+                const DeepCollectionEquality()
+                    .equals(other.doAfterError, doAfterError)) &&
+            (identical(other.updateInfoTile, updateInfoTile) ||
+                const DeepCollectionEquality()
+                    .equals(other.updateInfoTile, updateInfoTile)) &&
+            (identical(other.triggerLoadingPrimaryButtonAware,
+                    triggerLoadingPrimaryButtonAware) ||
+                const DeepCollectionEquality().equals(
+                    other.triggerLoadingPrimaryButtonAware,
+                    triggerLoadingPrimaryButtonAware)) &&
+            (identical(other.triggerFirstPrimaryButtonAware,
+                    triggerFirstPrimaryButtonAware) ||
+                const DeepCollectionEquality().equals(
+                    other.triggerFirstPrimaryButtonAware,
+                    triggerFirstPrimaryButtonAware)) &&
+            (identical(other.email, email) ||
+                const DeepCollectionEquality().equals(other.email, email)) &&
+            (identical(other.password, password) ||
+                const DeepCollectionEquality()
+                    .equals(other.password, password)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(feedbackOnPressed) ^
-      const DeepCollectionEquality().hash(onPressed) ^
-      const DeepCollectionEquality().hash(onLoading);
+      const DeepCollectionEquality().hash(showInfoTile) ^
+      const DeepCollectionEquality().hash(hideInfoTile) ^
+      const DeepCollectionEquality().hash(doAfterSuccess) ^
+      const DeepCollectionEquality().hash(doAfterError) ^
+      const DeepCollectionEquality().hash(updateInfoTile) ^
+      const DeepCollectionEquality().hash(triggerLoadingPrimaryButtonAware) ^
+      const DeepCollectionEquality().hash(triggerFirstPrimaryButtonAware) ^
+      const DeepCollectionEquality().hash(email) ^
+      const DeepCollectionEquality().hash(password);
 
   @JsonKey(ignore: true)
   @override
@@ -420,12 +565,29 @@ class _$_LVEContinuePressed
   TResult when<TResult extends Object?>({
     required TResult Function() started,
     required TResult Function() idle,
-    required TResult Function(dynamic Function() feedbackOnPressed,
-            dynamic Function() onPressed, dynamic Function() onLoading)
+    required TResult Function(
+            dynamic Function() showInfoTile,
+            dynamic Function() hideInfoTile,
+            dynamic Function() doAfterSuccess,
+            dynamic Function() doAfterError,
+            dynamic Function(InfoTileProps) updateInfoTile,
+            dynamic Function() triggerLoadingPrimaryButtonAware,
+            dynamic Function() triggerFirstPrimaryButtonAware,
+            String email,
+            String password)
         continuePressed,
     required TResult Function() toggleInfoTileVisibility,
   }) {
-    return continuePressed(feedbackOnPressed, onPressed, onLoading);
+    return continuePressed(
+        showInfoTile,
+        hideInfoTile,
+        doAfterSuccess,
+        doAfterError,
+        updateInfoTile,
+        triggerLoadingPrimaryButtonAware,
+        triggerFirstPrimaryButtonAware,
+        email,
+        password);
   }
 
   @override
@@ -433,14 +595,31 @@ class _$_LVEContinuePressed
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function()? idle,
-    TResult Function(dynamic Function() feedbackOnPressed,
-            dynamic Function() onPressed, dynamic Function() onLoading)?
+    TResult Function(
+            dynamic Function() showInfoTile,
+            dynamic Function() hideInfoTile,
+            dynamic Function() doAfterSuccess,
+            dynamic Function() doAfterError,
+            dynamic Function(InfoTileProps) updateInfoTile,
+            dynamic Function() triggerLoadingPrimaryButtonAware,
+            dynamic Function() triggerFirstPrimaryButtonAware,
+            String email,
+            String password)?
         continuePressed,
     TResult Function()? toggleInfoTileVisibility,
     required TResult orElse(),
   }) {
     if (continuePressed != null) {
-      return continuePressed(feedbackOnPressed, onPressed, onLoading);
+      return continuePressed(
+          showInfoTile,
+          hideInfoTile,
+          doAfterSuccess,
+          doAfterError,
+          updateInfoTile,
+          triggerLoadingPrimaryButtonAware,
+          triggerFirstPrimaryButtonAware,
+          email,
+          password);
     }
     return orElse();
   }
@@ -474,18 +653,28 @@ class _$_LVEContinuePressed
 
 abstract class _LVEContinuePressed implements LoginViewEvent {
   const factory _LVEContinuePressed(
-      {required dynamic Function() feedbackOnPressed,
-      required dynamic Function() onPressed,
-      required dynamic Function() onLoading}) = _$_LVEContinuePressed;
+      {required dynamic Function() showInfoTile,
+      required dynamic Function() hideInfoTile,
+      required dynamic Function() doAfterSuccess,
+      required dynamic Function() doAfterError,
+      required dynamic Function(InfoTileProps) updateInfoTile,
+      required dynamic Function() triggerLoadingPrimaryButtonAware,
+      required dynamic Function() triggerFirstPrimaryButtonAware,
+      required String email,
+      required String password}) = _$_LVEContinuePressed;
 
-  /// [feedbackOnPressed] is a method meant to trigger visual state changes in accordance
-  /// to it's state. Basically, this should be a UI-affecting only method.
-  dynamic Function() get feedbackOnPressed =>
+  dynamic Function() get showInfoTile => throw _privateConstructorUsedError;
+  dynamic Function() get hideInfoTile => throw _privateConstructorUsedError;
+  dynamic Function() get doAfterSuccess => throw _privateConstructorUsedError;
+  dynamic Function() get doAfterError => throw _privateConstructorUsedError;
+  dynamic Function(InfoTileProps) get updateInfoTile =>
       throw _privateConstructorUsedError;
-
-  /// [onPressed] is a method meant to communicate with the backend and such.
-  dynamic Function() get onPressed => throw _privateConstructorUsedError;
-  dynamic Function() get onLoading => throw _privateConstructorUsedError;
+  dynamic Function() get triggerLoadingPrimaryButtonAware =>
+      throw _privateConstructorUsedError;
+  dynamic Function() get triggerFirstPrimaryButtonAware =>
+      throw _privateConstructorUsedError;
+  String get email => throw _privateConstructorUsedError;
+  String get password => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$LVEContinuePressedCopyWith<_LVEContinuePressed> get copyWith =>
       throw _privateConstructorUsedError;
@@ -543,8 +732,16 @@ class _$_LVEToggleVisible
   TResult when<TResult extends Object?>({
     required TResult Function() started,
     required TResult Function() idle,
-    required TResult Function(dynamic Function() feedbackOnPressed,
-            dynamic Function() onPressed, dynamic Function() onLoading)
+    required TResult Function(
+            dynamic Function() showInfoTile,
+            dynamic Function() hideInfoTile,
+            dynamic Function() doAfterSuccess,
+            dynamic Function() doAfterError,
+            dynamic Function(InfoTileProps) updateInfoTile,
+            dynamic Function() triggerLoadingPrimaryButtonAware,
+            dynamic Function() triggerFirstPrimaryButtonAware,
+            String email,
+            String password)
         continuePressed,
     required TResult Function() toggleInfoTileVisibility,
   }) {
@@ -556,8 +753,16 @@ class _$_LVEToggleVisible
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function()? idle,
-    TResult Function(dynamic Function() feedbackOnPressed,
-            dynamic Function() onPressed, dynamic Function() onLoading)?
+    TResult Function(
+            dynamic Function() showInfoTile,
+            dynamic Function() hideInfoTile,
+            dynamic Function() doAfterSuccess,
+            dynamic Function() doAfterError,
+            dynamic Function(InfoTileProps) updateInfoTile,
+            dynamic Function() triggerLoadingPrimaryButtonAware,
+            dynamic Function() triggerFirstPrimaryButtonAware,
+            String email,
+            String password)?
         continuePressed,
     TResult Function()? toggleInfoTileVisibility,
     required TResult orElse(),
