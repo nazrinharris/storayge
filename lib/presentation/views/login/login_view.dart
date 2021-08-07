@@ -13,7 +13,6 @@ import 'package:storayge/presentation/views/login/bloc/login_view_bloc.dart';
 import 'package:supercharged/supercharged.dart';
 
 import '../../../locator.dart';
-import '../../../presentation/shared/styles.dart';
 import '../../../presentation/shared/ui_helpers.dart';
 import '../../shared/local_appbar.dart';
 

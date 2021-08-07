@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:storayge/presentation/shared/local_theme.dart';
 import 'package:storayge/presentation/smart_widgets/info_tile/bloc/info_tile_bloc.dart';
 import 'package:storayge/presentation/smart_widgets/info_tile/info_tile.dart';
 import '../../../features/cabinet/bloc/cabinet_cubit.dart';
@@ -7,7 +9,6 @@ import '../../../features/cabinet/domain/entities/shelf.dart';
 
 import '../../../core/auth/auth_cubit/auth_cubit.dart';
 import '../../../core/auth/domain/entities/storayge_user.dart';
-import '../../../presentation/shared/styles.dart';
 
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
@@ -16,37 +17,49 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const String shelfId = 'shelfIdaa';
-    const String uid = '111cGplVA3VaHMTYRuFohrniS2vwC33';
-
-    const Shelf shelf = Shelf(
-      shelfName: "localshelfName",
-      shelfId: "shelfIdha",
-      shelfDesc: "shelfDesc",
-      imgPath: "imgPath",
-      pathName: "pathName",
-      containerAmount: 1,
-      itemAmount: 1,
-    );
-
-    return BlocProvider(
-      create: (context) => InfoTileBloc(
-        infoTileProps: const InfoTileProps(
-          leadingText: 'A testament to a test.',
-          child: Text(
-              'This text is meant to be long. The words here do not have and will never have any significance aside from making this particular widget longer.'),
-          isAbleToExpand: true,
-          isExpanded: false,
-          currentStatus: InfoTileStatus.loading,
+    return Scaffold(
+      body: SafeArea(
+        bottom: false,
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'home',
+                    style: appTextTheme(context)
+                        .headline1!
+                        .copyWith(fontSize: 48.sp),
+                  ),
+                  IconButton(onPressed: () {}, icon: Icon(Icons.help_outline))
+                ],
+              ),
+            ),
+            Container(
+              key: const Key('search-bar'),
+              height: 32.0,
+              margin: EdgeInsets.symmetric(horizontal: 14),
+              padding: EdgeInsets.symmetric(horizontal: 0),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: TextFormField(
+                decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.search),
+                    border: UnderlineInputBorder(borderSide: BorderSide.none)),
+              ),
+            ),
+          ],
         ),
       ),
-      child: Scaffold(
-          body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [InfoTile()],
-      )),
     );
   }
+
+  /// All the code below are from outdated prototypes.
 
   BlocBuilder<CabinetCubit, CabinetState> _buildPrototype(
       Shelf shelf, String uid, String shelfId) {

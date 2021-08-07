@@ -5,7 +5,9 @@ const Color _kcPrimaryColor = Color(0xffFF916E);
 const Color _kcPrimaryColorDarker = Color(0xff8c6051);
 const Color _kcSecondaryColor = Color(0xff271700);
 const Color _kcTertiaryColor = Color(0xffFFE2BC);
-const Color _kcFourthColor = Color(0xffFFF0DC);
+const Color _kcFourthColor = Color(0xffFFF0DC); // Also used for appbar light
+
+const Color _kcBackgroundColorDarkLighter = Color(0xff2E1C00);
 
 const Color _kcGreen = Color(0xffB0FF7D);
 const Color _kcWhite = Color(0xffFFFFFF);
@@ -15,6 +17,8 @@ const Color _kcGrey = Color(0xff707070);
 
 const Color _kcBackgroundColorDark = Color(0xff110A00);
 const Color _kcBackgroundColorLight = Color(0xffFFE2BC);
+
+const Color _kcSearchBarBackgroundLight = Color(0xffFFF0DC);
 
 // Public Colors
 //
@@ -58,6 +62,10 @@ mixin AppTheme {
       highlightColor: _kcWhite,
       scaffoldBackgroundColor: _kcBackgroundColorDark,
       backgroundColor: _kcBackgroundColorDark,
+      bottomAppBarColor: _kcBackgroundColorDarkLighter,
+      cardColor: _kcPrimaryColor.withOpacity(0.3),
+
+      brightness: Brightness.dark,
 
       /// [Fonts and TextTheme]
       textTheme: TextTheme(
@@ -116,6 +124,10 @@ mixin AppTheme {
       highlightColor: _kcWhite,
       scaffoldBackgroundColor: _kcBackgroundColorLight,
       backgroundColor: _kcBackgroundColorLight,
+      bottomAppBarColor: _kcFourthColor,
+      cardColor: _kcPrimaryColor.withOpacity(0.3),
+
+      brightness: Brightness.light,
 
       /// [Font and TextTheme]
       textTheme: TextTheme(
@@ -174,7 +186,7 @@ mixin TextThemeLight {
   ///
   static TextStyle get headline1 {
     return TextStyle(
-      color: _kcTertiaryColor,
+      color: _kcBackgroundColorDark,
       fontSize: _kPrimaryHeadingTextSize,
       fontFamily: 'Montserrat_Alt',
       fontWeight: FontWeight.w700,
@@ -347,4 +359,24 @@ mixin TextThemeDark {
       fontWeight: FontWeight.normal,
     );
   }
+}
+
+InputDecoration kInputDecoration({
+  String? labelText,
+  required String hintText,
+  required BuildContext context,
+}) {
+  return InputDecoration(
+      focusColor: Theme.of(context).focusColor,
+      labelText: labelText,
+      labelStyle: appTextTheme(context).bodyText1,
+      hintText: hintText,
+      hintStyle: appTextTheme(context).caption,
+      enabledBorder: UnderlineInputBorder(
+        borderSide:
+            BorderSide(color: Theme.of(context).accentColor.withOpacity(0.5)),
+      ),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(width: 2, color: Theme.of(context).primaryColor),
+      ));
 }

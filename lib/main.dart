@@ -12,6 +12,7 @@ import 'package:storayge/presentation/views/home/home_view.dart';
 import 'package:storayge/presentation/views/login/login_view.dart';
 import 'package:storayge/presentation/views/main/main_view.dart';
 import 'package:storayge/presentation/views/start/start_view.dart';
+import 'package:storayge/presentation/views/testing/navigate_view.dart';
 
 import 'app_router.dart';
 import 'core/auth/auth_cubit/auth_cubit.dart';
@@ -69,10 +70,10 @@ class StoraygeApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
-          theme: AppTheme.lightTheme,
+          theme: AppTheme.darkTheme,
           title: 'Storayge',
-          home: MainView(),
-          // onGenerateRoute: appRouter.onGenerateRoute,
+          // home: NavigateView(),
+          onGenerateRoute: appRouter.onGenerateRoute,
         ),
       ),
     );

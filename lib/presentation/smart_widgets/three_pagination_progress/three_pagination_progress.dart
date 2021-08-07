@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storayge/presentation/shared/local_theme.dart';
-import '../../shared/styles.dart';
 import '../../shared/ui_helpers.dart';
 import 'three_pagination_progress_cubit.dart';
 

@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:storayge/presentation/shared/local_theme.dart';
 
 import '../../../presentation/shared/local_buttons.dart';
-import '../../../presentation/shared/styles.dart';
 import '../../../presentation/shared/ui_helpers.dart';
 
 class StartView extends StatelessWidget {
