@@ -27,7 +27,7 @@ dependencies:
   google_sign_in: ^5.0.7
 
   # Functional Programming
-  dartz: ^0.10.0-nullsafety.1
+  fpdart: ^0.0.9
 
   # Value Equality
   equatable: ^2.0.3
@@ -64,14 +64,14 @@ dev_dependencies:
     sdk: flutter
 
   # Code Generation
-  build_runner: ^2.0.4
+  build_runner: ^2.1.0
   auto_route_generator: ^2.1.0
   hive_generator: ^1.1.0
   json_serializable: ^4.1.3
   freezed:
 
   # Mocking and Testing
-  mockito: ^5.0.10
+  mockito: ^5.0.14
   bloc_test: ^8.0.2
 
 flutter:

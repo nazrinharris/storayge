@@ -1,4 +1,5 @@
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
+
 import 'package:hive/hive.dart';
 import '../../../../core/constants/app_const.dart';
 import '../../../../core/errors/exceptions.dart';

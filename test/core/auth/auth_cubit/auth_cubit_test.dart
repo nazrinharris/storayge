@@ -2,7 +2,7 @@
 
 import 'package:bloc_test/bloc_test.dart' as bloc;
 import 'package:mockito/mockito.dart';
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storayge/core/auth/auth_cubit/auth_cubit.dart';
 import 'package:storayge/core/usecases/params.dart';

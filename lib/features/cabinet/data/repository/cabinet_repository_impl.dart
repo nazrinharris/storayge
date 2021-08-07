@@ -6,7 +6,7 @@ import '../datasources/cabinet_remote_datasource.dart';
 import '../models/shelf_model.dart';
 import '../../domain/entities/shelf.dart';
 import '../../../../core/errors/failures.dart';
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import '../../domain/repository/cabinet_repository.dart';
 
 class CabinetRepositoryImpl implements CabinetRepository {

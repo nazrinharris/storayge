@@ -1,6 +1,6 @@
 import '../repository/auth_repository.dart';
 import '../../../errors/failures.dart';
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import '../../../usecases/usecase.dart';
 
 class SignOut implements Usecase<Unit, NoParams> {
