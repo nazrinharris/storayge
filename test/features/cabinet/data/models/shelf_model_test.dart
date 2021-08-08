@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storayge/features/cabinet/data/models/shelf_model.dart';
 import 'package:storayge/features/cabinet/domain/entities/shelf.dart';

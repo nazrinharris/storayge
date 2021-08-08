@@ -7,14 +7,14 @@ import '../models/shelf_model.dart';
 import '../../domain/entities/shelf.dart';
 import '../../../../core/errors/failures.dart';
 import 'package:fpdart/fpdart.dart';
-import '../../domain/repository/cabinet_repository.dart';
+import '../../domain/i_repository/i_cabinet_repository.dart';
 
-class CabinetRepositoryImpl implements CabinetRepository {
+class CabinetRepository implements ICabinetRepository {
   final CabinetRemoteDataSource remoteDataSource;
   final CabinetLocalDataSource localDataSource;
   final NetworkInfo networkInfo;
 
-  CabinetRepositoryImpl({
+  CabinetRepository({
     required this.remoteDataSource,
     required this.localDataSource,
     required this.networkInfo,
@@ -79,11 +79,11 @@ class CabinetRepositoryImpl implements CabinetRepository {
       final ShelfModel shelfModel = ShelfModel(
         shelfName: shelf.shelfName,
         shelfId: shelf.shelfId,
-        shelfDesc: shelf.shelfDesc,
-        imgPath: shelf.imgPath,
-        pathName: shelf.pathName,
-        containerAmount: shelf.containerAmount,
-        itemAmount: shelf.itemAmount,
+        shelfDesc: shelf.shelfDesc ?? 'temp',
+        imgPath: shelf.imgPath ?? 'temp',
+        pathName: shelf.pathName ?? 'temp',
+        containerAmount: shelf.containerAmount ?? 1,
+        itemAmount: shelf.itemAmount ?? 1,
       );
       await remoteDataSource.storeShelfInRemote(
           shelfModel: shelfModel, uid: uid);

@@ -2,7 +2,7 @@ import 'package:fpdart/fpdart.dart';
 import '../../../../core/errors/failures.dart';
 import '../entities/shelf.dart';
 
-abstract class CabinetRepository {
+abstract class ICabinetRepository {
   Future<Either<Failure, Shelf>> getShelf({
     required String uid,
     required String shelfId,

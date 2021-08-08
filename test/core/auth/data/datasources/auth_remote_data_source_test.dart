@@ -1,23 +1,40 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:storayge/core/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:storayge/core/constants/app_const.dart';
 import 'package:storayge/core/errors/exceptions.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../../presets/entities_presets.dart';
 import '../../../../presets/failures_exceptions_presets.dart';
-import '../../../mock_classes/mock_firebase/mock_firebase.mocks.dart';
+
+class MockFirebaseFirestore extends Mock implements FirebaseFirestore {}
+
+class MockCollectionReference extends Mock
+    implements CollectionReference<Map<String, dynamic>> {}
+
+class MockDocumentReference extends Mock
+    implements DocumentReference<Map<String, dynamic>> {}
+
+class MockDocumentSnapshot extends Mock
+    implements DocumentSnapshot<Map<String, dynamic>> {}
+
+class MockFirebaseAuth extends Mock implements FirebaseAuth {}
+
+class MockUserCredential extends Mock implements UserCredential {}
+
+class MockUser extends Mock implements User {}
 
 void main() {
-  late AuthRemoteDataSourceImpl authRemoteDataSourceImpl;
+  late AuthRemoteDataSource authRemoteDataSource;
 
   late MockFirebaseFirestore mockFirebaseFirestore;
-  late MockCollectionReference<Map<String, dynamic>> mockCollectionReference;
-  late MockDocumentReference<Map<String, dynamic>> mockDocumentReference;
-  late MockDocumentSnapshot<Map<String, dynamic>> mockDocumentSnapshot;
+  late MockCollectionReference mockCollectionReference;
+  late MockDocumentReference mockDocumentReference;
+  late MockDocumentSnapshot mockDocumentSnapshot;
 
   late MockFirebaseAuth mockFirebaseAuth;
   late MockUserCredential mockUserCredential;
@@ -32,7 +49,7 @@ void main() {
     mockFirebaseAuth = MockFirebaseAuth();
     mockUserCredential = MockUserCredential();
     mockUser = MockUser();
-    authRemoteDataSourceImpl = AuthRemoteDataSourceImpl(
+    authRemoteDataSource = AuthRemoteDataSource(
       firebaseFirestore: mockFirebaseFirestore,
       firebaseAuth: mockFirebaseAuth,
     );
@@ -40,22 +57,24 @@ void main() {
 
   group('getStoraygeUserDataFromRemote', () {
     void setupSuccesfullQuery() {
-      when(mockFirebaseFirestore.collection(any))
+      when(() => mockFirebaseFirestore.collection(any()))
           .thenAnswer((_) => mockCollectionReference);
-      when(mockCollectionReference.doc(any))
+      when(() => mockCollectionReference.doc(any()))
           .thenAnswer((_) => mockDocumentReference);
-      when(mockDocumentReference.get())
+      when(() => mockDocumentReference.get())
           .thenAnswer((_) async => mockDocumentSnapshot);
-      when(mockDocumentSnapshot.data()).thenAnswer((_) => tStoraygeUserJSON);
+      when(() => mockDocumentSnapshot.data())
+          .thenAnswer((_) => tStoraygeUserJSON);
     }
 
     void setupFailureQuery() {
-      when(mockFirebaseFirestore.collection(any))
+      when(() => mockFirebaseFirestore.collection(any()))
           .thenAnswer((_) => mockCollectionReference);
-      when(mockCollectionReference.doc(any))
+      when(() => mockCollectionReference.doc(any()))
           .thenAnswer((_) => mockDocumentReference);
-      when(mockDocumentReference.get()).thenThrow(testFirebaseException);
-      when(mockDocumentSnapshot.data()).thenAnswer((_) => tStoraygeUserJSON);
+      when(() => mockDocumentReference.get()).thenThrow(testFirebaseException);
+      when(() => mockDocumentSnapshot.data())
+          .thenAnswer((_) => tStoraygeUserJSON);
     }
 
     test(
@@ -64,12 +83,12 @@ void main() {
         //arrange
         setupSuccesfullQuery();
         // act
-        authRemoteDataSourceImpl.getStoraygeUserDataFromRemote(uid: tUid);
+        authRemoteDataSource.getStoraygeUserDataFromRemote(uid: tUid);
         // assert
         verifyInOrder([
-          mockFirebaseFirestore.collection(FIRESTORE_USER_COLLECTION),
-          mockCollectionReference.doc(tUid),
-          mockDocumentReference.get(),
+          () => mockFirebaseFirestore.collection(FIRESTORE_USER_COLLECTION),
+          () => mockCollectionReference.doc(tUid),
+          () => mockDocumentReference.get(),
         ]);
       },
     );
@@ -80,8 +99,8 @@ void main() {
         //arrange
         setupSuccesfullQuery();
         // act
-        final result = await authRemoteDataSourceImpl
-            .getStoraygeUserDataFromRemote(uid: tUid);
+        final result =
+            await authRemoteDataSource.getStoraygeUserDataFromRemote(uid: tUid);
         // assert
         expect(result, equals(tStoraygeUserModel));
       },
@@ -93,7 +112,7 @@ void main() {
         // arrange
         setupFailureQuery();
         // act
-        final call = authRemoteDataSourceImpl.getStoraygeUserDataFromRemote;
+        final call = authRemoteDataSource.getStoraygeUserDataFromRemote;
         // assert
         expect(
             () => call(uid: tUid),
@@ -107,22 +126,23 @@ void main() {
 
   group('loginWithEmailAndPassword', () {
     void setupSuccesfullQuery() {
-      when(mockFirebaseFirestore.collection(any))
+      when(() => mockFirebaseFirestore.collection(any()))
           .thenAnswer((_) => mockCollectionReference);
-      when(mockCollectionReference.doc(any))
+      when(() => mockCollectionReference.doc(any()))
           .thenAnswer((_) => mockDocumentReference);
-      when(mockDocumentReference.get())
+      when(() => mockDocumentReference.get())
           .thenAnswer((_) async => mockDocumentSnapshot);
-      when(mockDocumentSnapshot.data()).thenAnswer((_) => tStoraygeUserJSON);
+      when(() => mockDocumentSnapshot.data())
+          .thenAnswer((_) => tStoraygeUserJSON);
 
-      when(mockFirebaseAuth.signInWithEmailAndPassword(
-              email: anyNamed('email'), password: anyNamed('password')))
+      when(() => mockFirebaseAuth.signInWithEmailAndPassword(
+              email: any(named: 'email'), password: any(named: 'password')))
           .thenAnswer((_) async => mockUserCredential);
-      when(mockFirebaseAuth.createUserWithEmailAndPassword(
-              email: anyNamed('email'), password: anyNamed('password')))
+      when(() => mockFirebaseAuth.createUserWithEmailAndPassword(
+              email: any(named: 'email'), password: any(named: 'password')))
           .thenAnswer((_) async => mockUserCredential);
-      when(mockUserCredential.user).thenReturn(mockUser);
-      when(mockUser.uid).thenReturn(tUid);
+      when(() => mockUserCredential.user).thenReturn(mockUser);
+      when(() => mockUser.uid).thenReturn(tUid);
     }
 
     test(
@@ -131,7 +151,7 @@ void main() {
         // arrange
         setupSuccesfullQuery();
         // act
-        final result = await authRemoteDataSourceImpl.loginWithEmailAndPassword(
+        final result = await authRemoteDataSource.loginWithEmailAndPassword(
             email: tEmail, password: tPassword);
         // assert
         expect(result, equals(tStoraygeUserModel));
@@ -144,13 +164,13 @@ void main() {
         // arrange
         setupSuccesfullQuery();
         // act
-        await authRemoteDataSourceImpl.loginWithEmailAndPassword(
+        await authRemoteDataSource.loginWithEmailAndPassword(
             email: tEmail, password: tPassword);
         // assert
         verifyInOrder([
-          mockFirebaseFirestore.collection(FIRESTORE_USER_COLLECTION),
-          mockCollectionReference.doc(tUid),
-          mockDocumentReference.get(),
+          () => mockFirebaseFirestore.collection(FIRESTORE_USER_COLLECTION),
+          () => mockCollectionReference.doc(tUid),
+          () => mockDocumentReference.get(),
         ]);
       },
     );
@@ -158,18 +178,21 @@ void main() {
 
   group('registerWithEmailAndPassword', () {
     void setupSuccesfullQuery() {
-      when(mockFirebaseFirestore.collection(any))
+      when(() => mockFirebaseFirestore.collection(any()))
           .thenAnswer((_) => mockCollectionReference);
-      when(mockCollectionReference.doc(any))
+      when(() => mockCollectionReference.doc(any()))
           .thenAnswer((_) => mockDocumentReference);
-      when(mockDocumentReference.get())
+      when(() => mockDocumentReference.get())
           .thenAnswer((_) async => mockDocumentSnapshot);
-      when(mockDocumentSnapshot.data()).thenAnswer((_) => tStoraygeUserJSON);
-      when(mockFirebaseAuth.createUserWithEmailAndPassword(
-              email: anyNamed('email'), password: anyNamed('password')))
+      when(() => mockDocumentReference.set(any()))
+          .thenAnswer((_) async => Future.value());
+      when(() => mockDocumentSnapshot.data())
+          .thenAnswer((_) => tStoraygeUserJSON);
+      when(() => mockFirebaseAuth.createUserWithEmailAndPassword(
+              email: any(named: 'email'), password: any(named: 'password')))
           .thenAnswer((_) async => mockUserCredential);
-      when(mockUserCredential.user).thenReturn(mockUser);
-      when(mockUser.uid).thenReturn(tUid);
+      when(() => mockUserCredential.user).thenReturn(mockUser);
+      when(() => mockUser.uid).thenReturn(tUid);
     }
 
     test(
@@ -178,8 +201,7 @@ void main() {
         // arrange
         setupSuccesfullQuery();
         // act
-        final result =
-            await authRemoteDataSourceImpl.registerWithEmailAndPassword(
+        final result = await authRemoteDataSource.registerWithEmailAndPassword(
           email: tEmail,
           password: tPassword,
           username: tUsername,
@@ -195,20 +217,20 @@ void main() {
         // arrange
         setupSuccesfullQuery();
         // act
-        await authRemoteDataSourceImpl.registerWithEmailAndPassword(
+        await authRemoteDataSource.registerWithEmailAndPassword(
           email: tEmail,
           password: tPassword,
           username: tUsername,
         );
         // assert
         verifyInOrder([
-          mockFirebaseFirestore.collection(FIRESTORE_USER_COLLECTION),
-          mockCollectionReference.doc(tUid),
-          mockDocumentReference.set({
-            'uid': tUid,
-            'email': tEmail,
-            'username': tUsername,
-          }),
+          () => mockFirebaseFirestore.collection(FIRESTORE_USER_COLLECTION),
+          () => mockCollectionReference.doc(tUid),
+          () => mockDocumentReference.set({
+                'uid': tUid,
+                'email': tEmail,
+                'username': tUsername,
+              }),
         ]);
       },
     );
@@ -219,10 +241,10 @@ void main() {
       'should return proper uid when there is a user logged in',
       () async {
         // arrange
-        when(mockFirebaseAuth.currentUser).thenReturn(mockUser);
-        when(mockUser.uid).thenReturn(tUid);
+        when(() => mockFirebaseAuth.currentUser).thenReturn(mockUser);
+        when(() => mockUser.uid).thenReturn(tUid);
         // act
-        final result = await authRemoteDataSourceImpl.getUid();
+        final result = await authRemoteDataSource.getUid();
         // assert
         expect(result, equals(tUid));
       },
@@ -232,9 +254,9 @@ void main() {
       'should throw UserNotFoundException when no user is logged in',
       () async {
         // arrange
-        when(mockFirebaseAuth.currentUser).thenReturn(null);
+        when(() => mockFirebaseAuth.currentUser).thenReturn(null);
         // act
-        final call = authRemoteDataSourceImpl.getUid;
+        final call = authRemoteDataSource.getUid;
         // assert
         expect(() => call(), throwsA(isA<UserNotFoundException>()));
       },
@@ -246,12 +268,12 @@ void main() {
       'should call signOut() from firebaseAuth',
       () async {
         // arrange
-        when(mockFirebaseAuth.signOut())
+        when(() => mockFirebaseAuth.signOut())
             .thenAnswer((_) async => Future.value());
         // act
-        final result = await authRemoteDataSourceImpl.signOut();
+        final result = await authRemoteDataSource.signOut();
         // assert
-        verify(mockFirebaseAuth.signOut());
+        verify(() => mockFirebaseAuth.signOut());
         expect(result, unit);
       },
     );

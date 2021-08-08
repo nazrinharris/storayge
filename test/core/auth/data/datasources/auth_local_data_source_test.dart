@@ -1,21 +1,25 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:hive/hive.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:storayge/core/auth/data/datasources/auth_local_data_source.dart';
 import 'package:storayge/core/constants/app_const.dart';
 import 'package:storayge/core/errors/exceptions.dart';
 
 import '../../../../presets/entities_presets.dart';
-import '../../../mock_classes/mock_hive/mock_hive.mocks.dart';
+
+class MockHiveInterface extends Mock implements HiveInterface {}
+
+class MockBox extends Mock implements Box {}
 
 void main() {
-  late AuthLocalDataSourceImpl dataSourceImpl;
+  late AuthLocalDataSource authLocalDataSource;
   late MockHiveInterface mockHiveInterface;
   late MockBox mockBox;
 
   setUp(() {
     mockHiveInterface = MockHiveInterface();
     mockBox = MockBox();
-    dataSourceImpl = AuthLocalDataSourceImpl(
+    authLocalDataSource = AuthLocalDataSource(
       hiveInterface: mockHiveInterface,
     );
   });
@@ -25,13 +29,15 @@ void main() {
       'should return StoraygeUser from StoraygeUserBox when there is one in the cache',
       () async {
         // arrange
-        when(mockHiveInterface.openBox(any)).thenAnswer((_) async => mockBox);
-        when(mockBox.get(any)).thenAnswer((_) async => tStoraygeUserModel);
+        when(() => mockHiveInterface.openBox(any()))
+            .thenAnswer((_) async => mockBox);
+        when(() => mockBox.get(any()))
+            .thenAnswer((_) async => tStoraygeUserModel);
         // act
-        final result = await dataSourceImpl.getCachedStoraygeUser();
+        final result = await authLocalDataSource.getCachedStoraygeUser();
         // assert
-        verify(mockHiveInterface.openBox(any));
-        verify(mockBox.get(any));
+        verify(() => mockHiveInterface.openBox(any()));
+        verify(() => mockBox.get(any()));
         expect(result, equals(tStoraygeUserModel));
       },
     );
@@ -40,10 +46,11 @@ void main() {
       'should throw CacheException when there is no StoraygeUserModel in cache',
       () async {
         // arrange
-        when(mockHiveInterface.openBox(any)).thenAnswer((_) async => mockBox);
-        when(mockBox.get(any)).thenAnswer((_) async => null);
+        when(() => mockHiveInterface.openBox(any()))
+            .thenAnswer((_) async => mockBox);
+        when(() => mockBox.get(any())).thenAnswer((_) async => null);
         // act
-        final call = dataSourceImpl.getCachedStoraygeUser;
+        final call = authLocalDataSource.getCachedStoraygeUser;
         // assert
         expect(() => call(), throwsA(isA<CacheException>()));
       },
@@ -54,13 +61,15 @@ void main() {
     test(
       'should call HiveInterface and Box to cache data',
       () async {
-        when(mockHiveInterface.openBox(any)).thenAnswer((_) async => mockBox);
-        when(mockBox.put(any, any)).thenAnswer((_) async => Future.value());
+        when(() => mockHiveInterface.openBox(any()))
+            .thenAnswer((_) async => mockBox);
+        when(() => mockBox.put(any(), any()))
+            .thenAnswer((_) async => Future.value());
         // act
-        await dataSourceImpl.cacheStoraygeUser(tStoraygeUserModel);
+        await authLocalDataSource.cacheStoraygeUser(tStoraygeUserModel);
         // assert
-        verify(mockHiveInterface.openBox(HIVE_BOX_STORAYGE_USER));
-        verify(mockBox.put(HIVE_KEY_STORAYGE_USER, tStoraygeUserModel));
+        verify(() => mockHiveInterface.openBox(HIVE_BOX_STORAYGE_USER));
+        verify(() => mockBox.put(HIVE_KEY_STORAYGE_USER, tStoraygeUserModel));
       },
     );
   });

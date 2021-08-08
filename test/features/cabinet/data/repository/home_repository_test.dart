@@ -1,9 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fpdart/fpdart.dart';
+
 import 'package:mocktail/mocktail.dart';
 import 'package:storayge/core/network/network_info.dart';
 import 'package:storayge/features/cabinet/data/datasources/cabinet_local_datasource.dart';
 import 'package:storayge/features/cabinet/data/datasources/cabinet_remote_datasource.dart';
-import 'package:storayge/features/cabinet/data/repository/home_repository_impl.dart';
+import 'package:storayge/features/cabinet/data/repository/home_repository.dart';
+
+import '../../../../presets/entities_presets.dart';
 
 class MockCabinetRemoteDataSource extends Mock
     implements CabinetRemoteDataSource {}
@@ -14,7 +18,7 @@ class MockCabinetLocalDataSource extends Mock
 class MockNetworkInfo extends Mock implements NetworkInfo {}
 
 void main() {
-  late HomeRepositoryImpl repository;
+  late HomeRepository repository;
   late MockCabinetRemoteDataSource mockRemoteDataSource;
   late MockCabinetLocalDataSource mockLocalDataSource;
   late MockNetworkInfo mockNetworkInfo;
@@ -24,7 +28,7 @@ void main() {
     mockLocalDataSource = MockCabinetLocalDataSource();
     mockNetworkInfo = MockNetworkInfo();
 
-    repository = HomeRepositoryImpl(
+    repository = HomeRepository(
       remoteDataSource: mockRemoteDataSource,
       localDataSource: mockLocalDataSource,
       networkInfo: mockNetworkInfo,
@@ -33,16 +37,52 @@ void main() {
 
   setUpAll(() {});
 
+  void runTestsOnline(Function body) {
+    group('device is online', () {
+      setUp(() {
+        when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      });
+
+      body();
+    });
+  }
+
+  void runTestsOffline(Function body) {
+    group('device is online', () {
+      setUp(() {
+        when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      });
+
+      body();
+    });
+  }
+
   group('getHomeData', () {
     test(
       'should check if device is online',
       () async {
         // arrange
         when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(() => mockRemoteDataSource.getHomeData(uid: any(named: "uid")))
+            .thenAnswer((_) async => tShelfModel);
         // act
-
+        await repository.getHomeData(uid: tUid);
         // assert
+        verify(() => mockNetworkInfo.isConnected).called(1);
       },
     );
+
+    runTestsOnline(() {
+      test(
+        'should',
+        () async {
+          // arrange
+
+          // act
+
+          // assert
+        },
+      );
+    });
   });
 }

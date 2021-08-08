@@ -4,17 +4,17 @@ import '../../../constants/app_const.dart';
 import '../../../errors/exceptions.dart';
 import '../models/storayge_user_model.dart';
 
-abstract class AuthLocalDataSource {
+abstract class IAuthLocalDataSource {
   Future<StoraygeUserModel> getCachedStoraygeUser();
   Future<void> cacheStoraygeUser(StoraygeUserModel storaygeUserToCache);
   Future<bool> isFirstTimeOpeningApp();
   Future<StoraygeUserModel> getCurrentUser();
 }
 
-class AuthLocalDataSourceImpl implements AuthLocalDataSource {
+class AuthLocalDataSource implements IAuthLocalDataSource {
   final HiveInterface hiveInterface;
 
-  AuthLocalDataSourceImpl({
+  AuthLocalDataSource({
     required this.hiveInterface,
   });
 

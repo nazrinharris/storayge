@@ -1,20 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storayge/core/constants/app_const.dart';
 import 'package:storayge/features/cabinet/data/datasources/cabinet_remote_datasource.dart';
+import 'package:mocktail/mocktail.dart';
 
-import '../../../../core/mock_classes/mock_firebase/mock_firebase.mocks.dart';
 import '../../../../presets/entities_presets.dart';
 import '../../../../presets/failures_exceptions_presets.dart';
 
+class MockFirebaseFirestore extends Mock implements FirebaseFirestore {}
+
+class MockCollectionReference extends Mock
+    implements CollectionReference<Map<String, dynamic>> {}
+
+class MockDocumentReference extends Mock
+    implements DocumentReference<Map<String, dynamic>> {}
+
+class MockDocumentSnapshot extends Mock
+    implements DocumentSnapshot<Map<String, dynamic>> {}
+
 void main() {
-  late CabinetRemoteDataSourceImpl cabinetRemoteDataSourceImpl;
+  late CabinetRemoteDataSource cabinetRemoteDataSourceImpl;
 
   late MockFirebaseFirestore mockFirebaseFirestore;
-  late MockCollectionReference<Map<String, dynamic>> mockCollectionReference;
-  late MockDocumentReference<Map<String, dynamic>> mockDocumentReference;
-  late MockDocumentSnapshot<Map<String, dynamic>> mockDocumentSnapshot;
+  late MockCollectionReference mockCollectionReference;
+  late MockDocumentReference mockDocumentReference;
+  late MockDocumentSnapshot mockDocumentSnapshot;
 
   setUp(() {
     mockFirebaseFirestore = MockFirebaseFirestore();
@@ -22,33 +32,33 @@ void main() {
     mockCollectionReference = MockCollectionReference();
     mockDocumentReference = MockDocumentReference();
 
-    cabinetRemoteDataSourceImpl = CabinetRemoteDataSourceImpl(
+    cabinetRemoteDataSourceImpl = CabinetRemoteDataSource(
       firebaseFirestore: mockFirebaseFirestore,
     );
   });
 
   group('getShelf', () {
     void setupSuccesfullQuery() {
-      when(mockFirebaseFirestore.collection(any))
+      when(() => mockFirebaseFirestore.collection(any()))
           .thenAnswer((_) => mockCollectionReference);
-      when(mockCollectionReference.doc(any))
+      when(() => mockCollectionReference.doc(any()))
           .thenAnswer((_) => mockDocumentReference);
-      when(mockDocumentReference.collection(any))
+      when(() => mockDocumentReference.collection(any()))
           .thenAnswer((_) => mockCollectionReference);
-      when(mockDocumentReference.get())
+      when(() => mockDocumentReference.get())
           .thenAnswer((_) async => mockDocumentSnapshot);
-      when(mockDocumentSnapshot.data()).thenAnswer((_) => tShelfJSON);
+      when(() => mockDocumentSnapshot.data()).thenAnswer((_) => tShelfJSON);
     }
 
     void setupFailureQuery() {
-      when(mockFirebaseFirestore.collection(any))
+      when(() => mockFirebaseFirestore.collection(any()))
           .thenAnswer((_) => mockCollectionReference);
-      when(mockCollectionReference.doc(any))
+      when(() => mockCollectionReference.doc(any()))
           .thenAnswer((_) => mockDocumentReference);
-      when(mockDocumentReference.collection(any))
+      when(() => mockDocumentReference.collection(any()))
           .thenAnswer((_) => mockCollectionReference);
-      when(mockDocumentReference.get()).thenThrow(testFirebaseException);
-      when(mockDocumentSnapshot.data()).thenAnswer((_) => tShelfJSON);
+      when(() => mockDocumentReference.get()).thenThrow(testFirebaseException);
+      when(() => mockDocumentSnapshot.data()).thenAnswer((_) => tShelfJSON);
     }
 
     test(
@@ -63,11 +73,11 @@ void main() {
         );
         // assert
         verifyInOrder([
-          mockFirebaseFirestore.collection(FIRESTORE_USER_COLLECTION),
-          mockCollectionReference.doc(tUid),
-          mockDocumentReference.collection(FIRESTORE_SHELF_COLLECTION),
-          mockCollectionReference.doc(tShelfId),
-          mockDocumentReference.get(),
+          () => mockFirebaseFirestore.collection(FIRESTORE_USER_COLLECTION),
+          () => mockCollectionReference.doc(tUid),
+          () => mockDocumentReference.collection(FIRESTORE_SHELF_COLLECTION),
+          () => mockCollectionReference.doc(tShelfId),
+          () => mockDocumentReference.get(),
         ]);
       },
     );

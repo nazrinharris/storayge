@@ -8,17 +8,17 @@ import '../../../errors/exceptions.dart';
 import '../../../errors/failures.dart';
 import '../../../network/network_info.dart';
 import '../../domain/entities/storayge_user.dart';
-import '../../domain/repository/auth_repository.dart';
+import '../../domain/i_repository/i_auth_repository.dart';
 import '../datasources/auth_local_data_source.dart';
 import '../datasources/auth_remote_data_source.dart';
 import '../models/storayge_user_model.dart';
 
-class AuthRepositoryImpl implements AuthRepository {
+class AuthRepository implements IAuthRepository {
   final AuthRemoteDataSource remoteDataSource;
   final AuthLocalDataSource localDataSource;
   final NetworkInfo networkInfo;
 
-  AuthRepositoryImpl({
+  AuthRepository({
     required this.remoteDataSource,
     required this.localDataSource,
     required this.networkInfo,

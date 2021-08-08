@@ -49,6 +49,8 @@ final ServerFailure testServerFailure = ServerFailure(
   message: MESSAGE_NO_INTERNET_CONNECTION,
 );
 
+final NoConnectionFailure testNoConnectionFailure = NoConnectionFailure();
+
 final UserFailure testUserFailure = UserFailure(
   code: ERROR_USER_NOT_FOUND,
   message: MESSAGE_USER_NOT_FOUND,

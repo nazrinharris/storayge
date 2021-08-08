@@ -1,21 +1,21 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:storayge/features/cabinet/data/datasources/cabinet_local_datasource.dart';
+import 'package:storayge/features/cabinet/data/datasources/cabinet_remote_datasource.dart';
+import 'package:storayge/features/cabinet/data/repository/cabinet_repository.dart';
+import 'package:storayge/features/cabinet/domain/i_repository/i_cabinet_repository.dart';
 import '../../../core/constants/app_const.dart';
 import '../../../core/usecases/params.dart';
 import '../domain/entities/shelf.dart';
-import '../domain/usecases/get_shelf.dart';
-import '../domain/usecases/store_shelf.dart';
 
 part 'cabinet_state.dart';
 
 //TODO : Create tests for cubit
 class CabinetCubit extends Cubit<CabinetState> {
-  final GetShelf getShelf;
-  final StoreShelf storeShelf;
+  late ICabinetRepository cabinetRepository;
 
   CabinetCubit({
-    required this.getShelf,
-    required this.storeShelf,
+    required this.cabinetRepository,
   }) : super(CabinetInitial());
 
   Future<void> getShelfRun({
@@ -24,7 +24,7 @@ class CabinetCubit extends Cubit<CabinetState> {
   }) async {
     emit(const CabinetLoading(message: OPERATION_MESSAGE_GET_SHELF));
     final failureOrShelf =
-        await getShelf(ShelfParams(shelfId: shelfId, uid: uid));
+        await cabinetRepository.getShelf(shelfId: shelfId, uid: uid);
     emit(failureOrShelf.fold(
         (failure) =>
             GetShelfError(message: failure.message, code: failure.code),
@@ -36,11 +36,10 @@ class CabinetCubit extends Cubit<CabinetState> {
     required String uid,
   }) async {
     emit(const CabinetLoading(message: OPERATION_MESSAGE_STORE_SHELF));
-    final failureOrStore = await storeShelf(ShelfParams(
-      shelfId: shelf.shelfId,
-      uid: uid,
+    final failureOrStore = await cabinetRepository.storeShelf(
       shelf: shelf,
-    ));
+      uid: uid,
+    );
 
     emit(failureOrStore.fold(
       (failure) =>

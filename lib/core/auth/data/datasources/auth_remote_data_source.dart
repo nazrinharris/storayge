@@ -6,7 +6,7 @@ import '../../../errors/exceptions.dart';
 import '../../../constants/app_const.dart';
 import '../models/storayge_user_model.dart';
 
-abstract class AuthRemoteDataSource {
+abstract class IAuthRemoteDataSource {
   /// Query to the Cloud Firestore for the JSON Document of the uid specified
   Future<StoraygeUserModel> getStoraygeUserDataFromRemote({
     required String uid,
@@ -32,11 +32,11 @@ abstract class AuthRemoteDataSource {
   Future<Unit> signOut();
 }
 
-class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
+class AuthRemoteDataSource implements IAuthRemoteDataSource {
   final FirebaseFirestore firebaseFirestore;
   final FirebaseAuth firebaseAuth;
 
-  AuthRemoteDataSourceImpl({
+  AuthRemoteDataSource({
     required this.firebaseFirestore,
     required this.firebaseAuth,
   });

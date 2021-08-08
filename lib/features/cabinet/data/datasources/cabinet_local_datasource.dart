@@ -5,15 +5,15 @@ import '../../../../core/constants/app_const.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../models/shelf_model.dart';
 
-abstract class CabinetLocalDataSource {
+abstract class ICabinetLocalDataSource {
   Future<ShelfModel> getShelfFromLocal({required String shelfId});
   Future<Unit> storeShelfInLocal({required ShelfModel shelfModel});
 }
 
-class CabinetLocalDataSourceImpl implements CabinetLocalDataSource {
+class CabinetLocalDataSource implements ICabinetLocalDataSource {
   final HiveInterface hiveInterface;
 
-  CabinetLocalDataSourceImpl({
+  CabinetLocalDataSource({
     required this.hiveInterface,
   });
 
