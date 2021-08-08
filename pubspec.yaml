@@ -71,7 +71,7 @@ dev_dependencies:
   freezed:
 
   # Mocking and Testing
-  mockito: ^5.0.14
+  mocktail: ^0.1.4
   bloc_test: ^8.0.2
 
 flutter:

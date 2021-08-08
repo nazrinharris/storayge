@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:storayge/core/auth/domain/repository/auth_repository.dart';
+import 'package:storayge/core/auth/domain/i_repository/i_auth_repository.dart';
 import 'package:storayge/locator.dart';
 import '../../../core/auth/auth_cubit/auth_cubit.dart';
 
 class SplashView extends StatelessWidget {
-  final AuthRepository authRepository = locator();
+  final IAuthRepository authRepository = locator();
 
   SplashView({Key? key}) : super(key: key);
 

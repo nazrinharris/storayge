@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:storayge/features/cabinet/domain/entities/shelf.dart';
 import '../../../../core/constants/app_const.dart';
 import '../models/shelf_model.dart';
 
-abstract class CabinetRemoteDataSource {
+abstract class ICabinetRemoteDataSource {
   Future<ShelfModel> getShelf({
     required String uid,
     required String shelfId,
@@ -13,12 +14,16 @@ abstract class CabinetRemoteDataSource {
     required String uid,
     required ShelfModel shelfModel,
   });
+
+  Future<ShelfModel> getHomeData({
+    required String uid,
+  });
 }
 
-class CabinetRemoteDataSourceImpl implements CabinetRemoteDataSource {
+class CabinetRemoteDataSource implements ICabinetRemoteDataSource {
   final FirebaseFirestore firebaseFirestore;
 
-  CabinetRemoteDataSourceImpl({
+  CabinetRemoteDataSource({
     required this.firebaseFirestore,
   });
 
@@ -74,5 +79,10 @@ class CabinetRemoteDataSourceImpl implements CabinetRemoteDataSource {
     });
 
     return unit;
+  }
+
+  @override
+  Future<ShelfModel> getHomeData({required String uid}) {
+    throw UnimplementedError();
   }
 }

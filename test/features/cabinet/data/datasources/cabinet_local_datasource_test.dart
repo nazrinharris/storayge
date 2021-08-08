@@ -1,23 +1,27 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hive/hive.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:storayge/core/constants/app_const.dart';
 import 'package:storayge/core/errors/exceptions.dart';
 import 'package:storayge/features/cabinet/data/datasources/cabinet_local_datasource.dart';
 
-import '../../../../core/mock_classes/mock_hive/mock_hive.mocks.dart';
 import '../../../../presets/entities_presets.dart';
+
+class MockHiveInterface extends Mock implements HiveInterface {}
+
+class MockBox extends Mock implements Box {}
 
 void main() {
   late MockHiveInterface mockHiveInterface;
   late MockBox mockBox;
-  late CabinetLocalDataSourceImpl cabinetLocalDataSourceImpl;
+  late CabinetLocalDataSource cabinetLocalDataSource;
 
   setUp(() {
     mockHiveInterface = MockHiveInterface();
     mockBox = MockBox();
 
-    cabinetLocalDataSourceImpl = CabinetLocalDataSourceImpl(
+    cabinetLocalDataSource = CabinetLocalDataSource(
       hiveInterface: mockHiveInterface,
     );
   });
@@ -27,14 +31,15 @@ void main() {
       'should return Shelf from ShelfBox when the requested shelf exists',
       () async {
         // arrange
-        when(mockHiveInterface.openBox(any)).thenAnswer((_) async => mockBox);
-        when(mockBox.get(any)).thenAnswer((_) async => tShelfModel);
+        when(() => mockHiveInterface.openBox(any()))
+            .thenAnswer((_) async => mockBox);
+        when(() => mockBox.get(any())).thenAnswer((_) async => tShelfModel);
         // act
-        final result = await cabinetLocalDataSourceImpl.getShelfFromLocal(
-            shelfId: tShelfId);
+        final result =
+            await cabinetLocalDataSource.getShelfFromLocal(shelfId: tShelfId);
         // assert
-        verify(mockHiveInterface.openBox(HIVE_BOX_SHELF));
-        verify(mockBox.get(tShelfId));
+        verify(() => mockHiveInterface.openBox(HIVE_BOX_SHELF));
+        verify(() => mockBox.get(tShelfId));
         expect(result, equals(tShelfModel));
       },
     );
@@ -43,10 +48,11 @@ void main() {
       'should throw CacheException when the requested shelf does not exist',
       () async {
         // arrange
-        when(mockHiveInterface.openBox(any)).thenAnswer((_) async => mockBox);
-        when(mockBox.get(any)).thenAnswer((_) async => null);
+        when(() => mockHiveInterface.openBox(any()))
+            .thenAnswer((_) async => mockBox);
+        when(() => mockBox.get(any())).thenAnswer((_) async => null);
         // act
-        final call = cabinetLocalDataSourceImpl.getShelfFromLocal;
+        final call = cabinetLocalDataSource.getShelfFromLocal;
         // assert
         expect(() => call(shelfId: tShelfId),
             throwsA(predicate((e) => e is CacheException)));
@@ -59,14 +65,16 @@ void main() {
       'should store ShelfModel in ShelfBox',
       () async {
         // arrange
-        when(mockHiveInterface.openBox(any)).thenAnswer((_) async => mockBox);
-        when(mockBox.put(any, any)).thenAnswer((_) async => Future.value());
+        when(() => mockHiveInterface.openBox(any()))
+            .thenAnswer((_) async => mockBox);
+        when(() => mockBox.put(any(), any()))
+            .thenAnswer((_) async => Future.value());
         // act
-        final result = await cabinetLocalDataSourceImpl.storeShelfInLocal(
+        final result = await cabinetLocalDataSource.storeShelfInLocal(
             shelfModel: tShelfModel);
         // assert
-        verify(mockHiveInterface.openBox(HIVE_BOX_SHELF));
-        verify(mockBox.put(tShelfModel.shelfId, tShelfModel));
+        verify(() => mockHiveInterface.openBox(HIVE_BOX_SHELF));
+        verify(() => mockBox.put(tShelfModel.shelfId, tShelfModel));
         expect(result, unit);
       },
     );

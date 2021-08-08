@@ -7,15 +7,15 @@ class Shelf extends Equatable {
   @HiveField(1)
   final String shelfId;
   @HiveField(2)
-  final String shelfDesc;
+  final String? shelfDesc;
   @HiveField(3)
-  final String imgPath;
+  final String? imgPath;
   @HiveField(4)
-  final String pathName;
+  final String? pathName;
   @HiveField(5)
-  final int containerAmount;
+  final int? containerAmount;
   @HiveField(6)
-  final int itemAmount;
+  final int? itemAmount;
 
   const Shelf({
     required this.shelfName,

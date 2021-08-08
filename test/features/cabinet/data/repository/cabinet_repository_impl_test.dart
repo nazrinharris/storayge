@@ -1,15 +1,27 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:storayge/features/cabinet/data/repository/cabinet_repository_impl.dart';
+import 'package:storayge/core/network/network_info.dart';
+import 'package:storayge/features/cabinet/data/datasources/cabinet_local_datasource.dart';
+import 'package:storayge/features/cabinet/data/datasources/cabinet_remote_datasource.dart';
+import 'package:storayge/features/cabinet/data/models/shelf_model.dart';
+import 'package:storayge/features/cabinet/data/repository/cabinet_repository.dart';
 
-import '../../../../core/mock_classes/mock_utilities/mock_utilities.mocks.dart';
 import '../../../../presets/entities_presets.dart';
 import '../../../../presets/failures_exceptions_presets.dart';
-import '../../mock_classes/mock_app_cabinet/mock_app_cabinet.mocks.dart';
+
+class MockCabinetRemoteDataSource extends Mock
+    implements CabinetRemoteDataSource {}
+
+class MockCabinetLocalDataSource extends Mock
+    implements CabinetLocalDataSource {}
+
+class MockNetworkInfo extends Mock implements NetworkInfo {}
+
+class FakeShelfModel extends Fake implements ShelfModel {}
 
 void main() {
-  late CabinetRepositoryImpl repository;
+  late CabinetRepository repository;
   late MockCabinetRemoteDataSource mockCabinetRemoteDataSource;
   late MockCabinetLocalDataSource mockCabinetLocalDataSource;
   late MockNetworkInfo mockNetworkInfo;
@@ -19,17 +31,21 @@ void main() {
     mockCabinetLocalDataSource = MockCabinetLocalDataSource();
     mockNetworkInfo = MockNetworkInfo();
 
-    repository = CabinetRepositoryImpl(
+    repository = CabinetRepository(
       remoteDataSource: mockCabinetRemoteDataSource,
       localDataSource: mockCabinetLocalDataSource,
       networkInfo: mockNetworkInfo,
     );
   });
 
+  setUpAll(() {
+    registerFallbackValue(FakeShelfModel());
+  });
+
   void runTestsOnline(Function body) {
     group('device is online', () {
       setUp(() {
-        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       });
 
       body();
@@ -39,7 +55,7 @@ void main() {
   void runTestsOffline(Function body) {
     group('device is offline', () {
       setUp(() {
-        when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+        when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
       });
 
       body();
@@ -51,13 +67,13 @@ void main() {
       'should check if device is online',
       () async {
         // arrange
-        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-        when(mockCabinetRemoteDataSource.getShelf(
-          uid: anyNamed('uid'),
-          shelfId: anyNamed('shelfId'),
-        )).thenAnswer((_) async => tShelfModel);
-        when(mockCabinetLocalDataSource.storeShelfInLocal(
-                shelfModel: anyNamed('shelfModel')))
+        when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(() => mockCabinetRemoteDataSource.getShelf(
+              uid: any(named: 'uid'),
+              shelfId: any(named: 'shelfId'),
+            )).thenAnswer((_) async => tShelfModel);
+        when(() => mockCabinetLocalDataSource.storeShelfInLocal(
+                shelfModel: any(named: 'shelfModel')))
             .thenAnswer((_) async => unit);
         // act
         repository.getShelf(
@@ -65,7 +81,7 @@ void main() {
           shelfId: tShelfId,
         );
         // assert
-        verify(mockNetworkInfo.isConnected);
+        verify(() => mockNetworkInfo.isConnected);
       },
     );
 
@@ -74,12 +90,12 @@ void main() {
         'should return ShelfModel when query to remote data source is succesfull',
         () async {
           // arrange
-          when(mockCabinetRemoteDataSource.getShelf(
-            uid: anyNamed('uid'),
-            shelfId: anyNamed('shelfId'),
-          )).thenAnswer((_) async => tShelfModel);
-          when(mockCabinetLocalDataSource.storeShelfInLocal(
-                  shelfModel: anyNamed('shelfModel')))
+          when(() => mockCabinetRemoteDataSource.getShelf(
+                uid: any(named: 'uid'),
+                shelfId: any(named: 'shelfId'),
+              )).thenAnswer((_) async => tShelfModel);
+          when(() => mockCabinetLocalDataSource.storeShelfInLocal(
+                  shelfModel: any(named: 'shelfModel')))
               .thenAnswer((_) async => unit);
           // act
           final result = await repository.getShelf(
@@ -87,10 +103,10 @@ void main() {
             shelfId: tShelfId,
           );
           // assert
-          verify(mockCabinetRemoteDataSource.getShelf(
-            uid: tUid,
-            shelfId: tShelfId,
-          ));
+          verify(() => mockCabinetRemoteDataSource.getShelf(
+                uid: tUid,
+                shelfId: tShelfId,
+              ));
           expect(result, Right(tShelf));
         },
       );
@@ -99,12 +115,12 @@ void main() {
         'should cache ShelfModel locally when query to remote data source is succesfull',
         () async {
           // arrange
-          when(mockCabinetRemoteDataSource.getShelf(
-            uid: anyNamed('uid'),
-            shelfId: anyNamed('shelfId'),
-          )).thenAnswer((_) async => tShelfModel);
-          when(mockCabinetLocalDataSource.storeShelfInLocal(
-                  shelfModel: anyNamed('shelfModel')))
+          when(() => mockCabinetRemoteDataSource.getShelf(
+                uid: any(named: 'uid'),
+                shelfId: any(named: 'shelfId'),
+              )).thenAnswer((_) async => tShelfModel);
+          when(() => mockCabinetLocalDataSource.storeShelfInLocal(
+                  shelfModel: any(named: 'shelfModel')))
               .thenAnswer((_) async => unit);
           // act
           await repository.getShelf(
@@ -112,11 +128,11 @@ void main() {
             shelfId: tShelfId,
           );
           // assert
-          verify(mockCabinetRemoteDataSource.getShelf(
-            uid: tUid,
-            shelfId: tShelfId,
-          ));
-          verify(mockCabinetLocalDataSource.storeShelfInLocal(
+          verify(() => mockCabinetRemoteDataSource.getShelf(
+                uid: tUid,
+                shelfId: tShelfId,
+              ));
+          verify(() => mockCabinetLocalDataSource.storeShelfInLocal(
               shelfModel: tShelfModel));
         },
       );
@@ -125,20 +141,20 @@ void main() {
         'should return FirestoreFailure when the query to Firebase fails',
         () async {
           // arrange
-          when(mockCabinetRemoteDataSource.getShelf(
-            uid: anyNamed('uid'),
-            shelfId: anyNamed('shelfId'),
-          )).thenThrow(testFirebaseException);
+          when(() => mockCabinetRemoteDataSource.getShelf(
+                uid: any(named: 'uid'),
+                shelfId: any(named: 'shelfId'),
+              )).thenThrow(testFirebaseException);
           // act
           final result = await repository.getShelf(
             uid: tUid,
             shelfId: tShelfId,
           );
           // assert
-          verify(mockCabinetRemoteDataSource.getShelf(
-            uid: tUid,
-            shelfId: tShelfId,
-          ));
+          verify(() => mockCabinetRemoteDataSource.getShelf(
+                uid: tUid,
+                shelfId: tShelfId,
+              ));
           verifyZeroInteractions(mockCabinetLocalDataSource);
           expect(result, Left(testFirestoreFailure));
         },
@@ -150,8 +166,8 @@ void main() {
         'should return last locally stored data when data is present',
         () async {
           // arrange
-          when(mockCabinetLocalDataSource.getShelfFromLocal(shelfId: tShelfId))
-              .thenAnswer((_) async => tShelfModel);
+          when(() => mockCabinetLocalDataSource.getShelfFromLocal(
+              shelfId: tShelfId)).thenAnswer((_) async => tShelfModel);
           // act
           final result = await repository.getShelf(
             uid: tUid,
@@ -159,7 +175,7 @@ void main() {
           );
           // assert
           verifyZeroInteractions(mockCabinetRemoteDataSource);
-          verify(
+          verify(() =>
               mockCabinetLocalDataSource.getShelfFromLocal(shelfId: tShelfId));
           expect(result, Right(tShelf));
         },
@@ -169,8 +185,8 @@ void main() {
         'should return CacheFailure when there is no stored Shelf',
         () async {
           // arrange
-          when(mockCabinetLocalDataSource.getShelfFromLocal(shelfId: tShelfId))
-              .thenThrow(testCacheException);
+          when(() => mockCabinetLocalDataSource.getShelfFromLocal(
+              shelfId: tShelfId)).thenThrow(testCacheException);
           // act
           final result = await repository.getShelf(
             uid: tUid,
@@ -178,7 +194,7 @@ void main() {
           );
           // assert
           verifyZeroInteractions(mockCabinetRemoteDataSource);
-          verify(
+          verify(() =>
               mockCabinetLocalDataSource.getShelfFromLocal(shelfId: tShelfId));
           expect(result, Left(testCacheFailure));
         },

@@ -1,18 +1,29 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:fpdart/fpdart.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:storayge/core/auth/data/repository/auth_repository_impl.dart';
+import 'package:storayge/core/auth/data/datasources/auth_local_data_source.dart';
+import 'package:storayge/core/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:storayge/core/auth/data/models/storayge_user_model.dart';
+import 'package:storayge/core/auth/data/repository/auth_repository.dart';
 import 'package:storayge/core/errors/exceptions.dart';
 import 'package:storayge/core/errors/failures.dart';
+import 'package:storayge/core/network/network_info.dart';
+import 'package:storayge/features/cabinet/data/models/shelf_model.dart';
 import '../../../../presets/entities_presets.dart';
 import '../../../../presets/failures_exceptions_presets.dart';
-import '../../../mock_classes/mock_app_auth/mock_app_auth.mocks.dart';
-import '../../../mock_classes/mock_utilities/mock_utilities.mocks.dart';
+
+class MockAuthRemoteDataSource extends Mock implements AuthRemoteDataSource {}
+
+class MockAuthLocalDataSource extends Mock implements AuthLocalDataSource {}
+
+class MockNetworkInfo extends Mock implements NetworkInfo {}
+
+class FakeStoraygeUserModel extends Fake implements StoraygeUserModel {}
 
 void main() {
-  late AuthRepositoryImpl repository;
+  late AuthRepository repository;
   late MockAuthRemoteDataSource mockAuthRemoteDataSource;
   late MockAuthLocalDataSource mockAuthLocalDataSource;
   late MockNetworkInfo mockNetworkInfo;
@@ -21,17 +32,24 @@ void main() {
     mockAuthRemoteDataSource = MockAuthRemoteDataSource();
     mockAuthLocalDataSource = MockAuthLocalDataSource();
     mockNetworkInfo = MockNetworkInfo();
-    repository = AuthRepositoryImpl(
+    repository = AuthRepository(
       remoteDataSource: mockAuthRemoteDataSource,
       localDataSource: mockAuthLocalDataSource,
       networkInfo: mockNetworkInfo,
     );
+
+    when(() => mockAuthLocalDataSource.cacheStoraygeUser(any()))
+        .thenAnswer((_) async => Future.value());
+  });
+
+  setUpAll(() {
+    registerFallbackValue(FakeStoraygeUserModel());
   });
 
   void runTestsOnline(Function body) {
     group('device is online', () {
       setUp(() {
-        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       });
 
       body();
@@ -41,7 +59,7 @@ void main() {
   void runTestsOffline(Function body) {
     group('device is offline', () {
       setUp(() {
-        when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+        when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
       });
 
       body();
@@ -53,14 +71,15 @@ void main() {
       'should check if device is online',
       () async {
         // arrange
-        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-        when(mockAuthRemoteDataSource.getStoraygeUserDataFromRemote(
-                uid: anyNamed('uid')))
+        when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(() => mockAuthRemoteDataSource.getStoraygeUserDataFromRemote(
+                uid: any(named: 'uid')))
             .thenAnswer((_) async => tStoraygeUserModel);
+
         // act
         repository.getStoraygeUserDataFromRemote(uid: tUid);
         // assert
-        verify(mockNetworkInfo.isConnected);
+        verify(() => mockNetworkInfo.isConnected);
       },
     );
 
@@ -69,14 +88,14 @@ void main() {
         'should return StoraygeUserModel when the call to remote data source is succesfull',
         () async {
           // arrange
-          when(mockAuthRemoteDataSource.getStoraygeUserDataFromRemote(
-                  uid: anyNamed('uid')))
+          when(() => mockAuthRemoteDataSource.getStoraygeUserDataFromRemote(
+                  uid: any(named: 'uid')))
               .thenAnswer((_) async => tStoraygeUserModel);
           // act
           final result =
               await repository.getStoraygeUserDataFromRemote(uid: tUid);
           // assert
-          verify(mockAuthRemoteDataSource.getStoraygeUserDataFromRemote(
+          verify(() => mockAuthRemoteDataSource.getStoraygeUserDataFromRemote(
               uid: tUid));
           expect(result, Right(tStoraygeUser));
         },
@@ -86,15 +105,16 @@ void main() {
         'should cache StoraygeUserModel locally when the call to remote data source is succesful',
         () async {
           // arrange
-          when(mockAuthRemoteDataSource.getStoraygeUserDataFromRemote(
-                  uid: anyNamed('uid')))
+          when(() => mockAuthRemoteDataSource.getStoraygeUserDataFromRemote(
+                  uid: any(named: 'uid')))
               .thenAnswer((_) async => tStoraygeUserModel);
           // act
           await repository.getStoraygeUserDataFromRemote(uid: tUid);
           // assert
-          verify(mockAuthRemoteDataSource.getStoraygeUserDataFromRemote(
+          verify(() => mockAuthRemoteDataSource.getStoraygeUserDataFromRemote(
               uid: tUid));
-          verify(mockAuthLocalDataSource.cacheStoraygeUser(tStoraygeUserModel));
+          verify(() =>
+              mockAuthLocalDataSource.cacheStoraygeUser(tStoraygeUserModel));
         },
       );
 
@@ -102,14 +122,13 @@ void main() {
         'should return FirestoreFailure when the query to Firebase fails',
         () async {
           // arrange
-          when(mockAuthRemoteDataSource.getStoraygeUserDataFromRemote(
-                  uid: anyNamed('uid')))
-              .thenThrow(testFirebaseException);
+          when(() => mockAuthRemoteDataSource.getStoraygeUserDataFromRemote(
+              uid: any(named: 'uid'))).thenThrow(testFirebaseException);
           // act
           final result =
               await repository.getStoraygeUserDataFromRemote(uid: tUid);
           // assert
-          verify(mockAuthRemoteDataSource.getStoraygeUserDataFromRemote(
+          verify(() => mockAuthRemoteDataSource.getStoraygeUserDataFromRemote(
               uid: tUid));
           verifyZeroInteractions(mockAuthLocalDataSource);
           expect(result, Left(testFirestoreFailure));
@@ -126,14 +145,14 @@ void main() {
         'should return last locally cached data when the cached data is present',
         () async {
           // arrange
-          when(mockAuthLocalDataSource.getCachedStoraygeUser())
+          when(() => mockAuthLocalDataSource.getCachedStoraygeUser())
               .thenAnswer((_) async => tStoraygeUserModel);
           // act
           final result =
               await repository.getStoraygeUserDataFromRemote(uid: tUid);
           // assert
           verifyZeroInteractions(mockAuthRemoteDataSource);
-          verify(mockAuthLocalDataSource.getCachedStoraygeUser());
+          verify(() => mockAuthLocalDataSource.getCachedStoraygeUser());
           expect(result, equals(Right(tStoraygeUser)));
         },
       );
@@ -142,14 +161,14 @@ void main() {
         'should return CacheFailure when there is no cached StoraygeUser',
         () async {
           // arrange
-          when(mockAuthLocalDataSource.getCachedStoraygeUser())
+          when(() => mockAuthLocalDataSource.getCachedStoraygeUser())
               .thenThrow(testCacheException);
           // act
           final result =
               await repository.getStoraygeUserDataFromRemote(uid: tUid);
           // assert
           verifyZeroInteractions(mockAuthRemoteDataSource);
-          verify(mockAuthLocalDataSource.getCachedStoraygeUser());
+          verify(() => mockAuthLocalDataSource.getCachedStoraygeUser());
           expect(result, equals(Left(testCacheFailure)));
         },
       );
@@ -161,16 +180,16 @@ void main() {
       'should check if device is online',
       () async {
         // arrange
-        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-        when(mockAuthRemoteDataSource.loginWithEmailAndPassword(
-          email: anyNamed('email'),
-          password: anyNamed('password'),
-        )).thenAnswer((_) async => tStoraygeUserModel);
+        when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(() => mockAuthRemoteDataSource.loginWithEmailAndPassword(
+              email: any(named: 'email'),
+              password: any(named: 'password'),
+            )).thenAnswer((_) async => tStoraygeUserModel);
         // act
         repository.loginWithEmailAndPassword(
             email: tEmail, password: tPassword);
         // assert
-        verify(mockNetworkInfo.isConnected);
+        verify(() => mockNetworkInfo.isConnected);
       },
     );
 
@@ -179,10 +198,10 @@ void main() {
         'should return StoraygeUser with current user details when succesful login',
         () async {
           // arrange
-          when(mockAuthRemoteDataSource.loginWithEmailAndPassword(
-            email: anyNamed('email'),
-            password: anyNamed('password'),
-          )).thenAnswer((_) async => tStoraygeUserModel);
+          when(() => mockAuthRemoteDataSource.loginWithEmailAndPassword(
+                email: any(named: 'email'),
+                password: any(named: 'password'),
+              )).thenAnswer((_) async => tStoraygeUserModel);
           // act
           final result = await repository.loginWithEmailAndPassword(
               email: tEmail, password: tPassword);
@@ -195,15 +214,16 @@ void main() {
         'should cache StoraygeUser with current user details when succesful login',
         () async {
           // arrange
-          when(mockAuthRemoteDataSource.loginWithEmailAndPassword(
-            email: anyNamed('email'),
-            password: anyNamed('password'),
-          )).thenAnswer((_) async => tStoraygeUserModel);
+          when(() => mockAuthRemoteDataSource.loginWithEmailAndPassword(
+                email: any(named: 'email'),
+                password: any(named: 'password'),
+              )).thenAnswer((_) async => tStoraygeUserModel);
           // act
           await repository.loginWithEmailAndPassword(
               email: tEmail, password: tPassword);
           // assert
-          verify(mockAuthLocalDataSource.cacheStoraygeUser(tStoraygeUserModel));
+          verify(() =>
+              mockAuthLocalDataSource.cacheStoraygeUser(tStoraygeUserModel));
         },
       );
 
@@ -211,10 +231,10 @@ void main() {
         'should return FirebaseAuthFailure when login fails',
         () async {
           // arrange
-          when(mockAuthRemoteDataSource.loginWithEmailAndPassword(
-            email: anyNamed('email'),
-            password: anyNamed('password'),
-          )).thenThrow(testFirebaseAuthException);
+          when(() => mockAuthRemoteDataSource.loginWithEmailAndPassword(
+                email: any(named: 'email'),
+                password: any(named: 'password'),
+              )).thenThrow(testFirebaseAuthException);
           // act
           final result = await repository.loginWithEmailAndPassword(
               email: tEmail, password: tPassword);
@@ -243,12 +263,12 @@ void main() {
       'should check if device is online',
       () async {
         // arrange
-        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-        when(mockAuthRemoteDataSource.registerWithEmailAndPassword(
-          email: anyNamed('email'),
-          password: anyNamed('password'),
-          username: anyNamed('username'),
-        )).thenAnswer((_) async => tStoraygeUserModel);
+        when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(() => mockAuthRemoteDataSource.registerWithEmailAndPassword(
+              email: any(named: 'email'),
+              password: any(named: 'password'),
+              username: any(named: 'username'),
+            )).thenAnswer((_) async => tStoraygeUserModel);
         // act
         repository.registerWithEmailAndPassword(
           email: tEmail,
@@ -256,7 +276,7 @@ void main() {
           username: tUsername,
         );
         // assert
-        verify(mockNetworkInfo.isConnected);
+        verify(() => mockNetworkInfo.isConnected);
       },
     );
 
@@ -265,11 +285,11 @@ void main() {
         'should return StoraygeUser with current user details when succesful register',
         () async {
           // arrange
-          when(mockAuthRemoteDataSource.registerWithEmailAndPassword(
-            email: anyNamed('email'),
-            password: anyNamed('password'),
-            username: anyNamed('username'),
-          )).thenAnswer((_) async => tStoraygeUserModel);
+          when(() => mockAuthRemoteDataSource.registerWithEmailAndPassword(
+                email: any(named: 'email'),
+                password: any(named: 'password'),
+                username: any(named: 'username'),
+              )).thenAnswer((_) async => tStoraygeUserModel);
           // act
           final result = await repository.registerWithEmailAndPassword(
             email: tEmail,
@@ -285,11 +305,11 @@ void main() {
         'should cache StoraygeUser with current user details when succesful register',
         () async {
           // arrange
-          when(mockAuthRemoteDataSource.registerWithEmailAndPassword(
-            email: anyNamed('email'),
-            password: anyNamed('password'),
-            username: anyNamed('username'),
-          )).thenAnswer((_) async => tStoraygeUserModel);
+          when(() => mockAuthRemoteDataSource.registerWithEmailAndPassword(
+                email: any(named: 'email'),
+                password: any(named: 'password'),
+                username: any(named: 'username'),
+              )).thenAnswer((_) async => tStoraygeUserModel);
           // act
           await repository.registerWithEmailAndPassword(
             email: tEmail,
@@ -297,7 +317,8 @@ void main() {
             username: tUsername,
           );
           // assert
-          verify(mockAuthLocalDataSource.cacheStoraygeUser(tStoraygeUserModel));
+          verify(() =>
+              mockAuthLocalDataSource.cacheStoraygeUser(tStoraygeUserModel));
         },
       );
 
@@ -305,11 +326,11 @@ void main() {
         'should return FirebaseAuthFailure when registration fails',
         () async {
           // arrange
-          when(mockAuthRemoteDataSource.registerWithEmailAndPassword(
-            email: anyNamed('email'),
-            password: anyNamed('password'),
-            username: anyNamed('username'),
-          )).thenThrow(testFirebaseAuthException);
+          when(() => mockAuthRemoteDataSource.registerWithEmailAndPassword(
+                email: any(named: 'email'),
+                password: any(named: 'password'),
+                username: any(named: 'username'),
+              )).thenThrow(testFirebaseAuthException);
           // act
           final result = await repository.registerWithEmailAndPassword(
             email: tEmail,
@@ -324,7 +345,7 @@ void main() {
 
     runTestsOffline(() {
       test(
-        'should return ServerFailure when there is no internet connection',
+        'should return NoConnectionFailure when there is no internet connection',
         () async {
           // act
           final result = await repository.registerWithEmailAndPassword(
@@ -333,7 +354,7 @@ void main() {
             username: tUsername,
           );
           // assert
-          expect(result, equals(Left(testServerFailure)));
+          expect(result, equals(Left(testNoConnectionFailure)));
         },
       );
     });
@@ -344,7 +365,8 @@ void main() {
       'should return proper uid when user is logged in',
       () async {
         // arrange
-        when(mockAuthRemoteDataSource.getUid()).thenAnswer((_) async => tUid);
+        when(() => mockAuthRemoteDataSource.getUid())
+            .thenAnswer((_) async => tUid);
         // act
         final result = await repository.getUid();
         // assert
@@ -356,7 +378,7 @@ void main() {
       'should return UserFailure when no user is logged in',
       () async {
         // arrange
-        when(mockAuthRemoteDataSource.getUid())
+        when(() => mockAuthRemoteDataSource.getUid())
             .thenThrow(testUserNotFoundException);
         // act
         final result = await repository.getUid();
@@ -371,7 +393,8 @@ void main() {
       'should return unit when user is succesfully signed out',
       () async {
         // arrange
-        when(mockAuthRemoteDataSource.signOut()).thenAnswer((_) async => unit);
+        when(() => mockAuthRemoteDataSource.signOut())
+            .thenAnswer((_) async => unit);
         // act
         final result = await repository.signOut();
         // assert
@@ -383,7 +406,7 @@ void main() {
       'should return FirebaseAuthFailure when sign out fails',
       () async {
         // arrange
-        when(mockAuthRemoteDataSource.signOut())
+        when(() => mockAuthRemoteDataSource.signOut())
             .thenThrow(testFirebaseAuthException);
         // act
         final result = await repository.signOut();

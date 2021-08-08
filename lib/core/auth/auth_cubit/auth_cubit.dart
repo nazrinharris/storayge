@@ -4,24 +4,14 @@ import '../../constants/app_const.dart';
 import '../../usecases/params.dart';
 
 import '../domain/entities/storayge_user.dart';
-import '../domain/repository/auth_repository.dart';
-import '../domain/usecases/get_storayge_userdata_from_remote.dart';
-import '../domain/usecases/login_with_email_and_password.dart';
-import '../domain/usecases/register_with_email_and_password.dart';
+import '../domain/i_repository/i_auth_repository.dart';
 
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  final GetStoraygeUserDataFromRemote getStoraygeUserDataFromRemote;
-  final LoginWithEmailAndPassword loginWithEmailAndPassword;
-  final RegisterWithEmailAndPassword registerWithEmailAndPassword;
-
-  final AuthRepository authRepository;
+  final IAuthRepository authRepository;
 
   AuthCubit({
-    required this.getStoraygeUserDataFromRemote,
-    required this.loginWithEmailAndPassword,
-    required this.registerWithEmailAndPassword,
     required this.authRepository,
   }) : super(AuthIdle());
 
@@ -29,7 +19,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(
         const AuthLoading(currentOperationMessage: 'Retrieving storayge user'));
     final failureOrStoraygeUser =
-        await getStoraygeUserDataFromRemote(UidParams(uid: uid));
+        await authRepository.getStoraygeUserDataFromRemote(uid: uid);
     emit(
       failureOrStoraygeUser.fold(
           (failure) => AuthError(
@@ -52,11 +42,11 @@ class AuthCubit extends Cubit<AuthState> {
     ));
     if (password == confirmPassword) {
       final failureOrRegister =
-          await registerWithEmailAndPassword(RegisterParams(
+          await authRepository.registerWithEmailAndPassword(
         email: email,
         password: password,
         username: username,
-      ));
+      );
       emit(failureOrRegister.fold(
         (failure) => AuthError(
           message: failure.message!,
@@ -77,10 +67,10 @@ class AuthCubit extends Cubit<AuthState> {
     emit(const AuthLoading(
         currentOperationMessage:
             OPERATION_MESSAGE_LOGIN_WITH_EMAIL_AND_PASSWORD));
-    final failureOrLogin = await loginWithEmailAndPassword(LoginParams(
+    final failureOrLogin = await authRepository.loginWithEmailAndPassword(
       email: email,
       password: password,
-    ));
+    );
     emit(failureOrLogin.fold(
       (failure) => AuthError(
         message: failure.message!,
