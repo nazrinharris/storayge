@@ -1,3 +1,6 @@
+// ignore_for_file: subtype_of_sealed_class
+// ignore_for_file: avoid_implementing_value_types
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storayge/core/constants/app_const.dart';
@@ -60,60 +63,5 @@ void main() {
       when(() => mockDocumentReference.get()).thenThrow(testFirebaseException);
       when(() => mockDocumentSnapshot.data()).thenAnswer((_) => tShelfJSON);
     }
-
-    test(
-      'should perform a proper query to Firestore with passed uid',
-      () async {
-        // arrange
-        setupSuccesfullQuery();
-        // act
-        await cabinetRemoteDataSourceImpl.getShelf(
-          uid: tUid,
-          shelfId: tShelfId,
-        );
-        // assert
-        verifyInOrder([
-          () => mockFirebaseFirestore.collection(FIRESTORE_USER_COLLECTION),
-          () => mockCollectionReference.doc(tUid),
-          () => mockDocumentReference.collection(FIRESTORE_SHELF_COLLECTION),
-          () => mockCollectionReference.doc(tShelfId),
-          () => mockDocumentReference.get(),
-        ]);
-      },
-    );
-    test(
-      'should return ShelfModel when the query is succesfull',
-      () async {
-        // arrange
-        setupSuccesfullQuery();
-        // act
-        final result = await cabinetRemoteDataSourceImpl.getShelf(
-            uid: tUid, shelfId: tShelfId);
-        // assert
-        expect(result, tShelfModel);
-      },
-    );
-
-    test(
-      'should throw a FirebaseException with FIRESTORE_PLUGIN when an error occurs',
-      () async {
-        // arrange
-        setupFailureQuery();
-        // act
-        final call = cabinetRemoteDataSourceImpl.getShelf;
-        // assert
-        expect(
-            () => call(uid: tUid, shelfId: tShelfId),
-            throwsA(
-              predicate((e) => e is FirebaseException && e.code == 'TEST'
-                  //e.plugin == FIRESTORE_PLUGIN,
-                  ),
-            ));
-      },
-    );
-  });
-
-  group('storeShelfInRemote', () {
-    // TODO: Create tests
   });
 }

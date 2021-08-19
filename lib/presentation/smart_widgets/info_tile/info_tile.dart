@@ -79,8 +79,8 @@ class _InfoTileState extends State<InfoTile> with AnimationMixin {
     _childrenHeightFactorController = createController();
     _childrenHeightFactor = CurvedAnimation(
       parent: _childrenHeightFactorController,
-      curve: Curves.easeOutExpo,
-      reverseCurve: Curves.easeInExpo,
+      curve: Curves.fastOutSlowIn,
+      reverseCurve: Curves.fastOutSlowIn.flipped,
     );
     _horizontalLeadingPadding =
         Tween<double>(begin: 14, end: 24).animate(_childrenHeightFactor);
@@ -103,10 +103,10 @@ class _InfoTileState extends State<InfoTile> with AnimationMixin {
       _isExpanded =
           !context.read<InfoTileBloc>().state.infoTileProps.isExpanded;
       if (_isExpanded) {
-        _childrenHeightFactorController.play(duration: 350.milliseconds);
+        _childrenHeightFactorController.play(duration: 250.milliseconds);
         context.read<InfoTileBloc>().add(const InfoTileEvent.toggleExpansion());
       } else {
-        _childrenHeightFactorController.playReverse(duration: 350.milliseconds);
+        _childrenHeightFactorController.playReverse(duration: 250.milliseconds);
         context.read<InfoTileBloc>().add(const InfoTileEvent.toggleExpansion());
       }
     });

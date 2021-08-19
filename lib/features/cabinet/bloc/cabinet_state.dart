@@ -20,15 +20,6 @@ class CabinetLoading extends CabinetState {
   List<Object> get props => [message];
 }
 
-class GetShelfCompleted extends CabinetState {
-  final Shelf shelf;
-
-  const GetShelfCompleted({required this.shelf});
-
-  @override
-  List<Object> get props => [shelf];
-}
-
 class StoreShelfCompleted extends CabinetState {}
 
 /// [ErrorStates]

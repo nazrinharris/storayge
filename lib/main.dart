@@ -19,7 +19,6 @@ import 'core/auth/auth_cubit/auth_cubit.dart';
 import 'core/auth/data/models/storayge_user_model.dart';
 import 'core/util/app_bloc_observer.dart';
 import 'features/cabinet/bloc/cabinet_cubit.dart';
-import 'features/cabinet/data/models/shelf_model.dart';
 import 'locator.dart';
 import 'presentation/views/register/register_view.dart';
 
@@ -27,9 +26,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
-
-  Hive.registerAdapter(StoraygeUserModelAdapter());
-  Hive.registerAdapter(ShelfModelAdapter());
 
   HydratedBloc.storage = await HydratedStorage.build(
       storageDirectory: await getApplicationDocumentsDirectory());

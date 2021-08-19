@@ -56,33 +56,4 @@ void main() {
       body();
     });
   }
-
-  group('getHomeData', () {
-    test(
-      'should check if device is online',
-      () async {
-        // arrange
-        when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-        when(() => mockRemoteDataSource.getHomeData(uid: any(named: "uid")))
-            .thenAnswer((_) async => tShelfModel);
-        // act
-        await repository.getHomeData(uid: tUid);
-        // assert
-        verify(() => mockNetworkInfo.isConnected).called(1);
-      },
-    );
-
-    runTestsOnline(() {
-      test(
-        'should',
-        () async {
-          // arrange
-
-          // act
-
-          // assert
-        },
-      );
-    });
-  });
 }

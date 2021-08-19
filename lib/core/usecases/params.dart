@@ -1,7 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-import '../../features/cabinet/domain/entities/shelf.dart';
-
 class LoginParams extends Equatable {
   final String email;
   final String password;
@@ -48,19 +46,4 @@ class IDParams extends Equatable {
 
   @override
   List<Object?> get props => [id];
-}
-
-class ShelfParams extends Equatable {
-  final String uid;
-  final String shelfId;
-  final Shelf? shelf;
-
-  const ShelfParams({
-    required this.uid,
-    required this.shelfId,
-    this.shelf,
-  });
-
-  @override
-  List<Object?> get props => [uid, shelfId, shelf];
 }

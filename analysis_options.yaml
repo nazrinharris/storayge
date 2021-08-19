@@ -3,6 +3,9 @@ include: package:lint/analysis_options.yaml
 analyzer:
   strong-mode:
     implicit-casts: true
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
 
 linter:
   rules:

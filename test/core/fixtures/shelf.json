@@ -1,9 +1,0 @@
-{
-    "shelfName" : "test_shelf_name",
-    "shelfId" : "test_shelf_id",
-    "shelfDesc" : "test_shelf_desc",
-    "imgPath" : "test_img_path",
-    "pathName" : "test_path_name",
-    "containerAmount" : 0,
-    "itemAmount" : 0
-}
