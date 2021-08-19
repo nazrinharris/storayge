@@ -58,6 +58,17 @@ class NavigateView extends StatelessWidget {
               ),
             ),
             verticalSpace14,
+            PrimaryButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/test');
+              },
+              width: 200,
+              child: Text(
+                'To Test',
+                style: appTextTheme(context).headline6,
+              ),
+            ),
+            verticalSpace14,
           ],
         ),
       ),

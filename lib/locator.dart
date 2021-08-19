@@ -58,11 +58,11 @@ Future<void>? setupLocator() {
       ));
   // Data Sources
   locator
-      .registerLazySingleton<IAuthRemoteDataSource>(() => AuthRemoteDataSource(
+      .registerLazySingleton<AuthRemoteDataSource>(() => AuthRemoteDataSource(
             firebaseFirestore: locator(),
             firebaseAuth: locator(),
           ));
-  locator.registerLazySingleton<IAuthLocalDataSource>(
+  locator.registerLazySingleton<AuthLocalDataSource>(
       () => AuthLocalDataSource(hiveInterface: locator()));
 
   //*   NetworkInfo

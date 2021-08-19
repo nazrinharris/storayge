@@ -44,13 +44,13 @@ dependencies:
 
   # Data and Internet
   internet_connection_checker: ^0.0.1+2
-  json_annotation: ^4.0.0
+  json_annotation: ^4.0.1
 
   # Render
   flutter_svg: ^0.22.0
   flutter_screenutil: ^5.0.0+2
   simple_animations: ^3.1.1
-  bottom_nav_layout: ^3.0.5
+  bottom_nav_layout: ^3.0.6
   google_nav_bar: ^5.0.5
 
   # Misc
@@ -64,11 +64,10 @@ dev_dependencies:
     sdk: flutter
 
   # Code Generation
-  build_runner: ^2.1.0
+  build_runner: ^2.1.1
   auto_route_generator: ^2.1.0
-  hive_generator: ^1.1.0
   json_serializable: ^4.1.3
-  freezed:
+  freezed: ^0.14.2
 
   # Mocking and Testing
   mocktail: ^0.1.4

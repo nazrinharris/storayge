@@ -1,15 +1,10 @@
 import 'package:fpdart/fpdart.dart';
+import 'package:storayge/features/cabinet/domain/entities/storayge_group.dart';
 import '../../../../core/errors/failures.dart';
-import '../entities/shelf.dart';
 
 abstract class ICabinetRepository {
-  Future<Either<Failure, Shelf>> getShelf({
+  Future<Either<Failure, Group>> getSingleStoraygeGroup({
     required String uid,
-    required String shelfId,
-  });
-
-  Future<Either<Failure, Unit>> storeShelf({
-    required Shelf shelf,
-    required String uid,
+    required String storaygeGroupId,
   });
 }

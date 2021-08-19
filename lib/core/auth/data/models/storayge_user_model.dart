@@ -2,8 +2,6 @@ import 'package:hive/hive.dart';
 
 import '../../domain/entities/storayge_user.dart';
 
-part 'storayge_user_model.g.dart';
-
 @HiveType(typeId: 0)
 class StoraygeUserModel extends StoraygeUser with HiveObjectMixin {
   StoraygeUserModel({

@@ -10,7 +10,6 @@ import 'package:storayge/core/auth/data/repository/auth_repository.dart';
 import 'package:storayge/core/errors/exceptions.dart';
 import 'package:storayge/core/errors/failures.dart';
 import 'package:storayge/core/network/network_info.dart';
-import 'package:storayge/features/cabinet/data/models/shelf_model.dart';
 import '../../../../presets/entities_presets.dart';
 import '../../../../presets/failures_exceptions_presets.dart';
 

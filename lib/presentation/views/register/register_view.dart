@@ -85,7 +85,7 @@ class _RegisterViewState extends State<RegisterView> with AnimationMixin {
             infoTileProps: const InfoTileProps(
               leadingText: 'No operation running',
               child: Text(
-                  'In all seriousness, you should never have seen this text. Like how did you even get here?'),
+                  'In all seriousness, you should never have seen this text. Like how did you even get here? But the fact that you are here is still fine. You are probably me trying to diagnose this InfoTile. Dont worry me in the future, Ill make sure this line is long enough for you baby :)'),
               isAbleToExpand: true,
               isExpanded: false,
               currentStatus: InfoTileStatus.loading,
