@@ -20,7 +20,7 @@ class InfoTileBloc extends Bloc<InfoTileEvent, InfoTileState> {
   ) async* {
     yield* event.map(
       toggleExpansion: (_ToggleExpansion event) async* {
-        bool _isExpanded = !state.infoTileProps.isExpanded;
+        final bool _isExpanded = !state.infoTileProps.isExpanded;
         yield state.copyWith(
             infoTileProps:
                 state.infoTileProps.copyWith(isExpanded: _isExpanded));

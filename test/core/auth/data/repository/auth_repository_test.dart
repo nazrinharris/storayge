@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+// ignore_for_file: avoid_implementing_value_types
 
 import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
@@ -7,8 +8,6 @@ import 'package:storayge/core/auth/data/datasources/auth_local_data_source.dart'
 import 'package:storayge/core/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:storayge/core/auth/data/models/storayge_user_model.dart';
 import 'package:storayge/core/auth/data/repository/auth_repository.dart';
-import 'package:storayge/core/errors/exceptions.dart';
-import 'package:storayge/core/errors/failures.dart';
 import 'package:storayge/core/network/network_info.dart';
 import '../../../../presets/entities_presets.dart';
 import '../../../../presets/failures_exceptions_presets.dart';
@@ -74,7 +73,6 @@ void main() {
         when(() => mockAuthRemoteDataSource.getStoraygeUserDataFromRemote(
                 uid: any(named: 'uid')))
             .thenAnswer((_) async => tStoraygeUserModel);
-
         // act
         repository.getStoraygeUserDataFromRemote(uid: tUid);
         // assert
@@ -122,7 +120,7 @@ void main() {
         () async {
           // arrange
           when(() => mockAuthRemoteDataSource.getStoraygeUserDataFromRemote(
-              uid: any(named: 'uid'))).thenThrow(testFirebaseException);
+              uid: any(named: 'uid'))).thenThrow(tFirebaseException);
           // act
           final result =
               await repository.getStoraygeUserDataFromRemote(uid: tUid);
@@ -130,7 +128,7 @@ void main() {
           verify(() => mockAuthRemoteDataSource.getStoraygeUserDataFromRemote(
               uid: tUid));
           verifyZeroInteractions(mockAuthLocalDataSource);
-          expect(result, Left(testFirestoreFailure));
+          expect(result, Left(tFirestoreFailure));
         },
       );
     });
@@ -161,14 +159,14 @@ void main() {
         () async {
           // arrange
           when(() => mockAuthLocalDataSource.getCachedStoraygeUser())
-              .thenThrow(testCacheException);
+              .thenThrow(tCacheException);
           // act
           final result =
               await repository.getStoraygeUserDataFromRemote(uid: tUid);
           // assert
           verifyZeroInteractions(mockAuthRemoteDataSource);
           verify(() => mockAuthLocalDataSource.getCachedStoraygeUser());
-          expect(result, equals(Left(testCacheFailure)));
+          expect(result, equals(Left(tCacheFailure)));
         },
       );
     });
@@ -233,12 +231,12 @@ void main() {
           when(() => mockAuthRemoteDataSource.loginWithEmailAndPassword(
                 email: any(named: 'email'),
                 password: any(named: 'password'),
-              )).thenThrow(testFirebaseAuthException);
+              )).thenThrow(tFirebaseAuthException);
           // act
           final result = await repository.loginWithEmailAndPassword(
               email: tEmail, password: tPassword);
           // assert
-          expect(result, equals(Left(testFirebaseAuthFailure)));
+          expect(result, equals(Left(tFirebaseAuthFailure)));
         },
       );
     });
@@ -251,7 +249,7 @@ void main() {
           final result = await repository.loginWithEmailAndPassword(
               email: tEmail, password: tPassword);
           // assert
-          expect(result, equals(Left(testServerFailure)));
+          expect(result, equals(Left(tServerFailure)));
         },
       );
     });
@@ -329,7 +327,7 @@ void main() {
                 email: any(named: 'email'),
                 password: any(named: 'password'),
                 username: any(named: 'username'),
-              )).thenThrow(testFirebaseAuthException);
+              )).thenThrow(tFirebaseAuthException);
           // act
           final result = await repository.registerWithEmailAndPassword(
             email: tEmail,
@@ -337,7 +335,7 @@ void main() {
             username: tUsername,
           );
           // assert
-          expect(result, equals(Left(testFirebaseAuthFailure)));
+          expect(result, equals(Left(tFirebaseAuthFailure)));
         },
       );
     });
@@ -353,7 +351,7 @@ void main() {
             username: tUsername,
           );
           // assert
-          expect(result, equals(Left(testNoConnectionFailure)));
+          expect(result, equals(Left(tNoConnectionFailure)));
         },
       );
     });
@@ -378,11 +376,11 @@ void main() {
       () async {
         // arrange
         when(() => mockAuthRemoteDataSource.getUid())
-            .thenThrow(testUserNotFoundException);
+            .thenThrow(tUserNotFoundException);
         // act
         final result = await repository.getUid();
         // assert
-        expect(result, equals(Left(testUserFailure)));
+        expect(result, equals(Left(tUserFailure)));
       },
     );
   });
@@ -406,11 +404,11 @@ void main() {
       () async {
         // arrange
         when(() => mockAuthRemoteDataSource.signOut())
-            .thenThrow(testFirebaseAuthException);
+            .thenThrow(tFirebaseAuthException);
         // act
         final result = await repository.signOut();
         // assert
-        expect(result, equals(Left(testFirebaseAuthFailure)));
+        expect(result, equals(Left(tFirebaseAuthFailure)));
       },
     );
   });

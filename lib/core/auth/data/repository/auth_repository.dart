@@ -1,7 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:supercharged/supercharged.dart';
 
 import '../../../constants/app_const.dart';
 import '../../../errors/exceptions.dart';
@@ -178,7 +177,7 @@ class AuthRepository implements IAuthRepository {
     // TODO: implement isEmailNotRegistered
     // TODO: create tests
     if (await networkInfo.isConnected) {
-      bool isEmailNotRegistered =
+      final bool isEmailNotRegistered =
           await remoteDataSource.isEmailNotRegistered(email);
       if (isEmailNotRegistered) {
         return const Right(true);

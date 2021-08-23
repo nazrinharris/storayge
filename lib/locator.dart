@@ -1,24 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'presentation/smart_widgets/two_pagination_progress/two_pagination_progress_cubit.dart';
-import 'presentation/views/register/register_cubit/register_view_cubit.dart';
-import 'features/cabinet/bloc/cabinet_cubit.dart';
-import 'features/cabinet/data/datasources/cabinet_remote_datasource.dart';
-import 'features/cabinet/data/repository/cabinet_repository.dart';
-import 'features/cabinet/domain/i_repository/i_cabinet_repository.dart';
 
 import 'core/auth/auth_cubit/auth_cubit.dart';
 import 'core/auth/data/datasources/auth_local_data_source.dart';
 import 'core/auth/data/datasources/auth_remote_data_source.dart';
 import 'core/auth/data/repository/auth_repository.dart';
 import 'core/auth/domain/i_repository/i_auth_repository.dart';
-
 import 'core/network/network_info.dart';
+import 'features/cabinet/bloc/cabinet_cubit.dart';
 import 'features/cabinet/data/datasources/cabinet_local_datasource.dart';
+import 'features/cabinet/data/datasources/cabinet_remote_datasource.dart';
+import 'features/cabinet/data/repository/cabinet_repository.dart';
+import 'features/cabinet/domain/i_repository/i_cabinet_repository.dart';
 
 final GetIt locator = GetIt.instance;
 

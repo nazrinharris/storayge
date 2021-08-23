@@ -8,19 +8,12 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:storayge/presentation/shared/local_theme.dart';
-import 'package:storayge/presentation/views/home/home_view.dart';
-import 'package:storayge/presentation/views/login/login_view.dart';
-import 'package:storayge/presentation/views/main/main_view.dart';
-import 'package:storayge/presentation/views/start/start_view.dart';
-import 'package:storayge/presentation/views/testing/navigate_view.dart';
 
 import 'app_router.dart';
 import 'core/auth/auth_cubit/auth_cubit.dart';
-import 'core/auth/data/models/storayge_user_model.dart';
 import 'core/util/app_bloc_observer.dart';
 import 'features/cabinet/bloc/cabinet_cubit.dart';
 import 'locator.dart';
-import 'presentation/views/register/register_view.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

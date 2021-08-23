@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:storayge/presentation/smart_widgets/two_pagination_progress/two_pagination_progress.dart';
 import 'package:storayge/presentation/smart_widgets/two_pagination_progress/two_pagination_progress_cubit.dart';
-import 'package:storayge/presentation/views/register/register_cubit/register_view_cubit.dart';
 import 'package:supercharged/supercharged.dart';
 
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {

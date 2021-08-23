@@ -12,12 +12,12 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-StoryageGroup _$StoryageGroupFromJson(Map<String, dynamic> json) {
+StoraygeGroup _$StoraygeGroupFromJson(Map<String, dynamic> json) {
   switch (json['runtimeType'] as String) {
     case 'default':
-      return StoraygeGroupData.fromJson(json);
-    case 'snippet':
-      return Snippet.fromJson(json);
+      return _StoraygeGroup.fromJson(json);
+    case 'storaygeGroupAllList':
+      return StoraygeGroupAllList.fromJson(json);
 
     default:
       throw FallThroughError();
@@ -25,91 +25,71 @@ StoryageGroup _$StoryageGroupFromJson(Map<String, dynamic> json) {
 }
 
 /// @nodoc
-class _$StoryageGroupTearOff {
-  const _$StoryageGroupTearOff();
+class _$StoraygeGroupTearOff {
+  const _$StoraygeGroupTearOff();
 
-  StoraygeGroupData call(
-      {String? storaygeGroupName,
-      String? storaygeGroupId,
-      int? storaygeGroupAmount,
-      int? itemAmount,
-      String? storaygeGroupDesc,
-      List<String?>? storaygeGroupImages,
-      String? storaygeGroupPathName,
-      List<StoryageGroup?>? storaygeGroupList,
-      List<Item?>? itemList}) {
-    return StoraygeGroupData(
-      storaygeGroupName: storaygeGroupName,
-      storaygeGroupId: storaygeGroupId,
-      storaygeGroupAmount: storaygeGroupAmount,
-      itemAmount: itemAmount,
-      storaygeGroupDesc: storaygeGroupDesc,
-      storaygeGroupImages: storaygeGroupImages,
-      storaygeGroupPathName: storaygeGroupPathName,
-      storaygeGroupList: storaygeGroupList,
-      itemList: itemList,
+  _StoraygeGroup call(
+      {required String sgId,
+      required String? sgName,
+      required String? sgDesc,
+      required List<String?>? sgImgPathList}) {
+    return _StoraygeGroup(
+      sgId: sgId,
+      sgName: sgName,
+      sgDesc: sgDesc,
+      sgImgPathList: sgImgPathList,
     );
   }
 
-  Snippet snippet({required String storaygeGroupId}) {
-    return Snippet(
-      storaygeGroupId: storaygeGroupId,
+  StoraygeGroupAllList storaygeGroupAllList(
+      {@JsonKey(name: "sgSnippet")
+          required List<StoraygeGroupSnippet> sgAllList}) {
+    return StoraygeGroupAllList(
+      sgAllList: sgAllList,
     );
   }
 
-  StoryageGroup fromJson(Map<String, Object> json) {
-    return StoryageGroup.fromJson(json);
+  StoraygeGroup fromJson(Map<String, Object> json) {
+    return StoraygeGroup.fromJson(json);
   }
 }
 
 /// @nodoc
-const $StoryageGroup = _$StoryageGroupTearOff();
+const $StoraygeGroup = _$StoraygeGroupTearOff();
 
 /// @nodoc
-mixin _$StoryageGroup {
+mixin _$StoraygeGroup {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(
-            String? storaygeGroupName,
-            String? storaygeGroupId,
-            int? storaygeGroupAmount,
-            int? itemAmount,
-            String? storaygeGroupDesc,
-            List<String?>? storaygeGroupImages,
-            String? storaygeGroupPathName,
-            List<StoryageGroup?>? storaygeGroupList,
-            List<Item?>? itemList)
+    TResult Function(String sgId, String? sgName, String? sgDesc,
+            List<String?>? sgImgPathList)
         $default, {
-    required TResult Function(String storaygeGroupId) snippet,
+    required TResult Function(
+            @JsonKey(name: "sgSnippet") List<StoraygeGroupSnippet> sgAllList)
+        storaygeGroupAllList,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(
-            String? storaygeGroupName,
-            String? storaygeGroupId,
-            int? storaygeGroupAmount,
-            int? itemAmount,
-            String? storaygeGroupDesc,
-            List<String?>? storaygeGroupImages,
-            String? storaygeGroupPathName,
-            List<StoryageGroup?>? storaygeGroupList,
-            List<Item?>? itemList)?
+    TResult Function(String sgId, String? sgName, String? sgDesc,
+            List<String?>? sgImgPathList)?
         $default, {
-    TResult Function(String storaygeGroupId)? snippet,
+    TResult Function(
+            @JsonKey(name: "sgSnippet") List<StoraygeGroupSnippet> sgAllList)?
+        storaygeGroupAllList,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(StoraygeGroupData value) $default, {
-    required TResult Function(Snippet value) snippet,
+    TResult Function(_StoraygeGroup value) $default, {
+    required TResult Function(StoraygeGroupAllList value) storaygeGroupAllList,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(StoraygeGroupData value)? $default, {
-    TResult Function(Snippet value)? snippet,
+    TResult Function(_StoraygeGroup value)? $default, {
+    TResult Function(StoraygeGroupAllList value)? storaygeGroupAllList,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -117,99 +97,69 @@ mixin _$StoryageGroup {
 }
 
 /// @nodoc
-abstract class $StoryageGroupCopyWith<$Res> {
-  factory $StoryageGroupCopyWith(
-          StoryageGroup value, $Res Function(StoryageGroup) then) =
-      _$StoryageGroupCopyWithImpl<$Res>;
+abstract class $StoraygeGroupCopyWith<$Res> {
+  factory $StoraygeGroupCopyWith(
+          StoraygeGroup value, $Res Function(StoraygeGroup) then) =
+      _$StoraygeGroupCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$StoryageGroupCopyWithImpl<$Res>
-    implements $StoryageGroupCopyWith<$Res> {
-  _$StoryageGroupCopyWithImpl(this._value, this._then);
+class _$StoraygeGroupCopyWithImpl<$Res>
+    implements $StoraygeGroupCopyWith<$Res> {
+  _$StoraygeGroupCopyWithImpl(this._value, this._then);
 
-  final StoryageGroup _value;
+  final StoraygeGroup _value;
   // ignore: unused_field
-  final $Res Function(StoryageGroup) _then;
+  final $Res Function(StoraygeGroup) _then;
 }
 
 /// @nodoc
-abstract class $StoraygeGroupDataCopyWith<$Res> {
-  factory $StoraygeGroupDataCopyWith(
-          StoraygeGroupData value, $Res Function(StoraygeGroupData) then) =
-      _$StoraygeGroupDataCopyWithImpl<$Res>;
+abstract class _$StoraygeGroupCopyWith<$Res> {
+  factory _$StoraygeGroupCopyWith(
+          _StoraygeGroup value, $Res Function(_StoraygeGroup) then) =
+      __$StoraygeGroupCopyWithImpl<$Res>;
   $Res call(
-      {String? storaygeGroupName,
-      String? storaygeGroupId,
-      int? storaygeGroupAmount,
-      int? itemAmount,
-      String? storaygeGroupDesc,
-      List<String?>? storaygeGroupImages,
-      String? storaygeGroupPathName,
-      List<StoryageGroup?>? storaygeGroupList,
-      List<Item?>? itemList});
+      {String sgId,
+      String? sgName,
+      String? sgDesc,
+      List<String?>? sgImgPathList});
 }
 
 /// @nodoc
-class _$StoraygeGroupDataCopyWithImpl<$Res>
-    extends _$StoryageGroupCopyWithImpl<$Res>
-    implements $StoraygeGroupDataCopyWith<$Res> {
-  _$StoraygeGroupDataCopyWithImpl(
-      StoraygeGroupData _value, $Res Function(StoraygeGroupData) _then)
-      : super(_value, (v) => _then(v as StoraygeGroupData));
+class __$StoraygeGroupCopyWithImpl<$Res>
+    extends _$StoraygeGroupCopyWithImpl<$Res>
+    implements _$StoraygeGroupCopyWith<$Res> {
+  __$StoraygeGroupCopyWithImpl(
+      _StoraygeGroup _value, $Res Function(_StoraygeGroup) _then)
+      : super(_value, (v) => _then(v as _StoraygeGroup));
 
   @override
-  StoraygeGroupData get _value => super._value as StoraygeGroupData;
+  _StoraygeGroup get _value => super._value as _StoraygeGroup;
 
   @override
   $Res call({
-    Object? storaygeGroupName = freezed,
-    Object? storaygeGroupId = freezed,
-    Object? storaygeGroupAmount = freezed,
-    Object? itemAmount = freezed,
-    Object? storaygeGroupDesc = freezed,
-    Object? storaygeGroupImages = freezed,
-    Object? storaygeGroupPathName = freezed,
-    Object? storaygeGroupList = freezed,
-    Object? itemList = freezed,
+    Object? sgId = freezed,
+    Object? sgName = freezed,
+    Object? sgDesc = freezed,
+    Object? sgImgPathList = freezed,
   }) {
-    return _then(StoraygeGroupData(
-      storaygeGroupName: storaygeGroupName == freezed
-          ? _value.storaygeGroupName
-          : storaygeGroupName // ignore: cast_nullable_to_non_nullable
+    return _then(_StoraygeGroup(
+      sgId: sgId == freezed
+          ? _value.sgId
+          : sgId // ignore: cast_nullable_to_non_nullable
+              as String,
+      sgName: sgName == freezed
+          ? _value.sgName
+          : sgName // ignore: cast_nullable_to_non_nullable
               as String?,
-      storaygeGroupId: storaygeGroupId == freezed
-          ? _value.storaygeGroupId
-          : storaygeGroupId // ignore: cast_nullable_to_non_nullable
+      sgDesc: sgDesc == freezed
+          ? _value.sgDesc
+          : sgDesc // ignore: cast_nullable_to_non_nullable
               as String?,
-      storaygeGroupAmount: storaygeGroupAmount == freezed
-          ? _value.storaygeGroupAmount
-          : storaygeGroupAmount // ignore: cast_nullable_to_non_nullable
-              as int?,
-      itemAmount: itemAmount == freezed
-          ? _value.itemAmount
-          : itemAmount // ignore: cast_nullable_to_non_nullable
-              as int?,
-      storaygeGroupDesc: storaygeGroupDesc == freezed
-          ? _value.storaygeGroupDesc
-          : storaygeGroupDesc // ignore: cast_nullable_to_non_nullable
-              as String?,
-      storaygeGroupImages: storaygeGroupImages == freezed
-          ? _value.storaygeGroupImages
-          : storaygeGroupImages // ignore: cast_nullable_to_non_nullable
+      sgImgPathList: sgImgPathList == freezed
+          ? _value.sgImgPathList
+          : sgImgPathList // ignore: cast_nullable_to_non_nullable
               as List<String?>?,
-      storaygeGroupPathName: storaygeGroupPathName == freezed
-          ? _value.storaygeGroupPathName
-          : storaygeGroupPathName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      storaygeGroupList: storaygeGroupList == freezed
-          ? _value.storaygeGroupList
-          : storaygeGroupList // ignore: cast_nullable_to_non_nullable
-              as List<StoryageGroup?>?,
-      itemList: itemList == freezed
-          ? _value.itemList
-          : itemList // ignore: cast_nullable_to_non_nullable
-              as List<Item?>?,
     ));
   }
 }
@@ -217,170 +167,85 @@ class _$StoraygeGroupDataCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(explicitToJson: true)
-class _$StoraygeGroupData
-    with DiagnosticableTreeMixin
-    implements StoraygeGroupData {
-  const _$StoraygeGroupData(
-      {this.storaygeGroupName,
-      this.storaygeGroupId,
-      this.storaygeGroupAmount,
-      this.itemAmount,
-      this.storaygeGroupDesc,
-      this.storaygeGroupImages,
-      this.storaygeGroupPathName,
-      this.storaygeGroupList,
-      this.itemList});
+class _$_StoraygeGroup extends _StoraygeGroup {
+  _$_StoraygeGroup(
+      {required this.sgId,
+      required this.sgName,
+      required this.sgDesc,
+      required this.sgImgPathList})
+      : super._();
 
-  factory _$StoraygeGroupData.fromJson(Map<String, dynamic> json) =>
-      _$_$StoraygeGroupDataFromJson(json);
+  factory _$_StoraygeGroup.fromJson(Map<String, dynamic> json) =>
+      _$_$_StoraygeGroupFromJson(json);
 
   @override
-  final String? storaygeGroupName;
+  final String sgId;
   @override
-  final String? storaygeGroupId;
+  final String? sgName;
   @override
-  final int? storaygeGroupAmount;
+  final String? sgDesc;
   @override
-  final int? itemAmount;
-  @override
-  final String? storaygeGroupDesc;
-  @override
-  final List<String?>? storaygeGroupImages;
-  @override
-  final String? storaygeGroupPathName;
-  @override
-  final List<StoryageGroup?>? storaygeGroupList;
-  @override
-  final List<Item?>? itemList;
+  final List<String?>? sgImgPathList;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'StoryageGroup(storaygeGroupName: $storaygeGroupName, storaygeGroupId: $storaygeGroupId, storaygeGroupAmount: $storaygeGroupAmount, itemAmount: $itemAmount, storaygeGroupDesc: $storaygeGroupDesc, storaygeGroupImages: $storaygeGroupImages, storaygeGroupPathName: $storaygeGroupPathName, storaygeGroupList: $storaygeGroupList, itemList: $itemList)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'StoryageGroup'))
-      ..add(DiagnosticsProperty('storaygeGroupName', storaygeGroupName))
-      ..add(DiagnosticsProperty('storaygeGroupId', storaygeGroupId))
-      ..add(DiagnosticsProperty('storaygeGroupAmount', storaygeGroupAmount))
-      ..add(DiagnosticsProperty('itemAmount', itemAmount))
-      ..add(DiagnosticsProperty('storaygeGroupDesc', storaygeGroupDesc))
-      ..add(DiagnosticsProperty('storaygeGroupImages', storaygeGroupImages))
-      ..add(DiagnosticsProperty('storaygeGroupPathName', storaygeGroupPathName))
-      ..add(DiagnosticsProperty('storaygeGroupList', storaygeGroupList))
-      ..add(DiagnosticsProperty('itemList', itemList));
+  String toString() {
+    return 'StoraygeGroup(sgId: $sgId, sgName: $sgName, sgDesc: $sgDesc, sgImgPathList: $sgImgPathList)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is StoraygeGroupData &&
-            (identical(other.storaygeGroupName, storaygeGroupName) ||
+        (other is _StoraygeGroup &&
+            (identical(other.sgId, sgId) ||
+                const DeepCollectionEquality().equals(other.sgId, sgId)) &&
+            (identical(other.sgName, sgName) ||
+                const DeepCollectionEquality().equals(other.sgName, sgName)) &&
+            (identical(other.sgDesc, sgDesc) ||
+                const DeepCollectionEquality().equals(other.sgDesc, sgDesc)) &&
+            (identical(other.sgImgPathList, sgImgPathList) ||
                 const DeepCollectionEquality()
-                    .equals(other.storaygeGroupName, storaygeGroupName)) &&
-            (identical(other.storaygeGroupId, storaygeGroupId) ||
-                const DeepCollectionEquality()
-                    .equals(other.storaygeGroupId, storaygeGroupId)) &&
-            (identical(other.storaygeGroupAmount, storaygeGroupAmount) ||
-                const DeepCollectionEquality()
-                    .equals(other.storaygeGroupAmount, storaygeGroupAmount)) &&
-            (identical(other.itemAmount, itemAmount) ||
-                const DeepCollectionEquality()
-                    .equals(other.itemAmount, itemAmount)) &&
-            (identical(other.storaygeGroupDesc, storaygeGroupDesc) ||
-                const DeepCollectionEquality()
-                    .equals(other.storaygeGroupDesc, storaygeGroupDesc)) &&
-            (identical(other.storaygeGroupImages, storaygeGroupImages) ||
-                const DeepCollectionEquality()
-                    .equals(other.storaygeGroupImages, storaygeGroupImages)) &&
-            (identical(other.storaygeGroupPathName, storaygeGroupPathName) ||
-                const DeepCollectionEquality().equals(
-                    other.storaygeGroupPathName, storaygeGroupPathName)) &&
-            (identical(other.storaygeGroupList, storaygeGroupList) ||
-                const DeepCollectionEquality()
-                    .equals(other.storaygeGroupList, storaygeGroupList)) &&
-            (identical(other.itemList, itemList) ||
-                const DeepCollectionEquality()
-                    .equals(other.itemList, itemList)));
+                    .equals(other.sgImgPathList, sgImgPathList)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(storaygeGroupName) ^
-      const DeepCollectionEquality().hash(storaygeGroupId) ^
-      const DeepCollectionEquality().hash(storaygeGroupAmount) ^
-      const DeepCollectionEquality().hash(itemAmount) ^
-      const DeepCollectionEquality().hash(storaygeGroupDesc) ^
-      const DeepCollectionEquality().hash(storaygeGroupImages) ^
-      const DeepCollectionEquality().hash(storaygeGroupPathName) ^
-      const DeepCollectionEquality().hash(storaygeGroupList) ^
-      const DeepCollectionEquality().hash(itemList);
+      const DeepCollectionEquality().hash(sgId) ^
+      const DeepCollectionEquality().hash(sgName) ^
+      const DeepCollectionEquality().hash(sgDesc) ^
+      const DeepCollectionEquality().hash(sgImgPathList);
 
   @JsonKey(ignore: true)
   @override
-  $StoraygeGroupDataCopyWith<StoraygeGroupData> get copyWith =>
-      _$StoraygeGroupDataCopyWithImpl<StoraygeGroupData>(this, _$identity);
+  _$StoraygeGroupCopyWith<_StoraygeGroup> get copyWith =>
+      __$StoraygeGroupCopyWithImpl<_StoraygeGroup>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(
-            String? storaygeGroupName,
-            String? storaygeGroupId,
-            int? storaygeGroupAmount,
-            int? itemAmount,
-            String? storaygeGroupDesc,
-            List<String?>? storaygeGroupImages,
-            String? storaygeGroupPathName,
-            List<StoryageGroup?>? storaygeGroupList,
-            List<Item?>? itemList)
+    TResult Function(String sgId, String? sgName, String? sgDesc,
+            List<String?>? sgImgPathList)
         $default, {
-    required TResult Function(String storaygeGroupId) snippet,
+    required TResult Function(
+            @JsonKey(name: "sgSnippet") List<StoraygeGroupSnippet> sgAllList)
+        storaygeGroupAllList,
   }) {
-    return $default(
-        storaygeGroupName,
-        storaygeGroupId,
-        storaygeGroupAmount,
-        itemAmount,
-        storaygeGroupDesc,
-        storaygeGroupImages,
-        storaygeGroupPathName,
-        storaygeGroupList,
-        itemList);
+    return $default(sgId, sgName, sgDesc, sgImgPathList);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(
-            String? storaygeGroupName,
-            String? storaygeGroupId,
-            int? storaygeGroupAmount,
-            int? itemAmount,
-            String? storaygeGroupDesc,
-            List<String?>? storaygeGroupImages,
-            String? storaygeGroupPathName,
-            List<StoryageGroup?>? storaygeGroupList,
-            List<Item?>? itemList)?
+    TResult Function(String sgId, String? sgName, String? sgDesc,
+            List<String?>? sgImgPathList)?
         $default, {
-    TResult Function(String storaygeGroupId)? snippet,
+    TResult Function(
+            @JsonKey(name: "sgSnippet") List<StoraygeGroupSnippet> sgAllList)?
+        storaygeGroupAllList,
     required TResult orElse(),
   }) {
     if ($default != null) {
-      return $default(
-          storaygeGroupName,
-          storaygeGroupId,
-          storaygeGroupAmount,
-          itemAmount,
-          storaygeGroupDesc,
-          storaygeGroupImages,
-          storaygeGroupPathName,
-          storaygeGroupList,
-          itemList);
+      return $default(sgId, sgName, sgDesc, sgImgPathList);
     }
     return orElse();
   }
@@ -388,8 +253,8 @@ class _$StoraygeGroupData
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(StoraygeGroupData value) $default, {
-    required TResult Function(Snippet value) snippet,
+    TResult Function(_StoraygeGroup value) $default, {
+    required TResult Function(StoraygeGroupAllList value) storaygeGroupAllList,
   }) {
     return $default(this);
   }
@@ -397,8 +262,8 @@ class _$StoraygeGroupData
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(StoraygeGroupData value)? $default, {
-    TResult Function(Snippet value)? snippet,
+    TResult Function(_StoraygeGroup value)? $default, {
+    TResult Function(StoraygeGroupAllList value)? storaygeGroupAllList,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -409,150 +274,126 @@ class _$StoraygeGroupData
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$StoraygeGroupDataToJson(this)..['runtimeType'] = 'default';
+    return _$_$_StoraygeGroupToJson(this)..['runtimeType'] = 'default';
   }
 }
 
-abstract class StoraygeGroupData implements StoryageGroup {
-  const factory StoraygeGroupData(
-      {String? storaygeGroupName,
-      String? storaygeGroupId,
-      int? storaygeGroupAmount,
-      int? itemAmount,
-      String? storaygeGroupDesc,
-      List<String?>? storaygeGroupImages,
-      String? storaygeGroupPathName,
-      List<StoryageGroup?>? storaygeGroupList,
-      List<Item?>? itemList}) = _$StoraygeGroupData;
+abstract class _StoraygeGroup extends StoraygeGroup {
+  factory _StoraygeGroup(
+      {required String sgId,
+      required String? sgName,
+      required String? sgDesc,
+      required List<String?>? sgImgPathList}) = _$_StoraygeGroup;
+  _StoraygeGroup._() : super._();
 
-  factory StoraygeGroupData.fromJson(Map<String, dynamic> json) =
-      _$StoraygeGroupData.fromJson;
+  factory _StoraygeGroup.fromJson(Map<String, dynamic> json) =
+      _$_StoraygeGroup.fromJson;
 
-  String? get storaygeGroupName => throw _privateConstructorUsedError;
-  String? get storaygeGroupId => throw _privateConstructorUsedError;
-  int? get storaygeGroupAmount => throw _privateConstructorUsedError;
-  int? get itemAmount => throw _privateConstructorUsedError;
-  String? get storaygeGroupDesc => throw _privateConstructorUsedError;
-  List<String?>? get storaygeGroupImages => throw _privateConstructorUsedError;
-  String? get storaygeGroupPathName => throw _privateConstructorUsedError;
-  List<StoryageGroup?>? get storaygeGroupList =>
-      throw _privateConstructorUsedError;
-  List<Item?>? get itemList => throw _privateConstructorUsedError;
+  String get sgId => throw _privateConstructorUsedError;
+  String? get sgName => throw _privateConstructorUsedError;
+  String? get sgDesc => throw _privateConstructorUsedError;
+  List<String?>? get sgImgPathList => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $StoraygeGroupDataCopyWith<StoraygeGroupData> get copyWith =>
+  _$StoraygeGroupCopyWith<_StoraygeGroup> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $SnippetCopyWith<$Res> {
-  factory $SnippetCopyWith(Snippet value, $Res Function(Snippet) then) =
-      _$SnippetCopyWithImpl<$Res>;
-  $Res call({String storaygeGroupId});
+abstract class $StoraygeGroupAllListCopyWith<$Res> {
+  factory $StoraygeGroupAllListCopyWith(StoraygeGroupAllList value,
+          $Res Function(StoraygeGroupAllList) then) =
+      _$StoraygeGroupAllListCopyWithImpl<$Res>;
+  $Res call({@JsonKey(name: "sgSnippet") List<StoraygeGroupSnippet> sgAllList});
 }
 
 /// @nodoc
-class _$SnippetCopyWithImpl<$Res> extends _$StoryageGroupCopyWithImpl<$Res>
-    implements $SnippetCopyWith<$Res> {
-  _$SnippetCopyWithImpl(Snippet _value, $Res Function(Snippet) _then)
-      : super(_value, (v) => _then(v as Snippet));
+class _$StoraygeGroupAllListCopyWithImpl<$Res>
+    extends _$StoraygeGroupCopyWithImpl<$Res>
+    implements $StoraygeGroupAllListCopyWith<$Res> {
+  _$StoraygeGroupAllListCopyWithImpl(
+      StoraygeGroupAllList _value, $Res Function(StoraygeGroupAllList) _then)
+      : super(_value, (v) => _then(v as StoraygeGroupAllList));
 
   @override
-  Snippet get _value => super._value as Snippet;
+  StoraygeGroupAllList get _value => super._value as StoraygeGroupAllList;
 
   @override
   $Res call({
-    Object? storaygeGroupId = freezed,
+    Object? sgAllList = freezed,
   }) {
-    return _then(Snippet(
-      storaygeGroupId: storaygeGroupId == freezed
-          ? _value.storaygeGroupId
-          : storaygeGroupId // ignore: cast_nullable_to_non_nullable
-              as String,
+    return _then(StoraygeGroupAllList(
+      sgAllList: sgAllList == freezed
+          ? _value.sgAllList
+          : sgAllList // ignore: cast_nullable_to_non_nullable
+              as List<StoraygeGroupSnippet>,
     ));
   }
 }
 
 /// @nodoc
-@JsonSerializable()
-class _$Snippet with DiagnosticableTreeMixin implements Snippet {
-  const _$Snippet({required this.storaygeGroupId});
 
-  factory _$Snippet.fromJson(Map<String, dynamic> json) =>
-      _$_$SnippetFromJson(json);
+@JsonSerializable(explicitToJson: true)
+class _$StoraygeGroupAllList extends StoraygeGroupAllList {
+  _$StoraygeGroupAllList({@JsonKey(name: "sgSnippet") required this.sgAllList})
+      : super._();
 
-  @override
-  final String storaygeGroupId;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'StoryageGroup.snippet(storaygeGroupId: $storaygeGroupId)';
-  }
+  factory _$StoraygeGroupAllList.fromJson(Map<String, dynamic> json) =>
+      _$_$StoraygeGroupAllListFromJson(json);
 
   @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'StoryageGroup.snippet'))
-      ..add(DiagnosticsProperty('storaygeGroupId', storaygeGroupId));
+  @JsonKey(name: "sgSnippet")
+  final List<StoraygeGroupSnippet> sgAllList;
+
+  @override
+  String toString() {
+    return 'StoraygeGroup.storaygeGroupAllList(sgAllList: $sgAllList)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is Snippet &&
-            (identical(other.storaygeGroupId, storaygeGroupId) ||
+        (other is StoraygeGroupAllList &&
+            (identical(other.sgAllList, sgAllList) ||
                 const DeepCollectionEquality()
-                    .equals(other.storaygeGroupId, storaygeGroupId)));
+                    .equals(other.sgAllList, sgAllList)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(storaygeGroupId);
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(sgAllList);
 
   @JsonKey(ignore: true)
   @override
-  $SnippetCopyWith<Snippet> get copyWith =>
-      _$SnippetCopyWithImpl<Snippet>(this, _$identity);
+  $StoraygeGroupAllListCopyWith<StoraygeGroupAllList> get copyWith =>
+      _$StoraygeGroupAllListCopyWithImpl<StoraygeGroupAllList>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(
-            String? storaygeGroupName,
-            String? storaygeGroupId,
-            int? storaygeGroupAmount,
-            int? itemAmount,
-            String? storaygeGroupDesc,
-            List<String?>? storaygeGroupImages,
-            String? storaygeGroupPathName,
-            List<StoryageGroup?>? storaygeGroupList,
-            List<Item?>? itemList)
+    TResult Function(String sgId, String? sgName, String? sgDesc,
+            List<String?>? sgImgPathList)
         $default, {
-    required TResult Function(String storaygeGroupId) snippet,
+    required TResult Function(
+            @JsonKey(name: "sgSnippet") List<StoraygeGroupSnippet> sgAllList)
+        storaygeGroupAllList,
   }) {
-    return snippet(storaygeGroupId);
+    return storaygeGroupAllList(sgAllList);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(
-            String? storaygeGroupName,
-            String? storaygeGroupId,
-            int? storaygeGroupAmount,
-            int? itemAmount,
-            String? storaygeGroupDesc,
-            List<String?>? storaygeGroupImages,
-            String? storaygeGroupPathName,
-            List<StoryageGroup?>? storaygeGroupList,
-            List<Item?>? itemList)?
+    TResult Function(String sgId, String? sgName, String? sgDesc,
+            List<String?>? sgImgPathList)?
         $default, {
-    TResult Function(String storaygeGroupId)? snippet,
+    TResult Function(
+            @JsonKey(name: "sgSnippet") List<StoraygeGroupSnippet> sgAllList)?
+        storaygeGroupAllList,
     required TResult orElse(),
   }) {
-    if (snippet != null) {
-      return snippet(storaygeGroupId);
+    if (storaygeGroupAllList != null) {
+      return storaygeGroupAllList(sgAllList);
     }
     return orElse();
   }
@@ -560,37 +401,267 @@ class _$Snippet with DiagnosticableTreeMixin implements Snippet {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(StoraygeGroupData value) $default, {
-    required TResult Function(Snippet value) snippet,
+    TResult Function(_StoraygeGroup value) $default, {
+    required TResult Function(StoraygeGroupAllList value) storaygeGroupAllList,
   }) {
-    return snippet(this);
+    return storaygeGroupAllList(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(StoraygeGroupData value)? $default, {
-    TResult Function(Snippet value)? snippet,
+    TResult Function(_StoraygeGroup value)? $default, {
+    TResult Function(StoraygeGroupAllList value)? storaygeGroupAllList,
     required TResult orElse(),
   }) {
-    if (snippet != null) {
-      return snippet(this);
+    if (storaygeGroupAllList != null) {
+      return storaygeGroupAllList(this);
     }
     return orElse();
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$SnippetToJson(this)..['runtimeType'] = 'snippet';
+    return _$_$StoraygeGroupAllListToJson(this)
+      ..['runtimeType'] = 'storaygeGroupAllList';
   }
 }
 
-abstract class Snippet implements StoryageGroup {
-  const factory Snippet({required String storaygeGroupId}) = _$Snippet;
+abstract class StoraygeGroupAllList extends StoraygeGroup {
+  factory StoraygeGroupAllList(
+          {@JsonKey(name: "sgSnippet")
+              required List<StoraygeGroupSnippet> sgAllList}) =
+      _$StoraygeGroupAllList;
+  StoraygeGroupAllList._() : super._();
 
-  factory Snippet.fromJson(Map<String, dynamic> json) = _$Snippet.fromJson;
+  factory StoraygeGroupAllList.fromJson(Map<String, dynamic> json) =
+      _$StoraygeGroupAllList.fromJson;
 
-  String get storaygeGroupId => throw _privateConstructorUsedError;
+  @JsonKey(name: "sgSnippet")
+  List<StoraygeGroupSnippet> get sgAllList =>
+      throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $SnippetCopyWith<Snippet> get copyWith => throw _privateConstructorUsedError;
+  $StoraygeGroupAllListCopyWith<StoraygeGroupAllList> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+StoraygeGroupSnippet _$StoraygeGroupSnippetFromJson(Map<String, dynamic> json) {
+  return _StoraygeGroupSnippet.fromJson(json);
+}
+
+/// @nodoc
+class _$StoraygeGroupSnippetTearOff {
+  const _$StoraygeGroupSnippetTearOff();
+
+  _StoraygeGroupSnippet call(
+      {required String sgId,
+      required String sgName,
+      required String sgDesc,
+      required String sgImgPath}) {
+    return _StoraygeGroupSnippet(
+      sgId: sgId,
+      sgName: sgName,
+      sgDesc: sgDesc,
+      sgImgPath: sgImgPath,
+    );
+  }
+
+  StoraygeGroupSnippet fromJson(Map<String, Object> json) {
+    return StoraygeGroupSnippet.fromJson(json);
+  }
+}
+
+/// @nodoc
+const $StoraygeGroupSnippet = _$StoraygeGroupSnippetTearOff();
+
+/// @nodoc
+mixin _$StoraygeGroupSnippet {
+  String get sgId => throw _privateConstructorUsedError;
+  String get sgName => throw _privateConstructorUsedError;
+  String get sgDesc => throw _privateConstructorUsedError;
+  String get sgImgPath => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $StoraygeGroupSnippetCopyWith<StoraygeGroupSnippet> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $StoraygeGroupSnippetCopyWith<$Res> {
+  factory $StoraygeGroupSnippetCopyWith(StoraygeGroupSnippet value,
+          $Res Function(StoraygeGroupSnippet) then) =
+      _$StoraygeGroupSnippetCopyWithImpl<$Res>;
+  $Res call({String sgId, String sgName, String sgDesc, String sgImgPath});
+}
+
+/// @nodoc
+class _$StoraygeGroupSnippetCopyWithImpl<$Res>
+    implements $StoraygeGroupSnippetCopyWith<$Res> {
+  _$StoraygeGroupSnippetCopyWithImpl(this._value, this._then);
+
+  final StoraygeGroupSnippet _value;
+  // ignore: unused_field
+  final $Res Function(StoraygeGroupSnippet) _then;
+
+  @override
+  $Res call({
+    Object? sgId = freezed,
+    Object? sgName = freezed,
+    Object? sgDesc = freezed,
+    Object? sgImgPath = freezed,
+  }) {
+    return _then(_value.copyWith(
+      sgId: sgId == freezed
+          ? _value.sgId
+          : sgId // ignore: cast_nullable_to_non_nullable
+              as String,
+      sgName: sgName == freezed
+          ? _value.sgName
+          : sgName // ignore: cast_nullable_to_non_nullable
+              as String,
+      sgDesc: sgDesc == freezed
+          ? _value.sgDesc
+          : sgDesc // ignore: cast_nullable_to_non_nullable
+              as String,
+      sgImgPath: sgImgPath == freezed
+          ? _value.sgImgPath
+          : sgImgPath // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$StoraygeGroupSnippetCopyWith<$Res>
+    implements $StoraygeGroupSnippetCopyWith<$Res> {
+  factory _$StoraygeGroupSnippetCopyWith(_StoraygeGroupSnippet value,
+          $Res Function(_StoraygeGroupSnippet) then) =
+      __$StoraygeGroupSnippetCopyWithImpl<$Res>;
+  @override
+  $Res call({String sgId, String sgName, String sgDesc, String sgImgPath});
+}
+
+/// @nodoc
+class __$StoraygeGroupSnippetCopyWithImpl<$Res>
+    extends _$StoraygeGroupSnippetCopyWithImpl<$Res>
+    implements _$StoraygeGroupSnippetCopyWith<$Res> {
+  __$StoraygeGroupSnippetCopyWithImpl(
+      _StoraygeGroupSnippet _value, $Res Function(_StoraygeGroupSnippet) _then)
+      : super(_value, (v) => _then(v as _StoraygeGroupSnippet));
+
+  @override
+  _StoraygeGroupSnippet get _value => super._value as _StoraygeGroupSnippet;
+
+  @override
+  $Res call({
+    Object? sgId = freezed,
+    Object? sgName = freezed,
+    Object? sgDesc = freezed,
+    Object? sgImgPath = freezed,
+  }) {
+    return _then(_StoraygeGroupSnippet(
+      sgId: sgId == freezed
+          ? _value.sgId
+          : sgId // ignore: cast_nullable_to_non_nullable
+              as String,
+      sgName: sgName == freezed
+          ? _value.sgName
+          : sgName // ignore: cast_nullable_to_non_nullable
+              as String,
+      sgDesc: sgDesc == freezed
+          ? _value.sgDesc
+          : sgDesc // ignore: cast_nullable_to_non_nullable
+              as String,
+      sgImgPath: sgImgPath == freezed
+          ? _value.sgImgPath
+          : sgImgPath // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_StoraygeGroupSnippet implements _StoraygeGroupSnippet {
+  const _$_StoraygeGroupSnippet(
+      {required this.sgId,
+      required this.sgName,
+      required this.sgDesc,
+      required this.sgImgPath});
+
+  factory _$_StoraygeGroupSnippet.fromJson(Map<String, dynamic> json) =>
+      _$_$_StoraygeGroupSnippetFromJson(json);
+
+  @override
+  final String sgId;
+  @override
+  final String sgName;
+  @override
+  final String sgDesc;
+  @override
+  final String sgImgPath;
+
+  @override
+  String toString() {
+    return 'StoraygeGroupSnippet(sgId: $sgId, sgName: $sgName, sgDesc: $sgDesc, sgImgPath: $sgImgPath)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _StoraygeGroupSnippet &&
+            (identical(other.sgId, sgId) ||
+                const DeepCollectionEquality().equals(other.sgId, sgId)) &&
+            (identical(other.sgName, sgName) ||
+                const DeepCollectionEquality().equals(other.sgName, sgName)) &&
+            (identical(other.sgDesc, sgDesc) ||
+                const DeepCollectionEquality().equals(other.sgDesc, sgDesc)) &&
+            (identical(other.sgImgPath, sgImgPath) ||
+                const DeepCollectionEquality()
+                    .equals(other.sgImgPath, sgImgPath)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(sgId) ^
+      const DeepCollectionEquality().hash(sgName) ^
+      const DeepCollectionEquality().hash(sgDesc) ^
+      const DeepCollectionEquality().hash(sgImgPath);
+
+  @JsonKey(ignore: true)
+  @override
+  _$StoraygeGroupSnippetCopyWith<_StoraygeGroupSnippet> get copyWith =>
+      __$StoraygeGroupSnippetCopyWithImpl<_StoraygeGroupSnippet>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$_$_StoraygeGroupSnippetToJson(this);
+  }
+}
+
+abstract class _StoraygeGroupSnippet implements StoraygeGroupSnippet {
+  const factory _StoraygeGroupSnippet(
+      {required String sgId,
+      required String sgName,
+      required String sgDesc,
+      required String sgImgPath}) = _$_StoraygeGroupSnippet;
+
+  factory _StoraygeGroupSnippet.fromJson(Map<String, dynamic> json) =
+      _$_StoraygeGroupSnippet.fromJson;
+
+  @override
+  String get sgId => throw _privateConstructorUsedError;
+  @override
+  String get sgName => throw _privateConstructorUsedError;
+  @override
+  String get sgDesc => throw _privateConstructorUsedError;
+  @override
+  String get sgImgPath => throw _privateConstructorUsedError;
+  @override
+  @JsonKey(ignore: true)
+  _$StoraygeGroupSnippetCopyWith<_StoraygeGroupSnippet> get copyWith =>
+      throw _privateConstructorUsedError;
 }

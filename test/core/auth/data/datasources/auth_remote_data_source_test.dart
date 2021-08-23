@@ -1,3 +1,5 @@
+// ignore_for_file: subtype_of_sealed_class
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
@@ -72,7 +74,7 @@ void main() {
           .thenAnswer((_) => mockCollectionReference);
       when(() => mockCollectionReference.doc(any()))
           .thenAnswer((_) => mockDocumentReference);
-      when(() => mockDocumentReference.get()).thenThrow(testFirebaseException);
+      when(() => mockDocumentReference.get()).thenThrow(tFirebaseException);
       when(() => mockDocumentSnapshot.data())
           .thenAnswer((_) => tStoraygeUserJSON);
     }
@@ -83,10 +85,10 @@ void main() {
         //arrange
         setupSuccesfullQuery();
         // act
-        authRemoteDataSource.getStoraygeUserDataFromRemote(uid: tUid);
+        await authRemoteDataSource.getStoraygeUserDataFromRemote(uid: tUid);
         // assert
         verifyInOrder([
-          () => mockFirebaseFirestore.collection(FIRESTORE_USER_COLLECTION),
+          () => mockFirebaseFirestore.collection(FS_USER_COLLECTION),
           () => mockCollectionReference.doc(tUid),
           () => mockDocumentReference.get(),
         ]);
@@ -119,7 +121,7 @@ void main() {
             throwsA(predicate((e) =>
                 e is FirebaseException &&
                 e.code == 'TEST' &&
-                e.plugin == FIRESTORE_PLUGIN)));
+                e.plugin == FS_PLUGIN)));
       },
     );
   });
@@ -168,7 +170,7 @@ void main() {
             email: tEmail, password: tPassword);
         // assert
         verifyInOrder([
-          () => mockFirebaseFirestore.collection(FIRESTORE_USER_COLLECTION),
+          () => mockFirebaseFirestore.collection(FS_USER_COLLECTION),
           () => mockCollectionReference.doc(tUid),
           () => mockDocumentReference.get(),
         ]);
@@ -224,7 +226,7 @@ void main() {
         );
         // assert
         verifyInOrder([
-          () => mockFirebaseFirestore.collection(FIRESTORE_USER_COLLECTION),
+          () => mockFirebaseFirestore.collection(FS_USER_COLLECTION),
           () => mockCollectionReference.doc(tUid),
           () => mockDocumentReference.set({
                 'uid': tUid,

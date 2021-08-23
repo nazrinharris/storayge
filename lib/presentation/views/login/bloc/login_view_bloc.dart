@@ -45,7 +45,7 @@ class LoginViewBloc extends Bloc<LoginViewEvent, LoginViewState> {
       )
           .then(
         (_) {
-          AuthState currentState = authCubit.state;
+          final AuthState currentState = authCubit.state;
 
           if (currentState is AuthLoaded) {
             event.updateInfoTile(
@@ -78,7 +78,7 @@ class LoginViewBloc extends Bloc<LoginViewEvent, LoginViewState> {
     }, idle: (_LVEIdle event) async* {
       yield state;
     }, toggleInfoTileVisibility: (_LVEToggleVisible event) async* {
-      bool currentVisibilty = state.loginViewProps.isInfoTileVisible;
+      final bool currentVisibilty = state.loginViewProps.isInfoTileVisible;
 
       yield state.copyWith(
           loginViewProps: state.loginViewProps.copyWith(

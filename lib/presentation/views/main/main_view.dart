@@ -1,6 +1,5 @@
 import 'package:bottom_nav_layout/bottom_nav_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:storayge/core/util/storayge_icons.dart';
 import 'package:storayge/presentation/shared/local_theme.dart';
@@ -13,21 +12,6 @@ import 'package:supercharged/supercharged.dart';
 class MainView extends StatelessWidget {
   const MainView({Key? key}) : super(key: key);
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Home',
-    ),
-    Text(
-      'Likes',
-    ),
-    Text(
-      'Search',
-    ),
-    Text(
-      'Profile',
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,10 +20,10 @@ class MainView extends StatelessWidget {
           savePageState: true,
           pageTransitionData: _pageTransition(),
           pages: [
-            (_) => HomeView(),
-            (_) => ListScreen(),
-            (_) => FindView(),
-            (_) => MeScreen(),
+            (_) => const HomeView(),
+            (_) => const ListScreen(),
+            (_) => const FindView(),
+            (_) => const MeScreen(),
           ],
           bottomNavigationBar: (currentIndex, onTap) {
             return Container(

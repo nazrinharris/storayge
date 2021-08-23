@@ -1,0 +1,16 @@
+{
+    "sgSnippet" : [
+        {
+            "sgId" : "test_storayge_group_id_snip",
+            "sgName" : "test_storayge_group_name_snip",
+            "sgDesc" : "test_storayge_group_desc_snip",
+            "sgImgPath" : "test_storayge_group_img_path_snip"
+        },
+        {
+            "sgId" : "2_test_storayge_group_id_snip",
+            "sgName" : "2_test_storayge_group_name_snip",
+            "sgDesc" : "2_test_storayge_group_desc_snip",
+            "sgImgPath" : "2_test_storayge_group_img_path_snip"
+        }
+    ]
+}

@@ -6,7 +6,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storayge/core/auth/auth_cubit/auth_cubit.dart';
 import 'package:storayge/core/auth/data/repository/auth_repository.dart';
-import 'package:storayge/core/usecases/params.dart';
 
 import '../../../presets/entities_presets.dart';
 import '../../../presets/failures_exceptions_presets.dart';
@@ -77,7 +76,7 @@ void main() {
           act: (AuthCubit cubit) {
             when(() => mockAuthRepository.getStoraygeUserDataFromRemote(
                   uid: any(named: 'uid'),
-                )).thenAnswer((_) async => Left(testFirestoreFailure));
+                )).thenAnswer((_) async => Left(tFirestoreFailure));
             cubit.getStoraygeUserDataRun(uid: tUid);
           },
           expect: () => [
@@ -140,7 +139,7 @@ void main() {
           when(() => mockAuthRepository.loginWithEmailAndPassword(
                 email: any(named: 'email'),
                 password: any(named: 'password'),
-              )).thenAnswer((_) async => Left(testFirebaseAuthFailure));
+              )).thenAnswer((_) async => Left(tFirebaseAuthFailure));
           cubit.loginWithEmailAndPasswordRun(
             email: tEmail,
             password: tPassword,

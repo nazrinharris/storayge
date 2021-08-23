@@ -1,19 +1,24 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:storayge/core/constants/app_const.dart';
-
-// class FirestoreException extends FirebaseException {
-//   FirestoreException({
-//     required String code,
-//     required String message,
-//   }) : super(
-//           plugin: FIRESTORE_PLUGIN,
-//           code: code,
-//           message: message,
-//         );
-// }
-
 class CacheException implements Exception {}
 
 class AppException implements Exception {}
 
 class UserNotFoundException implements Exception {}
+
+class CodeException implements Exception {
+  final String code;
+  final String message;
+
+  CodeException({
+    required this.code,
+    required this.message,
+  });
+}
+
+class StorageException implements CodeException {
+  @override
+  final String code;
+  @override
+  final String message;
+
+  StorageException({required this.code, required this.message});
+}

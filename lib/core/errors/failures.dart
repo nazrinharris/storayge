@@ -67,6 +67,16 @@ class UserFailure extends Failure {
         );
 }
 
+class UnexpectedFailure extends Failure {
+  const UnexpectedFailure({
+    String? code,
+    String? message,
+  }) : super(
+          code: code,
+          message: message,
+        );
+}
+
 class UserNotFoundFailure extends Failure {}
 
 class CacheFailure extends Failure {

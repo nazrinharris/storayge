@@ -24,7 +24,8 @@ class FindView extends StatelessWidget {
                         .headline1!
                         .copyWith(fontSize: 48.sp),
                   ),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.help_outline))
+                  IconButton(
+                      onPressed: () {}, icon: const Icon(Icons.help_outline))
                 ],
               ),
             )

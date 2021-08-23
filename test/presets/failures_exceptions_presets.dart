@@ -6,56 +6,43 @@ import 'package:storayge/core/constants/app_const.dart';
 import 'package:storayge/core/errors/exceptions.dart';
 import 'package:storayge/core/errors/failures.dart';
 
-/// Base [FirebaseException]
-final FirebaseException testFirebaseException = FirebaseException(
+/// [Failures]
+final CacheFailure tCacheFailure = CacheFailure();
+final NoConnectionFailure tNoConnectionFailure = NoConnectionFailure();
+final ServerFailure tServerFailure = ServerFailure(
+  code: ERROR_NO_INTERNET_CONNECTION,
+  message: MESSAGE_NO_INTERNET_CONNECTION,
+);
+final UserFailure tUserFailure = UserFailure(
+  code: ERROR_USER_NOT_FOUND,
+  message: MESSAGE_USER_NOT_FOUND,
+);
+final FirestoreFailure tFirestoreFailure = FirestoreFailure(
+  message: 'test_message',
+  code: 'TEST',
+);
+final FirebaseAuthFailure tFirebaseAuthFailure = FirebaseAuthFailure(
+  code: 'TEST',
+  message: 'test_message',
+);
+final StorageFailure tStorageFailure = StorageFailure(
+  code: 'TEST',
+  message: 'test_message',
+);
+
+/// [Exceptions]
+final tCacheException = CacheException();
+final tUserNotFoundException = UserNotFoundException();
+final FirebaseException tFirebaseException = FirebaseException(
   plugin: 'base',
   code: 'TEST',
   message: 'test_message',
 );
-
-/// [CloudFirestore] Exceptions
-// final FirestoreException testFirestoreException = FirestoreException(
-//   code: 'TEST',
-//   message: 'test operation',
-// );
-// final FirestoreException abortedCloudFirestoreException = FirestoreException(
-//   code: 'ABORTED',
-//   message: 'The operaation was aborted.',
-// );
-
-/// [CloudFirestore Failures] Failures
-final FirestoreFailure testFirestoreFailure = FirestoreFailure(
-  message: 'test_message',
-  code: 'TEST',
-);
-
-/// [FirebaseAuth Exceptions]
-final FirebaseAuthException testFirebaseAuthException = FirebaseAuthException(
+final FirebaseAuthException tFirebaseAuthException = FirebaseAuthException(
   code: 'TEST',
   message: 'test_message',
 );
-
-/// [FirebaseAuth Failures]
-final FirebaseAuthFailure testFirebaseAuthFailure = FirebaseAuthFailure(
+final StorageException tStorageException = StorageException(
   code: 'TEST',
   message: 'test_message',
 );
-
-/// [Local] Failures
-final CacheFailure testCacheFailure = CacheFailure();
-
-final ServerFailure testServerFailure = ServerFailure(
-  code: ERROR_NO_INTERNET_CONNECTION,
-  message: MESSAGE_NO_INTERNET_CONNECTION,
-);
-
-final NoConnectionFailure testNoConnectionFailure = NoConnectionFailure();
-
-final UserFailure testUserFailure = UserFailure(
-  code: ERROR_USER_NOT_FOUND,
-  message: MESSAGE_USER_NOT_FOUND,
-);
-
-/// [Local Exceptions]
-final testUserNotFoundException = UserNotFoundException();
-final testCacheException = CacheException();

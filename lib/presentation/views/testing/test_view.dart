@@ -17,7 +17,7 @@ class _TestViewState extends State<TestView> {
   Widget build(BuildContext context) {
     final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-    StoraygeGroupData? doc;
+    StoraygeGroup? doc;
 
     bool isNull;
 
@@ -35,12 +35,12 @@ class _TestViewState extends State<TestView> {
             PrimaryButton(
               onPressed: () async {
                 doc = await firebaseFirestore
-                    .collection(FIRESTORE_USER_COLLECTION)
+                    .collection(FS_USER_COLLECTION)
                     .doc('ASasErON7MPYCFFUcDblDf9kmcy1')
                     .get()
                     .then((value) => value.data())
-                    .then((json) => StoraygeGroupData.fromJson(
-                        json!['singleStoraygeGroup']!))
+                    .then((json) =>
+                        StoraygeGroup.fromJson(json!['singleStoraygeGroup']!))
                     .then((doc) {
                   setState(() {});
                   return doc;
@@ -49,7 +49,7 @@ class _TestViewState extends State<TestView> {
                 print(doc);
 
                 await firebaseFirestore
-                    .collection(FIRESTORE_USER_COLLECTION)
+                    .collection(FS_USER_COLLECTION)
                     .doc('ASasErON7MPYCFFUcDblDf9kmcy1')
                     .get()
                     .then((doc) => doc.data())
