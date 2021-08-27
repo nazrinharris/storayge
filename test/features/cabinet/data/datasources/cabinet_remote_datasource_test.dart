@@ -12,7 +12,7 @@ import '../../../../core/fixtures/fixture_reader.dart';
 import '../../../../presets/entities_presets.dart';
 import '../../../../presets/failures_exceptions_presets.dart';
 
-Map<String, dynamic> tAllListSGSnipJSON =
+Map<String, dynamic> tAllListSGSnipOneJSON =
     json.decode(fixture('storayge_group_snippet_list_one.json'));
 
 class MockFirebaseFirestore extends Mock implements FirebaseFirestore {}
@@ -45,7 +45,7 @@ void main() {
     );
   });
 
-  void setupSuccesfullQuery() {
+  void setupSuccesfullQuery(Map<String, dynamic> jsonToReturn) {
     when(() => mockFirebaseFirestore.collection(any()))
         .thenAnswer((_) => mockCollectionReference);
     when(() => mockCollectionReference.doc(any()))
@@ -54,8 +54,18 @@ void main() {
         .thenAnswer((_) => mockCollectionReference);
     when(() => mockDocumentReference.get())
         .thenAnswer((_) async => mockDocumentSnapshot);
-    when(() => mockDocumentSnapshot.data())
-        .thenAnswer((_) => tAllListSGSnipJSON);
+    when(() => mockDocumentSnapshot.data()).thenAnswer((_) => jsonToReturn);
+  }
+
+  void setupFailureQuery(Map<String, dynamic> jsonToReturn) {
+    when(() => mockFirebaseFirestore.collection(any()))
+        .thenAnswer((_) => mockCollectionReference);
+    when(() => mockCollectionReference.doc(any()))
+        .thenAnswer((_) => mockDocumentReference);
+    when(() => mockDocumentReference.collection(any()))
+        .thenAnswer((_) => mockCollectionReference);
+    when(() => mockDocumentReference.get()).thenThrow(tFirebaseException);
+    when(() => mockDocumentSnapshot.data()).thenAnswer((_) => jsonToReturn);
   }
 
   group('CabinetRemoteDatasource', () {
@@ -64,9 +74,9 @@ void main() {
         'should perform proper a proper query to CloudFirestore with the passed in uid',
         () async {
           // arrange
-          setupSuccesfullQuery();
+          setupSuccesfullQuery(tAllListSGSnipOneJSON);
           // act
-          cabinetRemoteDataSource.getAllListSGSnipFromRemote(uid: tUid);
+          await cabinetRemoteDataSource.getAllListSGSnipFromRemote(uid: tUid);
           // assert
           verifyInOrder([
             () => mockFirebaseFirestore.collection(FS_USER_COLLECTION),
@@ -75,6 +85,38 @@ void main() {
             () => mockCollectionReference.doc(FS_SGALLLIST_DOC),
             () => mockDocumentReference.get()
           ]);
+        },
+      );
+      test(
+        'should return List<StoraygeGroupSnippet> when the query is succesfull',
+        () async {
+          // arrange
+          setupSuccesfullQuery(tAllListSGSnipOneJSON);
+          // act
+          final result = await cabinetRemoteDataSource
+              .getAllListSGSnipFromRemote(uid: tUid);
+          // assert
+          expect(result, tStoraygeGroupAllListSnipOne);
+        },
+      );
+
+      test(
+        'should throw FirebaseException with FIRESTORE_PLUGIN when an error occurs',
+        () async {
+          // arrange
+          setupFailureQuery(tAllListSGSnipOneJSON);
+          // act
+          final call = cabinetRemoteDataSource.getAllListSGSnipFromRemote;
+          // assert
+          expect(
+            () => call(uid: tUid),
+            throwsA(
+              predicate((e) =>
+                  e is FirebaseException &&
+                  e.code == 'TEST' &&
+                  e.plugin == FS_PLUGIN),
+            ),
+          );
         },
       );
     });

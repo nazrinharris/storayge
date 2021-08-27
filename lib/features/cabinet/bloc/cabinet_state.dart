@@ -1,52 +1,19 @@
 part of 'cabinet_cubit.dart';
 
-abstract class CabinetState extends Equatable {
-  const CabinetState();
+@freezed
+class CabinetState with _$CabinetState {
+  const factory CabinetState.initial() = _Initial;
+  const factory CabinetState.loading({
+    required String currentOperationMessage,
+    required String code,
+  }) = CabinetLoading;
 
-  @override
-  List<Object> get props => [];
-}
-
-class CabinetInitial extends CabinetState {}
-
-class CabinetLoading extends CabinetState {
-  final String message;
-
-  const CabinetLoading({
-    required this.message,
-  });
-
-  @override
-  List<Object> get props => [message];
-}
-
-class StoreShelfCompleted extends CabinetState {}
-
-/// [ErrorStates]
-///
-///
-class GetShelfError extends CabinetState {
-  final String? message;
-  final String? code;
-
-  const GetShelfError({
-    required this.message,
-    required this.code,
-  });
-
-  @override
-  List<Object> get props => [message ?? '', code ?? ''];
-}
-
-class StoreShelfError extends CabinetState {
-  final String? message;
-  final String? code;
-
-  const StoreShelfError({
-    required this.message,
-    required this.code,
-  });
-
-  @override
-  List<Object> get props => [message ?? '', code ?? ''];
+  //* execGetAllListSGSnip()
+  const factory CabinetState.getAllListSGSnipLoaded({
+    required List<StoraygeGroupSnippet> allListSGSnip,
+  }) = CabinetLoadedGetAllListSGSnip;
+  const factory CabinetState.getAllListSGSnipError({
+    required String message,
+    required String code,
+  }) = CabinetErrorGetAllListSGSnip;
 }

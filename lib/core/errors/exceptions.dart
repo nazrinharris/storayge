@@ -22,3 +22,12 @@ class StorageException implements CodeException {
 
   StorageException({required this.code, required this.message});
 }
+
+class UnexpectedException implements CodeException {
+  @override
+  final String code;
+  @override
+  final String message;
+
+  UnexpectedException({required this.code, required this.message});
+}

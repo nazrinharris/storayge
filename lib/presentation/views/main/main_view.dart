@@ -17,7 +17,7 @@ class MainView extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: BottomNavLayout(
-          savePageState: true,
+          savePageState: false,
           pageTransitionData: _pageTransition(),
           pages: [
             (_) => const HomeView(),

@@ -12,7 +12,6 @@ import 'package:storayge/presentation/shared/local_theme.dart';
 import 'app_router.dart';
 import 'core/auth/auth_cubit/auth_cubit.dart';
 import 'core/util/app_bloc_observer.dart';
-import 'features/cabinet/bloc/cabinet_cubit.dart';
 import 'locator.dart';
 
 Future<void> main() async {
@@ -50,10 +49,10 @@ class StoraygeApp extends StatelessWidget {
       designSize: const Size(414, 893),
       builder: () => MultiBlocProvider(
         providers: [
-          BlocProvider(
-            //lazy: false,
-            create: (context) => locator<CabinetCubit>(),
-          ),
+          // BlocProvider(
+          //   //lazy: false,
+          //   create: (context) => locator<CabinetCubit>(),
+          // ),
           BlocProvider(
             create: (context) => locator<AuthCubit>(),
           ),

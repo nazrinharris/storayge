@@ -58,6 +58,8 @@ class CabinetRepository implements ICabinetRepository {
         return Right(sgAllListSnip);
       } on StorageException catch (e) {
         return Left(StorageFailure(code: e.code, message: e.message));
+      } catch (e) {
+        return Left(UnexpectedFailure(message: e.toString()));
       }
     }
   }

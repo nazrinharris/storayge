@@ -9,6 +9,7 @@ import 'package:storayge/features/cabinet/data/datasources/cabinet_remote_dataso
 import 'package:storayge/features/cabinet/data/repository/cabinet_repository.dart';
 import 'package:storayge/features/cabinet/domain/entities/storayge_group.dart';
 
+import '../../../../presets/entities_presets.dart';
 import '../../../../presets/failures_exceptions_presets.dart';
 
 class MockCabinetRemoteDataSource extends Mock
@@ -28,11 +29,6 @@ void main() {
   late MockCabinetLocalDataSource mockCabinetLocalDataSource;
   late MockNetworkInfo mockNetworkInfo;
 
-  late List<StoraygeGroupSnippet> tStoraygeGroupAllListSnipTwo;
-
-  late StoraygeGroupSnippet tStoraygeGroupSnippet;
-  late StoraygeGroupSnippet tStoraygeGroupSnippet2;
-
   setUp(() {
     mockCabinetRemoteDataSource = MockCabinetRemoteDataSource();
     mockCabinetLocalDataSource = MockCabinetLocalDataSource();
@@ -44,26 +40,7 @@ void main() {
       networkInfo: mockNetworkInfo,
     );
 
-    tStoraygeGroupSnippet = StoraygeGroupSnippet(
-      sgId: tsgIdSnip,
-      sgName: tsgNameSnip,
-      sgDesc: tsgDescSnip,
-      sgImgPath: tsgImgPathSnip,
-    );
-
-    tStoraygeGroupSnippet2 = StoraygeGroupSnippet(
-      sgId: tsgIdSnip2,
-      sgName: tsgNameSnip2,
-      sgDesc: tsgDescSnip2,
-      sgImgPath: tsgImgPathSnip2,
-    );
-
-    tStoraygeGroupAllListSnipTwo = [
-      tStoraygeGroupSnippet,
-      tStoraygeGroupSnippet2,
-    ];
-
-    registerFallbackValue(FakeStoraygeGroupAllListSnippet);
+    registerFallbackValue(FakeStoraygeGroupAllListSnippet());
   });
 
   group('CabinetRepository', () {
@@ -196,19 +173,18 @@ void main() {
             expect(result, Left(tStorageFailure));
           },
         );
+        //todo: complete this test
+        test(
+          'should return Left(UnexpectedFailure) when an unexpected exception is thrown',
+          () async {
+            // arrange
+
+            // act
+
+            // assert
+          },
+        );
       });
     });
   });
 }
-
-const String tsgNameSnip = 'test_storayge_group_name_snip';
-const String tsgIdSnip = 'test_storayge_group_id_snip';
-const String tsgDescSnip = 'test_storayge_group_desc_snip';
-const String tsgImgPathSnip = 'test_storayge_group_img_path_snip';
-
-const String tsgNameSnip2 = '2_test_storayge_group_name_snip';
-const String tsgIdSnip2 = '2_test_storayge_group_id_snip';
-const String tsgDescSnip2 = '2_test_storayge_group_desc_snip';
-const String tsgImgPathSnip2 = '2_test_storayge_group_img_path_snip';
-
-const String tUid = 'test_uid';

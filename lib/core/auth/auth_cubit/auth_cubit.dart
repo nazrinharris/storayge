@@ -121,6 +121,19 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
+  // todo: make this an actual proper function with linking to repo.
+  Future<void> execGetUserUid() async {
+    emit(const AuthLoading(currentOperationMessage: 'Retrieving uid'));
+    final failureOrUid = await authRepository.getUid();
+
+    emit(failureOrUid.fold(
+      (failure) => AuthError(
+        message: failure.message ?? 'No error message was provided',
+      ),
+      (uid) => AuthGeneralCompleted(content: uid),
+    ));
+  }
+
   void emitIdle() {
     emit(AuthIdle());
   }

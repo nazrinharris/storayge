@@ -18,6 +18,7 @@ const String tsgImgPathSnip2 = '2_test_storayge_group_img_path_snip';
 String fixture(String name) =>
     File('test/core/fixtures/$name').readAsStringSync();
 void main() {
+  late StoraygeGroup tStoraygeGroupAllListSnipZero;
   late StoraygeGroup tStoraygeGroupAllListSnipOne;
   late StoraygeGroup tStoraygeGroupAllListSnipTwo;
 
@@ -39,6 +40,10 @@ void main() {
       sgImgPath: tsgImgPathSnip2,
     );
 
+    tStoraygeGroupAllListSnipZero = StoraygeGroup.storaygeGroupAllList(
+      sgAllList: [],
+    );
+
     tStoraygeGroupAllListSnipOne = StoraygeGroup.storaygeGroupAllList(
       sgAllList: [tStoraygeGroupSnippet],
     );
@@ -48,37 +53,56 @@ void main() {
     );
   });
 
-  test(
-    'should verify StoraygeGroupSnippet is not a subtype of StoraygeGroup',
-    () async {
-      // assert
-      expect(tStoraygeGroupSnippet, isNot(StoraygeGroup));
-    },
-  );
+  group('StoraygeGroup', () {
+    group('[StoraygeGroupAllList]', () {
+      // todo: fix bug where if null, fromJson breaks
+      test(
+        'should return a valid StoraygeGroupAllList class when there is no sgSnip in sgAllList json',
+        () async {
+          // arrange
+          final Map<String, dynamic> jsonMap = json.json
+              .decode(fixture('storayge_group_snippet_list_zero.json'));
+          // act
+          final result = StoraygeGroupAllList.fromJson(jsonMap);
+          // assert
+          expect(result, tStoraygeGroupAllListSnipZero);
+        },
+      );
+      test(
+        'should return a valid StoraygeGroupAllList class when there is only one SG in sgAllList json',
+        () async {
+          // arrange
+          final Map<String, dynamic> jsonMap =
+              json.json.decode(fixture('storayge_group_snippet_list_one.json'));
+          // act
+          final result = StoraygeGroupAllList.fromJson(jsonMap);
+          // assert
+          expect(result, tStoraygeGroupAllListSnipOne);
+        },
+      );
 
-  test(
-    'should return a valid StoraygeGroupAllList class when there is only one SG in sgAllList json',
-    () async {
-      // arrange
-      final Map<String, dynamic> jsonMap =
-          json.json.decode(fixture('storayge_group_snippet_list_one.json'));
-      // act
-      final result = StoraygeGroupAllList.fromJson(jsonMap);
-      // assert
-      expect(result, tStoraygeGroupAllListSnipOne);
-    },
-  );
+      test(
+        'should return a valid StoraygeGroupAllList class when there is two SG in sgAllList json',
+        () async {
+          // arrange
+          final Map<String, dynamic> jsonMap =
+              json.json.decode(fixture('storayge_group_snippet_list_two.json'));
+          // act
+          final result = StoraygeGroupAllList.fromJson(jsonMap);
+          // assert
+          expect(result, tStoraygeGroupAllListSnipTwo);
+        },
+      );
+    });
+  });
 
-  test(
-    'should return a valid StoraygeGroupAllList class when there is two SG in sgAllList json',
-    () async {
-      // arrange
-      final Map<String, dynamic> jsonMap =
-          json.json.decode(fixture('storayge_group_snippet_list_two.json'));
-      // act
-      final result = StoraygeGroupAllList.fromJson(jsonMap);
-      // assert
-      expect(result, tStoraygeGroupAllListSnipTwo);
-    },
-  );
+  group('StoraygeGroupSnippet', () {
+    test(
+      'should verify StoraygeGroupSnippet is not a subtype of StoraygeGroup',
+      () async {
+        // assert
+        expect(tStoraygeGroupSnippet, isNot(StoraygeGroup));
+      },
+    );
+  });
 }

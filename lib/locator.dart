@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:storayge/features/cabinet/bloc/cabinet_cubit.dart';
 
 import 'core/auth/auth_cubit/auth_cubit.dart';
 import 'core/auth/data/datasources/auth_local_data_source.dart';
@@ -10,7 +11,7 @@ import 'core/auth/data/datasources/auth_remote_data_source.dart';
 import 'core/auth/data/repository/auth_repository.dart';
 import 'core/auth/domain/i_repository/i_auth_repository.dart';
 import 'core/network/network_info.dart';
-import 'features/cabinet/bloc/cabinet_cubit.dart';
+
 import 'features/cabinet/data/datasources/cabinet_local_datasource.dart';
 import 'features/cabinet/data/datasources/cabinet_remote_datasource.dart';
 import 'features/cabinet/data/repository/cabinet_repository.dart';
@@ -35,9 +36,9 @@ Future<void>? setupLocator() {
         networkInfo: locator(),
       ));
   // Datasources
-  locator.registerLazySingleton<ICabinetLocalDataSource>(
+  locator.registerLazySingleton<CabinetLocalDataSource>(
       () => CabinetLocalDataSource(hiveInterface: locator()));
-  locator.registerLazySingleton<ICabinetRemoteDataSource>(
+  locator.registerLazySingleton<CabinetRemoteDataSource>(
       () => CabinetRemoteDataSource(firebaseFirestore: locator()));
 
   //! Core

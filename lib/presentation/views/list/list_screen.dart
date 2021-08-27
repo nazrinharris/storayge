@@ -1,36 +1,109 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:storayge/core/errors/exceptions.dart';
 import 'package:storayge/features/cabinet/domain/entities/item.dart';
 import 'package:storayge/features/cabinet/domain/entities/storayge_group.dart';
 import 'package:storayge/presentation/shared/local_theme.dart';
 import 'package:storayge/presentation/shared/ui_helpers.dart';
+import 'package:storayge/presentation/views/list/bloc/list_screen_bloc.dart';
+import 'package:supercharged/supercharged.dart';
+
+import '../../../locator.dart';
 
 class ListScreen extends StatelessWidget {
   const ListScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        bottom: false,
-        child: ListView.builder(
-          physics: const BouncingScrollPhysics(),
-          itemCount: 4,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return Column(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ListScreenBloc(
+            cabinetCubit: locator(),
+            authCubit: locator(),
+          ),
+        )
+      ],
+      child: Scaffold(
+        body: SafeArea(
+          bottom: false,
+          child: ListView(
+            physics: const BouncingScrollPhysics(),
+            children: [
+              Column(
                 children: [
                   const ListScreenHeader(),
                   verticalSpace14,
                 ],
-              );
-            } else {
-              return const SizedBox.shrink();
-            }
-          },
+              ),
+              StoraygeGroupList(),
+            ],
+          ),
         ),
       ),
     );
+  }
+}
+
+class StoraygeGroupList extends StatefulWidget {
+  StoraygeGroupList({Key? key}) : super(key: key);
+
+  @override
+  _StoraygeGroupListState createState() => _StoraygeGroupListState();
+}
+
+class _StoraygeGroupListState extends State<StoraygeGroupList> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ListScreenBloc>().add(ListScreenEvent.execGetAllListSGSnip());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ListScreenBloc, ListScreenState>(
+        builder: (context, state) {
+      final ListScreenState currentState = context.read<ListScreenBloc>().state;
+
+      context.read<ListScreenBloc>().stream.listen((event) {
+        setState(() {});
+      });
+
+      return AnimatedSwitcher(
+        duration: 1.seconds,
+        child: resolveChild(currentState),
+      );
+    });
+  }
+
+  Widget resolveChild(ListScreenState currentState) {
+    if (currentState is LSLoadedAllListSGSnip) {
+      return ListView.builder(
+        itemCount: currentState.allListSgSnip.length,
+        itemBuilder: (context, index) {
+          return Container(
+            color: Colors.grey,
+            alignment: Alignment.center,
+            child: Text(currentState.allListSgSnip[index].sgId),
+          );
+        },
+      );
+    } else if (currentState is LSError) {
+      return Container(
+        color: Colors.pink,
+        alignment: Alignment.center,
+        child: Text(currentState.message),
+      );
+    } else if (currentState is LSLoading) {
+      return const CircularProgressIndicator();
+    } else if (currentState is LSInitial) {
+      return const CircularProgressIndicator(
+        color: Colors.red,
+      );
+    } else {
+      throw UnexpectedException(code: 'code', message: 'Unknown State');
+    }
   }
 }
 

@@ -9,6 +9,8 @@ const String HIVE_BOX_SHELF = 'shelf';
 const String HIVE_KEY_IS_FIRST_TIME_OPENING_APP = 'isFirstTimeOpeningApp';
 const String HIVE_KEY_STORAYGE_USER = 'current_storayge_user';
 
+const String HIVE_ALL_LIST_SG_SNIP = 'all_list_storayge_group_snippet';
+
 /// [CloudFirestore] collection and subcollection paths.
 ///
 /// Do not change.
