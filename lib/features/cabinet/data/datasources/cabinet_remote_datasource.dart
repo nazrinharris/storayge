@@ -29,26 +29,30 @@ class CabinetRemoteDataSource implements ICabinetRemoteDataSource {
               .get()
               .then((snapshot) => snapshot.data());
 
-      final StoraygeGroup storaygeGroup =
-          StoraygeGroupAllList.fromJson(retrievedSGAllListJson!);
+      if (retrievedSGAllListJson != null) {
+        final StoraygeGroup storaygeGroup =
+            StoraygeGroupAllList.fromJson(retrievedSGAllListJson);
 
-      final List<StoraygeGroupSnippet> sgSnippetAllList =
-          storaygeGroup.maybeMap(
-        (_) {
-          throw Exception(
-            "Expected a StoraygeGroupAllList but received the default StoraygeGroup",
-          );
-        },
-        storaygeGroupAllList: (storaygeGroupAllList) =>
-            storaygeGroupAllList.sgAllList,
-        orElse: () {
-          throw Exception(
-            "The variable sgSnippetAllList is null, this could mean that the [sgAllList] document within the [management] collection does not exist.",
-          );
-        },
-      );
+        final List<StoraygeGroupSnippet> sgSnippetAllList =
+            storaygeGroup.maybeMap(
+          (_) {
+            throw Exception(
+              "Expected a StoraygeGroupAllList but received the default StoraygeGroup",
+            );
+          },
+          storaygeGroupAllList: (storaygeGroupAllList) =>
+              storaygeGroupAllList.sgAllList,
+          orElse: () {
+            throw Exception(
+              "The variable sgSnippetAllList is null, this could mean that the [sgAllList] document within the [management] collection does not exist.",
+            );
+          },
+        );
 
-      return sgSnippetAllList;
+        return sgSnippetAllList;
+      } else {
+        throw FirebaseException(plugin: FS_PLUGIN, message: "Document is null");
+      }
     } on FirebaseException catch (e) {
       throw FirebaseException(
         plugin: FS_PLUGIN,

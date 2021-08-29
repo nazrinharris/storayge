@@ -6,7 +6,7 @@ import '../models/storayge_user_model.dart';
 
 abstract class IAuthLocalDataSource {
   Future<StoraygeUserModel> getCachedStoraygeUser();
-  Future<void> cacheStoraygeUser(StoraygeUserModel storaygeUserToCache);
+  Future<void> storeStoraygeUser(StoraygeUserModel storaygeUserToCache);
   Future<bool> isFirstTimeOpeningApp();
   Future<StoraygeUserModel> getCurrentUser();
 }
@@ -43,7 +43,7 @@ class AuthLocalDataSource implements IAuthLocalDataSource {
 
 // TODO: Create tests
   @override
-  Future<void> cacheStoraygeUser(
+  Future<void> storeStoraygeUser(
       StoraygeUserModel storaygeUserModelToCache) async {
     final box = await hiveInterface.openBox(HIVE_BOX_STORAYGE_USER);
     return box.put(HIVE_KEY_STORAYGE_USER, storaygeUserModelToCache);

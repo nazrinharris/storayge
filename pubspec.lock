@@ -44,18 +44,22 @@ packages:
     source: hosted
     version: "2.1.0"
   bloc:
-    dependency: transitive
+    dependency: "direct main"
     description:
-      name: bloc
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "7.0.0"
+      path: "packages/bloc"
+      ref: "7a679116aed916d2452c917a52b70bdd2b7ae142"
+      resolved-ref: "7a679116aed916d2452c917a52b70bdd2b7ae142"
+      url: "https://github.com/felangel/bloc"
+    source: git
+    version: "7.1.0"
   bloc_test:
     dependency: "direct dev"
     description:
-      name: bloc_test
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "packages/bloc_test"
+      ref: "7a679116aed916d2452c917a52b70bdd2b7ae142"
+      resolved-ref: "7a679116aed916d2452c917a52b70bdd2b7ae142"
+      url: "https://github.com/felangel/bloc"
+    source: git
     version: "8.1.0"
   boolean_selector:
     dependency: transitive
@@ -317,10 +321,12 @@ packages:
   flutter_bloc:
     dependency: "direct main"
     description:
-      name: flutter_bloc
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "7.1.0"
+      path: "packages/flutter_bloc"
+      ref: "7a679116aed916d2452c917a52b70bdd2b7ae142"
+      resolved-ref: "7a679116aed916d2452c917a52b70bdd2b7ae142"
+      url: "https://github.com/felangel/bloc"
+    source: git
+    version: "7.2.0"
   flutter_screenutil:
     dependency: "direct main"
     description:
@@ -673,7 +679,7 @@ packages:
       name: provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.0"
+    version: "6.0.0"
   pub_semver:
     dependency: transitive
     description:

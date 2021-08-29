@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:storayge/core/auth/auth_cubit/auth_cubit.dart';
 import 'package:storayge/presentation/shared/local_buttons.dart';
 import 'package:storayge/presentation/shared/local_theme.dart';
 import 'package:storayge/presentation/shared/ui_helpers.dart';
@@ -65,6 +67,17 @@ class NavigateView extends StatelessWidget {
               width: 200,
               child: Text(
                 'To Test',
+                style: appTextTheme(context).headline6,
+              ),
+            ),
+            verticalSpace14,
+            PrimaryButton(
+              onPressed: () {
+                BlocProvider.of<AuthCubit>(context).execSignOut();
+              },
+              width: 200,
+              child: Text(
+                'Signout',
                 style: appTextTheme(context).headline6,
               ),
             ),

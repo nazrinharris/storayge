@@ -36,19 +36,26 @@ class CabinetLocalDataSource implements ICabinetLocalDataSource {
 
     final List<StoraygeGroupSnippet> retrievedList = <StoraygeGroupSnippet>[];
 
-    bool isAtTheEnd = false;
-    int index = 0;
+    final boxMap = Map<String, dynamic>.from(allListSGSnipBox.toMap());
 
-    while (isAtTheEnd == false) {
-      Map<String, dynamic>? retrievedSnippetJson = allListSGSnipBox.get(index);
+    boxMap.forEach((sgId, sgSnippet) {
+      retrievedList.add(StoraygeGroupSnippet.fromJson(sgSnippet));
+    });
 
-      if (retrievedSnippetJson != null) {
-        retrievedList.add(StoraygeGroupSnippet.fromJson(retrievedSnippetJson));
-        index++;
-      } else {
-        isAtTheEnd = true;
-      }
-    }
+    // bool isAtTheEnd = false;
+    // int index = 0;
+
+    // while (isAtTheEnd == false) {
+    //   Map<String, dynamic>? retrievedSnippetJson =
+    //       allListSGSnipBox.getAt(index);
+
+    //   if (retrievedSnippetJson != null) {
+    //     retrievedList.add(StoraygeGroupSnippet.fromJson(retrievedSnippetJson));
+    //     index++;
+    //   } else {
+    //     isAtTheEnd = true;
+    //   }
+    // }
 
     return retrievedList;
   }

@@ -19,77 +19,164 @@ class LoginViewBloc extends Bloc<LoginViewEvent, LoginViewState> {
   LoginViewBloc({
     required this.loginViewProps,
     required this.authCubit,
-  }) : super(_LVSInitial(loginViewProps));
+  }) : super(_LVSInitial(loginViewProps)) {
+    on<_LVEStarted>(started);
+    on<_LVEContinuePressed>(continuePressed);
+    on<_LVEIdle>(idle);
+    on<_LVEToggleVisible>(toggleVisible);
+  }
 
-  @override
-  Stream<LoginViewState> mapEventToState(
-    LoginViewEvent event,
-  ) async* {
-    yield* event.map(
-      started: (_LVEStarted event) async* {
-        yield state;
-      },
-      continuePressed: (_LVEContinuePressed event) async* {
-        event.updateInfoTile(const InfoTileProps(
-          leadingText: "Give us a moment...",
-          child: Text("We're logging you in. Sit tight."),
-          isAbleToExpand: true,
-          isExpanded: false,
-          currentStatus: InfoTileStatus.loading,
-        ));
-        event.triggerLoadingPrimaryButtonAware();
-        event.showInfoTile();
+  FutureOr<void> started(
+    _LVEStarted event,
+    Emitter<LoginViewState> emit,
+  ) {
+    emit(state);
+  }
 
-        await authCubit
-            .loginWithEmailAndPasswordRun(
-          email: event.email,
-          password: event.password,
-        )
-            .then(
-          (_) {
-            final AuthState currentState = authCubit.state;
+  FutureOr<void> continuePressed(
+    _LVEContinuePressed event,
+    Emitter<LoginViewState> emit,
+  ) async {
+    event.updateInfoTile(const InfoTileProps(
+      leadingText: "Give us a moment...",
+      child: Text("We're logging you in. Sit tight."),
+      isAbleToExpand: true,
+      isExpanded: false,
+      currentStatus: InfoTileStatus.loading,
+    ));
+    event.triggerLoadingPrimaryButtonAware();
+    event.showInfoTile();
 
-            if (currentState is AuthLoaded) {
-              event.updateInfoTile(
-                InfoTileProps(
-                  leadingText: "Successfull login!",
-                  isAbleToExpand: true,
-                  isExpanded: false,
-                  currentStatus: InfoTileStatus.success,
-                  child: Column(
-                    children: [Text(currentState.storaygeUser.email)],
-                  ),
-                ),
-              );
-              event.triggerFirstPrimaryButtonAware();
-              print('Succesfull Login');
-            } else if (currentState is AuthError) {
-              event.updateInfoTile(
-                InfoTileProps(
-                  leadingText: currentState.message,
-                  isAbleToExpand: false,
-                  isExpanded: false,
-                  currentStatus: InfoTileStatus.error,
-                  child: const SizedBox.shrink(),
-                ),
-              );
-              event.triggerFirstPrimaryButtonAware();
-            }
-          },
-        );
-      },
-      idle: (_LVEIdle event) async* {
-        yield state;
-      },
-      toggleInfoTileVisibility: (_LVEToggleVisible event) async* {
-        final bool currentVisibilty = state.loginViewProps.isInfoTileVisible;
+    await authCubit
+        .execLoginWithEmailAndPassword(
+      email: event.email,
+      password: event.password,
+    )
+        .then(
+      (_) {
+        final AuthState currentState = authCubit.state;
 
-        yield state.copyWith(
-          loginViewProps: state.loginViewProps.copyWith(
-            isInfoTileVisible: !currentVisibilty,
-          ),
-        );
+        if (currentState is AuthLoaded) {
+          event.updateInfoTile(
+            InfoTileProps(
+              leadingText: "Successfull login!",
+              isAbleToExpand: true,
+              isExpanded: false,
+              currentStatus: InfoTileStatus.success,
+              child: Column(
+                children: [Text(currentState.storaygeUser.email)],
+              ),
+            ),
+          );
+          event.triggerFirstPrimaryButtonAware();
+          print('Succesfull Login');
+        } else if (currentState is AuthError) {
+          event.updateInfoTile(
+            InfoTileProps(
+              leadingText: currentState.message,
+              isAbleToExpand: false,
+              isExpanded: false,
+              currentStatus: InfoTileStatus.error,
+              child: const SizedBox.shrink(),
+            ),
+          );
+          event.triggerFirstPrimaryButtonAware();
+        }
       },
     );
   }
+
+  FutureOr<void> idle(
+    _LVEIdle event,
+    Emitter<LoginViewState> emit,
+  ) {
+    emit(state);
+  }
+
+  FutureOr<void> toggleVisible(
+    _LVEToggleVisible event,
+    Emitter<LoginViewState> emit,
+  ) {
+    final bool currentVisibilty = state.loginViewProps.isInfoTileVisible;
+
+    emit(
+      state.copyWith(
+        loginViewProps: state.loginViewProps.copyWith(
+          isInfoTileVisible: !currentVisibilty,
+        ),
+      ),
+    );
+  }
+
+  // @override
+  // Stream<LoginViewState> mapEventToState(
+  //   LoginViewEvent event,
+  // ) async* {
+  //   yield* event.map(
+  //     started: (_LVEStarted event) async* {
+  //       yield state;
+  //     },
+  //     continuePressed: (_LVEContinuePressed event) async* {
+  //       event.updateInfoTile(const InfoTileProps(
+  //         leadingText: "Give us a moment...",
+  //         child: Text("We're logging you in. Sit tight."),
+  //         isAbleToExpand: true,
+  //         isExpanded: false,
+  //         currentStatus: InfoTileStatus.loading,
+  //       ));
+  //       event.triggerLoadingPrimaryButtonAware();
+  //       event.showInfoTile();
+
+  //       await authCubit
+  //           .loginWithEmailAndPasswordRun(
+  //         email: event.email,
+  //         password: event.password,
+  //       )
+  //           .then(
+  //         (_) {
+  //           final AuthState currentState = authCubit.state;
+
+  //           if (currentState is AuthLoaded) {
+  //             event.updateInfoTile(
+  //               InfoTileProps(
+  //                 leadingText: "Successfull login!",
+  //                 isAbleToExpand: true,
+  //                 isExpanded: false,
+  //                 currentStatus: InfoTileStatus.success,
+  //                 child: Column(
+  //                   children: [Text(currentState.storaygeUser.email)],
+  //                 ),
+  //               ),
+  //             );
+  //             event.triggerFirstPrimaryButtonAware();
+  //             print('Succesfull Login');
+  //           } else if (currentState is AuthError) {
+  //             event.updateInfoTile(
+  //               InfoTileProps(
+  //                 leadingText: currentState.message,
+  //                 isAbleToExpand: false,
+  //                 isExpanded: false,
+  //                 currentStatus: InfoTileStatus.error,
+  //                 child: const SizedBox.shrink(),
+  //               ),
+  //             );
+  //             event.triggerFirstPrimaryButtonAware();
+  //           }
+  //         },
+  //       );
+  //     },
+  //     idle: (_LVEIdle event) async* {
+  //       yield state;
+  //     },
+  //     toggleInfoTileVisibility: (_LVEToggleVisible event) async* {
+  //       final bool currentVisibilty = state.loginViewProps.isInfoTileVisible;
+
+  //       yield state.copyWith(
+  //         loginViewProps: state.loginViewProps.copyWith(
+  //           isInfoTileVisible: !currentVisibilty,
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 }

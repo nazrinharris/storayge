@@ -36,7 +36,7 @@ void main() {
       networkInfo: mockNetworkInfo,
     );
 
-    when(() => mockAuthLocalDataSource.cacheStoraygeUser(any()))
+    when(() => mockAuthLocalDataSource.storeStoraygeUser(any()))
         .thenAnswer((_) async => Future.value());
   });
 
@@ -111,7 +111,7 @@ void main() {
           verify(() => mockAuthRemoteDataSource.getStoraygeUserDataFromRemote(
               uid: tUid));
           verify(() =>
-              mockAuthLocalDataSource.cacheStoraygeUser(tStoraygeUserModel));
+              mockAuthLocalDataSource.storeStoraygeUser(tStoraygeUserModel));
         },
       );
 
@@ -220,7 +220,7 @@ void main() {
               email: tEmail, password: tPassword);
           // assert
           verify(() =>
-              mockAuthLocalDataSource.cacheStoraygeUser(tStoraygeUserModel));
+              mockAuthLocalDataSource.storeStoraygeUser(tStoraygeUserModel));
         },
       );
 
@@ -315,7 +315,7 @@ void main() {
           );
           // assert
           verify(() =>
-              mockAuthLocalDataSource.cacheStoraygeUser(tStoraygeUserModel));
+              mockAuthLocalDataSource.storeStoraygeUser(tStoraygeUserModel));
         },
       );
 

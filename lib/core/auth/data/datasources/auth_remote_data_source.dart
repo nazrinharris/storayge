@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../../../constants/app_const.dart';
 import '../../../errors/exceptions.dart';
 
@@ -94,6 +95,12 @@ class AuthRemoteDataSource implements IAuthRemoteDataSource {
       'email': email,
       'username': username,
     });
+    await firebaseFirestore
+        .collection(FS_USER_COLLECTION)
+        .doc(resultUid)
+        .collection(FS_MANAGEMENT_COLLECTION)
+        .doc('sgAllList')
+        .set({"sgSnippet": []});
     return StoraygeUserModel(
       uid: resultUid,
       username: username,
@@ -138,7 +145,7 @@ class AuthRemoteDataSource implements IAuthRemoteDataSource {
 
   @override
   Future<bool> isEmailNotRegistered(String email) async {
-    // TODO: implement isEmailNotRegistered
+    //todo: tests?
     final List<String> availableSignInMethods =
         await firebaseAuth.fetchSignInMethodsForEmail(email);
 

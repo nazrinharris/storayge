@@ -43,7 +43,7 @@ void main() {
                 uid: any(named: "uid"),
               )).thenAnswer((_) async => Right(tStoraygeUser));
           // act
-          cubit.getStoraygeUserDataRun(uid: tUid);
+          cubit.execGetStoraygeUserData(uid: tUid);
           await untilCalled(() => mockAuthRepository
               .getStoraygeUserDataFromRemote(uid: any(named: "uid")));
           // assert
@@ -61,7 +61,7 @@ void main() {
             when(() => mockAuthRepository.getStoraygeUserDataFromRemote(
                   uid: any(named: "uid"),
                 )).thenAnswer((_) async => Right(tStoraygeUser));
-            cubit.getStoraygeUserDataRun(uid: tUid);
+            cubit.execGetStoraygeUserData(uid: tUid);
           },
           expect: () => [
                 AuthLoading(currentOperationMessage: 'message'),
@@ -77,7 +77,7 @@ void main() {
             when(() => mockAuthRepository.getStoraygeUserDataFromRemote(
                   uid: any(named: 'uid'),
                 )).thenAnswer((_) async => Left(tFirestoreFailure));
-            cubit.getStoraygeUserDataRun(uid: tUid);
+            cubit.execGetStoraygeUserData(uid: tUid);
           },
           expect: () => [
                 AuthLoading(currentOperationMessage: 'message'),
@@ -94,7 +94,7 @@ void main() {
                   email: any(named: 'email'), password: any(named: 'password')))
               .thenAnswer((_) async => Right(tStoraygeUser));
           // act
-          cubit.loginWithEmailAndPasswordRun(
+          cubit.execLoginWithEmailAndPassword(
             email: tEmail,
             password: tPassword,
           );
@@ -119,7 +119,7 @@ void main() {
                 email: any(named: 'email'),
                 password: any(named: 'password'),
               )).thenAnswer((_) async => Right(tStoraygeUser));
-          cubit.loginWithEmailAndPasswordRun(
+          cubit.execLoginWithEmailAndPassword(
             email: tEmail,
             password: tPassword,
           );
@@ -140,7 +140,7 @@ void main() {
                 email: any(named: 'email'),
                 password: any(named: 'password'),
               )).thenAnswer((_) async => Left(tFirebaseAuthFailure));
-          cubit.loginWithEmailAndPasswordRun(
+          cubit.execLoginWithEmailAndPassword(
             email: tEmail,
             password: tPassword,
           );

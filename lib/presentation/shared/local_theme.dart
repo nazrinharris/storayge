@@ -31,6 +31,7 @@ const Color kcSuccessGreenBackground = Color(0xffF2FFDC);
 const Color kcSuccessGreenText = Color(0xff102700);
 const Color kcErrorRedBackground = Color(0xffFFBBBB);
 const Color kcErrorRedText = Color(0xff670000);
+const Color kcTertiaryColor = Color(0xffFFE2BC);
 
 double _kPrimaryHeadingTextSize = 40.0.sp;
 double _kSecondaryHeadingTextSize = 30.0.sp;

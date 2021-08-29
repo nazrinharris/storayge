@@ -31,7 +31,7 @@ class AuthRepository implements IAuthRepository {
       try {
         final StoraygeUserModel remoteStoraygeUser =
             await remoteDataSource.getStoraygeUserDataFromRemote(uid: uid);
-        localDataSource.cacheStoraygeUser(remoteStoraygeUser);
+        localDataSource.storeStoraygeUser(remoteStoraygeUser);
         final storaygeUser = StoraygeUser(
           username: remoteStoraygeUser.username,
           email: remoteStoraygeUser.email,
@@ -69,7 +69,7 @@ class AuthRepository implements IAuthRepository {
       try {
         final storaygeUserModelAfterLogin = await remoteDataSource
             .loginWithEmailAndPassword(email: email, password: password);
-        localDataSource.cacheStoraygeUser(storaygeUserModelAfterLogin);
+        localDataSource.storeStoraygeUser(storaygeUserModelAfterLogin);
         final storaygeUser = StoraygeUser(
           username: storaygeUserModelAfterLogin.username,
           email: storaygeUserModelAfterLogin.email,
@@ -103,7 +103,7 @@ class AuthRepository implements IAuthRepository {
           password: password,
           username: username,
         );
-        await localDataSource.cacheStoraygeUser(result);
+        await localDataSource.storeStoraygeUser(result);
         final storaygeUser = StoraygeUser(
           username: result.username,
           email: result.email,

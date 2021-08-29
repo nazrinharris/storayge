@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -5,7 +6,6 @@ import 'package:storayge/core/errors/exceptions.dart';
 import 'package:storayge/features/cabinet/domain/entities/item.dart';
 import 'package:storayge/features/cabinet/domain/entities/storayge_group.dart';
 import 'package:storayge/presentation/shared/local_theme.dart';
-import 'package:storayge/presentation/shared/ui_helpers.dart';
 import 'package:storayge/presentation/views/list/bloc/list_screen_bloc.dart';
 import 'package:supercharged/supercharged.dart';
 
@@ -28,17 +28,27 @@ class ListScreen extends StatelessWidget {
       child: Scaffold(
         body: SafeArea(
           bottom: false,
-          child: ListView(
-            physics: const BouncingScrollPhysics(),
-            children: [
-              Column(
-                children: [
-                  const ListScreenHeader(),
-                  verticalSpace14,
-                ],
-              ),
-              StoraygeGroupList(),
-            ],
+          child: Builder(
+            builder: (context) {
+              context.read<ListScreenBloc>().add(LSexecGetAllListSGSnip());
+
+              return BlocBuilder<ListScreenBloc, ListScreenState>(
+                builder: (context, state) {
+                  return CustomScrollView(
+                    physics: BouncingScrollPhysics(),
+                    slivers: [
+                      SliverPersistentHeader(
+                        delegate: StoraygeSliverDelegate(
+                          maxExtent: 120,
+                          minExtent: 80,
+                        ),
+                      ),
+                      ResolveState(),
+                    ],
+                  );
+                },
+              );
+            },
           ),
         ),
       ),
@@ -46,64 +56,146 @@ class ListScreen extends StatelessWidget {
   }
 }
 
-class StoraygeGroupList extends StatefulWidget {
-  StoraygeGroupList({Key? key}) : super(key: key);
+class ResolveState extends StatefulWidget {
+  ResolveState({Key? key}) : super(key: key);
 
   @override
-  _StoraygeGroupListState createState() => _StoraygeGroupListState();
+  _ResolveStateState createState() => _ResolveStateState();
 }
 
-class _StoraygeGroupListState extends State<StoraygeGroupList> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<ListScreenBloc>().add(ListScreenEvent.execGetAllListSGSnip());
-  }
-
+class _ResolveStateState extends State<ResolveState> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ListScreenBloc, ListScreenState>(
-        builder: (context, state) {
-      final ListScreenState currentState = context.read<ListScreenBloc>().state;
+    final ListScreenState currentState = context.read<ListScreenBloc>().state;
 
-      context.read<ListScreenBloc>().stream.listen((event) {
-        setState(() {});
-      });
-
-      return AnimatedSwitcher(
-        duration: 1.seconds,
-        child: resolveChild(currentState),
-      );
-    });
-  }
-
-  Widget resolveChild(ListScreenState currentState) {
     if (currentState is LSLoadedAllListSGSnip) {
-      return ListView.builder(
-        itemCount: currentState.allListSgSnip.length,
-        itemBuilder: (context, index) {
-          return Container(
-            color: Colors.grey,
-            alignment: Alignment.center,
-            child: Text(currentState.allListSgSnip[index].sgId),
-          );
-        },
+      return SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            return Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+              color: Colors.grey,
+              child: Text(currentState.allListSgSnip[index].sgId),
+            );
+          },
+          childCount: currentState.allListSgSnip.length,
+        ),
       );
     } else if (currentState is LSError) {
-      return Container(
-        color: Colors.pink,
-        alignment: Alignment.center,
-        child: Text(currentState.message),
+      return SliverList(
+        delegate: SliverChildListDelegate(
+          [
+            Container(
+              alignment: Alignment.center,
+              color: Colors.pink,
+              child: Text("${currentState.message} : ${currentState.code}"),
+            )
+          ],
+        ),
       );
     } else if (currentState is LSLoading) {
-      return const CircularProgressIndicator();
+      return SliverList(
+          delegate: SliverChildListDelegate([
+        CircularProgressIndicator(),
+        Container(
+          alignment: Alignment.center,
+          color: Colors.yellow,
+          child: Text(currentState.currentOperationMessage),
+        )
+      ]));
     } else if (currentState is LSInitial) {
-      return const CircularProgressIndicator(
-        color: Colors.red,
-      );
+      return SliverList(
+          delegate: SliverChildListDelegate([
+        CircularProgressIndicator(),
+        Container(
+          alignment: Alignment.center,
+          color: Colors.yellow,
+          child: Text('LS INITIAL'),
+        )
+      ]));
     } else {
       throw UnexpectedException(code: 'code', message: 'Unknown State');
     }
+  }
+}
+
+class StoraygeSliverDelegate extends SliverPersistentHeaderDelegate {
+  @override
+  final double minExtent;
+  @override
+  final double maxExtent;
+
+  StoraygeSliverDelegate({
+    required this.minExtent,
+    required this.maxExtent,
+  });
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Theme.of(context).backgroundColor,
+                Theme.of(context).backgroundColor.withOpacity(0.0),
+              ],
+            ),
+          ),
+        ),
+        Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'list',
+                    style: appTextTheme(context)
+                        .headline1!
+                        .copyWith(fontSize: 48.sp),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.help_outline),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              key: const Key('search-bar'),
+              height: 32.0,
+              margin: const EdgeInsets.symmetric(horizontal: 14),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: TextFormField(
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.search),
+                  border: UnderlineInputBorder(borderSide: BorderSide.none),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
   }
 }
 

@@ -12,24 +12,42 @@ part 'info_tile_bloc.freezed.dart';
 class InfoTileBloc extends Bloc<InfoTileEvent, InfoTileState> {
   final InfoTileProps infoTileProps;
 
-  InfoTileBloc({required this.infoTileProps}) : super(_Loading(infoTileProps));
-
-  @override
-  Stream<InfoTileState> mapEventToState(
-    InfoTileEvent event,
-  ) async* {
-    yield* event.map(
-      toggleExpansion: (_ToggleExpansion event) async* {
-        final bool _isExpanded = !state.infoTileProps.isExpanded;
-        yield state.copyWith(
-            infoTileProps:
-                state.infoTileProps.copyWith(isExpanded: _isExpanded));
-      },
-      triggerStateChange: (_TriggerStateChange event) async* {
-        yield state.copyWith(infoTileProps: event.infoTileProps);
-      },
-    );
+  InfoTileBloc({required this.infoTileProps}) : super(_Loading(infoTileProps)) {
+    on<_ToggleExpansion>(toggleExpansion);
+    on<_TriggerStateChange>(triggerStateChange);
   }
+
+  FutureOr<void> toggleExpansion(
+    _ToggleExpansion event,
+    Emitter<InfoTileState> emit,
+  ) {
+    final bool _isExpanded = !state.infoTileProps.isExpanded;
+    emit(state.copyWith.infoTileProps(isExpanded: _isExpanded));
+  }
+
+  FutureOr<void> triggerStateChange(
+    _TriggerStateChange event,
+    Emitter<InfoTileState> emit,
+  ) {
+    emit(state.copyWith(infoTileProps: event.infoTileProps));
+  }
+
+  // @override
+  // Stream<InfoTileState> mapEventToState(
+  //   InfoTileEvent event,
+  // ) async* {
+  //   yield* event.map(
+  //     toggleExpansion: (_ToggleExpansion event) async* {
+  //       final bool _isExpanded = !state.infoTileProps.isExpanded;
+  //       yield state.copyWith(
+  //           infoTileProps:
+  //               state.infoTileProps.copyWith(isExpanded: _isExpanded));
+  //     },
+  //     triggerStateChange: (_TriggerStateChange event) async* {
+  //       yield state.copyWith(infoTileProps: event.infoTileProps);
+  //     },
+  //   );
+  // }
 }
 
 InfoTileProps infoTileIdle = const InfoTileProps(

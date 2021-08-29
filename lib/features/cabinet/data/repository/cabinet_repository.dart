@@ -46,8 +46,11 @@ class CabinetRepository implements ICabinetRepository {
         return Left(StorageFailure(code: e.code, message: e.message));
       } catch (e) {
         // TODO : Add an UNEXPECTED_FAILURE code and message to the code_library
+        print(e);
         return const Left(
-          UnexpectedFailure(code: 'unexpected', message: 'unexpected'),
+          UnexpectedFailure(
+              code: 'CabinetRepository_Unexpected',
+              message: 'CabinetRepository_Unexpected'),
         );
       }
     } else {
@@ -59,7 +62,8 @@ class CabinetRepository implements ICabinetRepository {
       } on StorageException catch (e) {
         return Left(StorageFailure(code: e.code, message: e.message));
       } catch (e) {
-        return Left(UnexpectedFailure(message: e.toString()));
+        return Left(UnexpectedFailure(
+            message: e.toString(), code: 'from getAllListSGSnipFromLocal()'));
       }
     }
   }

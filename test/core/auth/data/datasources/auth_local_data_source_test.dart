@@ -66,7 +66,7 @@ void main() {
         when(() => mockBox.put(any(), any()))
             .thenAnswer((_) async => Future.value());
         // act
-        await authLocalDataSource.cacheStoraygeUser(tStoraygeUserModel);
+        await authLocalDataSource.storeStoraygeUser(tStoraygeUserModel);
         // assert
         verify(() => mockHiveInterface.openBox(HIVE_BOX_STORAYGE_USER));
         verify(() => mockBox.put(HIVE_KEY_STORAYGE_USER, tStoraygeUserModel));

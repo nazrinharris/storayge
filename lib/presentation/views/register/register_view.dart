@@ -449,7 +449,7 @@ class _BuildBottomButtons extends StatelessWidget {
       showInfoTile();
       await context
           .read<AuthCubit>()
-          .isEmailNotRegisteredRun(email: currentEmail!)
+          .execIsEmailNotRegistered(email: currentEmail!)
           .then((_) {
         final AuthState currentAuthState = context.read<AuthCubit>().state;
         if (currentAuthState is AuthGeneralCompleted) {
@@ -514,7 +514,7 @@ class _BuildBottomButtons extends StatelessWidget {
 
       await context
           .read<AuthCubit>()
-          .registerWithEmailAndPasswordRun(
+          .execRegisterWithEmailAndPassword(
             username: _currentUsername,
             email: _currentEmail,
             password: _currentPassword,

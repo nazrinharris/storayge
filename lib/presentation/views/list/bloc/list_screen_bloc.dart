@@ -16,119 +16,74 @@ class ListScreenBloc extends Bloc<ListScreenEvent, ListScreenState> {
   final AuthCubit authCubit;
 
   ListScreenBloc({
-    required this.cabinetCubit,
     required this.authCubit,
-  }) : super(const LSInitial());
-
-  @override
-  Stream<ListScreenState> mapEventToState(
-    ListScreenEvent event,
-  ) async* {
-    yield* event.map(
-      started: (event) async* {
-        // yield const ListScreenState.loading(
-        //     currentOperationMessage: 'Retrieving your groups');
-
-        // String uid;
-
-        // AuthState authState = authCubit.state;
-        // CabinetState cabinetState = cabinetCubit.state;
-
-        // print("started");
-
-        // await authCubit.execGetUserUid().then((_) async* {
-        //   print("UID Retrieved");
-        //   if (authState is AuthGeneralCompleted) {
-        //     uid = authState.content;
-
-        //     await cabinetCubit.execGetAllList(uid: uid).then((_) async* {
-        //       if (cabinetState is CabinetLoadedGetAllListSGSnip) {
-        //         yield ListScreenState.loadedAllListSGSnip(
-        //             cabinetState.allListSGSnip);
-        //       } else if (cabinetState is CabinetErrorGetAllListSGSnip) {
-        //         yield ListScreenState.error(
-        //           message: cabinetState.message,
-        //           code: cabinetState.code,
-        //         );
-        //       } else {
-        //         //todo: library of codes and exceptions and messages
-        //         throw UnexpectedException(
-        //           code: "cabinet_cubit_exception",
-        //           message: "hmmmm",
-        //         );
-        //       }
-        //     });
-        //   } else if (authState is AuthError) {
-        //     yield ListScreenState.error(
-        //       message: authState.message,
-        //       code: authState.code ?? 'No code was provided',
-        //     );
-        //   } else {
-        //     //todo: library of codes and exceptions and messages
-        //     throw UnexpectedException(
-        //       code: "auth_cubit_exception",
-        //       message: "hmmmm",
-        //     );
-        //   }
-        // });
-      },
-      execGetAllListSGSnip: (LSexecGetAllListSGSnip event) async* {
-        yield const ListScreenState.loading(
-            currentOperationMessage: 'Retrieving your groups');
-
-        String uid;
-
-        AuthState authState = authCubit.state;
-        CabinetState cabinetState = cabinetCubit.state;
-
-        print("execGetAllListSGSnip");
-
-        await authCubit.execGetUserUid().then((_) {
-          print("execGetUserUid");
-        });
-
-        await authCubit.execGetUserUid().then((_) async* {
-          print("UID Retrieved");
-          if (authState is AuthGeneralCompleted) {
-            uid = authState.content;
-
-            await cabinetCubit.execGetAllList(uid: uid).then((_) async* {
-              if (cabinetState is CabinetLoadedGetAllListSGSnip) {
-                yield ListScreenState.loadedAllListSGSnip(
-                    cabinetState.allListSGSnip);
-              } else if (cabinetState is CabinetErrorGetAllListSGSnip) {
-                yield ListScreenState.error(
-                  message: cabinetState.message,
-                  code: cabinetState.code,
-                );
-              } else {
-                //todo: library of codes and exceptions and messages
-                throw UnexpectedException(
-                  code: "cabinet_cubit_exception",
-                  message: "hmmmm",
-                );
-              }
-            });
-          } else if (authState is AuthError) {
-            yield ListScreenState.error(
-              message: authState.message,
-              code: authState.code ?? 'No code was provided',
-            );
-          } else {
-            //todo: library of codes and exceptions and messages
-            throw UnexpectedException(
-              code: "auth_cubit_exception",
-              message: "hmmmm",
-            );
-          }
-        });
-      },
-    );
+    required this.cabinetCubit,
+  }) : super(const LSInitial()) {
+    on<_Started>(start);
+    on<LSexecGetAllListSGSnip>(execGetAllListSGSnip);
   }
 
-  @override
-  void onChange(Change<ListScreenState> change) {
-    print(change);
-    super.onChange(change);
+  FutureOr<void> start(
+    ListScreenEvent event,
+    Emitter<ListScreenState> emit,
+  ) {
+    emit(state);
+  }
+
+  FutureOr<void> execGetAllListSGSnip(
+    ListScreenEvent event,
+    Emitter<ListScreenState> emit,
+  ) async {
+    print('execGetAllListSGSnip started');
+
+    emit(const ListScreenState.loading(
+        currentOperationMessage: 'Retrieving your groups..'));
+
+    String uid;
+
+    await authCubit.execGetUserUid().then((_) async {
+      print('execGetUserUid completed');
+
+      AuthState authState = authCubit.state;
+
+      if (authState is AuthGeneralCompleted) {
+        print('UID Retrieved');
+        uid = authState.content;
+
+        await cabinetCubit.execGetAllList(uid: uid).then(
+          (_) async {
+            CabinetState cabinetState = cabinetCubit.state;
+
+            if (cabinetState is CabinetLoadedGetAllListSGSnip) {
+              emit(ListScreenState.loadedAllListSGSnip(
+                  cabinetState.allListSGSnip));
+            } else if (cabinetState is CabinetErrorGetAllListSGSnip) {
+              emit(ListScreenState.error(
+                message: cabinetState.message,
+                code: cabinetState.code,
+              ));
+            } else {
+              print('cabinetCubit unexpected state ; $cabinetState');
+              throw UnexpectedException(
+                code: 'cabinet_cubit_exception',
+                message: 'what the hej happened',
+              );
+            }
+
+            print('execGetAllList completed');
+          },
+        );
+      } else if (authState is AuthError) {
+        print('AuthCubit Error');
+        emit(
+          ListScreenState.error(
+              message: authState.message,
+              code: authState.code ?? 'No code was provided'),
+        );
+      } else {
+        print('authCubit unexpected state ; $authState');
+        throw UnexpectedException(code: 'code', message: 'authCubit');
+      }
+    });
   }
 }
