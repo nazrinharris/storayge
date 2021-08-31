@@ -32,12 +32,16 @@ class _$StoraygeGroupTearOff {
       {required String sgId,
       required String? sgName,
       required String? sgDesc,
-      required List<String?>? sgImgPathList}) {
+      required List<String?>? sgImgPathList,
+      required List<StoraygeGroupSnippet> sgNestedSnippetList,
+      required List<Item> itemSnippetList}) {
     return _StoraygeGroup(
       sgId: sgId,
       sgName: sgName,
       sgDesc: sgDesc,
       sgImgPathList: sgImgPathList,
+      sgNestedSnippetList: sgNestedSnippetList,
+      itemSnippetList: itemSnippetList,
     );
   }
 
@@ -61,8 +65,13 @@ const $StoraygeGroup = _$StoraygeGroupTearOff();
 mixin _$StoraygeGroup {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String sgId, String? sgName, String? sgDesc,
-            List<String?>? sgImgPathList)
+    TResult Function(
+            String sgId,
+            String? sgName,
+            String? sgDesc,
+            List<String?>? sgImgPathList,
+            List<StoraygeGroupSnippet> sgNestedSnippetList,
+            List<Item> itemSnippetList)
         $default, {
     required TResult Function(
             @JsonKey(name: "sgSnippet") List<StoraygeGroupSnippet> sgAllList)
@@ -71,8 +80,13 @@ mixin _$StoraygeGroup {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String sgId, String? sgName, String? sgDesc,
-            List<String?>? sgImgPathList)?
+    TResult Function(
+            String sgId,
+            String? sgName,
+            String? sgDesc,
+            List<String?>? sgImgPathList,
+            List<StoraygeGroupSnippet> sgNestedSnippetList,
+            List<Item> itemSnippetList)?
         $default, {
     TResult Function(
             @JsonKey(name: "sgSnippet") List<StoraygeGroupSnippet> sgAllList)?
@@ -122,7 +136,9 @@ abstract class _$StoraygeGroupCopyWith<$Res> {
       {String sgId,
       String? sgName,
       String? sgDesc,
-      List<String?>? sgImgPathList});
+      List<String?>? sgImgPathList,
+      List<StoraygeGroupSnippet> sgNestedSnippetList,
+      List<Item> itemSnippetList});
 }
 
 /// @nodoc
@@ -142,6 +158,8 @@ class __$StoraygeGroupCopyWithImpl<$Res>
     Object? sgName = freezed,
     Object? sgDesc = freezed,
     Object? sgImgPathList = freezed,
+    Object? sgNestedSnippetList = freezed,
+    Object? itemSnippetList = freezed,
   }) {
     return _then(_StoraygeGroup(
       sgId: sgId == freezed
@@ -160,6 +178,14 @@ class __$StoraygeGroupCopyWithImpl<$Res>
           ? _value.sgImgPathList
           : sgImgPathList // ignore: cast_nullable_to_non_nullable
               as List<String?>?,
+      sgNestedSnippetList: sgNestedSnippetList == freezed
+          ? _value.sgNestedSnippetList
+          : sgNestedSnippetList // ignore: cast_nullable_to_non_nullable
+              as List<StoraygeGroupSnippet>,
+      itemSnippetList: itemSnippetList == freezed
+          ? _value.itemSnippetList
+          : itemSnippetList // ignore: cast_nullable_to_non_nullable
+              as List<Item>,
     ));
   }
 }
@@ -172,7 +198,9 @@ class _$_StoraygeGroup extends _StoraygeGroup {
       {required this.sgId,
       required this.sgName,
       required this.sgDesc,
-      required this.sgImgPathList})
+      required this.sgImgPathList,
+      required this.sgNestedSnippetList,
+      required this.itemSnippetList})
       : super._();
 
   factory _$_StoraygeGroup.fromJson(Map<String, dynamic> json) =>
@@ -186,10 +214,14 @@ class _$_StoraygeGroup extends _StoraygeGroup {
   final String? sgDesc;
   @override
   final List<String?>? sgImgPathList;
+  @override
+  final List<StoraygeGroupSnippet> sgNestedSnippetList;
+  @override
+  final List<Item> itemSnippetList;
 
   @override
   String toString() {
-    return 'StoraygeGroup(sgId: $sgId, sgName: $sgName, sgDesc: $sgDesc, sgImgPathList: $sgImgPathList)';
+    return 'StoraygeGroup(sgId: $sgId, sgName: $sgName, sgDesc: $sgDesc, sgImgPathList: $sgImgPathList, sgNestedSnippetList: $sgNestedSnippetList, itemSnippetList: $itemSnippetList)';
   }
 
   @override
@@ -204,7 +236,13 @@ class _$_StoraygeGroup extends _StoraygeGroup {
                 const DeepCollectionEquality().equals(other.sgDesc, sgDesc)) &&
             (identical(other.sgImgPathList, sgImgPathList) ||
                 const DeepCollectionEquality()
-                    .equals(other.sgImgPathList, sgImgPathList)));
+                    .equals(other.sgImgPathList, sgImgPathList)) &&
+            (identical(other.sgNestedSnippetList, sgNestedSnippetList) ||
+                const DeepCollectionEquality()
+                    .equals(other.sgNestedSnippetList, sgNestedSnippetList)) &&
+            (identical(other.itemSnippetList, itemSnippetList) ||
+                const DeepCollectionEquality()
+                    .equals(other.itemSnippetList, itemSnippetList)));
   }
 
   @override
@@ -213,7 +251,9 @@ class _$_StoraygeGroup extends _StoraygeGroup {
       const DeepCollectionEquality().hash(sgId) ^
       const DeepCollectionEquality().hash(sgName) ^
       const DeepCollectionEquality().hash(sgDesc) ^
-      const DeepCollectionEquality().hash(sgImgPathList);
+      const DeepCollectionEquality().hash(sgImgPathList) ^
+      const DeepCollectionEquality().hash(sgNestedSnippetList) ^
+      const DeepCollectionEquality().hash(itemSnippetList);
 
   @JsonKey(ignore: true)
   @override
@@ -223,21 +263,32 @@ class _$_StoraygeGroup extends _StoraygeGroup {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String sgId, String? sgName, String? sgDesc,
-            List<String?>? sgImgPathList)
+    TResult Function(
+            String sgId,
+            String? sgName,
+            String? sgDesc,
+            List<String?>? sgImgPathList,
+            List<StoraygeGroupSnippet> sgNestedSnippetList,
+            List<Item> itemSnippetList)
         $default, {
     required TResult Function(
             @JsonKey(name: "sgSnippet") List<StoraygeGroupSnippet> sgAllList)
         storaygeGroupAllList,
   }) {
-    return $default(sgId, sgName, sgDesc, sgImgPathList);
+    return $default(sgId, sgName, sgDesc, sgImgPathList, sgNestedSnippetList,
+        itemSnippetList);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String sgId, String? sgName, String? sgDesc,
-            List<String?>? sgImgPathList)?
+    TResult Function(
+            String sgId,
+            String? sgName,
+            String? sgDesc,
+            List<String?>? sgImgPathList,
+            List<StoraygeGroupSnippet> sgNestedSnippetList,
+            List<Item> itemSnippetList)?
         $default, {
     TResult Function(
             @JsonKey(name: "sgSnippet") List<StoraygeGroupSnippet> sgAllList)?
@@ -245,7 +296,8 @@ class _$_StoraygeGroup extends _StoraygeGroup {
     required TResult orElse(),
   }) {
     if ($default != null) {
-      return $default(sgId, sgName, sgDesc, sgImgPathList);
+      return $default(sgId, sgName, sgDesc, sgImgPathList, sgNestedSnippetList,
+          itemSnippetList);
     }
     return orElse();
   }
@@ -283,7 +335,9 @@ abstract class _StoraygeGroup extends StoraygeGroup {
       {required String sgId,
       required String? sgName,
       required String? sgDesc,
-      required List<String?>? sgImgPathList}) = _$_StoraygeGroup;
+      required List<String?>? sgImgPathList,
+      required List<StoraygeGroupSnippet> sgNestedSnippetList,
+      required List<Item> itemSnippetList}) = _$_StoraygeGroup;
   _StoraygeGroup._() : super._();
 
   factory _StoraygeGroup.fromJson(Map<String, dynamic> json) =
@@ -293,6 +347,9 @@ abstract class _StoraygeGroup extends StoraygeGroup {
   String? get sgName => throw _privateConstructorUsedError;
   String? get sgDesc => throw _privateConstructorUsedError;
   List<String?>? get sgImgPathList => throw _privateConstructorUsedError;
+  List<StoraygeGroupSnippet> get sgNestedSnippetList =>
+      throw _privateConstructorUsedError;
+  List<Item> get itemSnippetList => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$StoraygeGroupCopyWith<_StoraygeGroup> get copyWith =>
       throw _privateConstructorUsedError;
@@ -371,8 +428,13 @@ class _$StoraygeGroupAllList extends StoraygeGroupAllList {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String sgId, String? sgName, String? sgDesc,
-            List<String?>? sgImgPathList)
+    TResult Function(
+            String sgId,
+            String? sgName,
+            String? sgDesc,
+            List<String?>? sgImgPathList,
+            List<StoraygeGroupSnippet> sgNestedSnippetList,
+            List<Item> itemSnippetList)
         $default, {
     required TResult Function(
             @JsonKey(name: "sgSnippet") List<StoraygeGroupSnippet> sgAllList)
@@ -384,8 +446,13 @@ class _$StoraygeGroupAllList extends StoraygeGroupAllList {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String sgId, String? sgName, String? sgDesc,
-            List<String?>? sgImgPathList)?
+    TResult Function(
+            String sgId,
+            String? sgName,
+            String? sgDesc,
+            List<String?>? sgImgPathList,
+            List<StoraygeGroupSnippet> sgNestedSnippetList,
+            List<Item> itemSnippetList)?
         $default, {
     TResult Function(
             @JsonKey(name: "sgSnippet") List<StoraygeGroupSnippet> sgAllList)?

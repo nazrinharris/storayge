@@ -14,6 +14,12 @@ _$_StoraygeGroup _$_$_StoraygeGroupFromJson(Map<String, dynamic> json) {
     sgImgPathList: (json['sgImgPathList'] as List<dynamic>?)
         ?.map((e) => e as String?)
         .toList(),
+    sgNestedSnippetList: (json['sgNestedSnippetList'] as List<dynamic>)
+        .map((e) => StoraygeGroupSnippet.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    itemSnippetList: (json['itemSnippetList'] as List<dynamic>)
+        .map((e) => Item.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -23,6 +29,10 @@ Map<String, dynamic> _$_$_StoraygeGroupToJson(_$_StoraygeGroup instance) =>
       'sgName': instance.sgName,
       'sgDesc': instance.sgDesc,
       'sgImgPathList': instance.sgImgPathList,
+      'sgNestedSnippetList':
+          instance.sgNestedSnippetList.map((e) => e.toJson()).toList(),
+      'itemSnippetList':
+          instance.itemSnippetList.map((e) => e.toJson()).toList(),
     };
 
 _$StoraygeGroupAllList _$_$StoraygeGroupAllListFromJson(

@@ -59,6 +59,9 @@ mixin AppTheme {
       dialogBackgroundColor: _kcFourthColor,
       dividerColor: _kcTertiaryColor,
 
+      /// This color should be a color that is slightly different from [BackgroundColor]
+      canvasColor: _kcSecondaryColor,
+
       shadowColor: _kcBlack,
       hintColor: _kcWhite,
       focusColor: _kcPrimaryColor,
@@ -120,6 +123,9 @@ mixin AppTheme {
       /// These two colors are meant for (but not exclusively) [InfoBar]
       dialogBackgroundColor: _kcFourthColor, // Card Color
       dividerColor: _kcBackgroundColorDark, // Border Card Color
+
+      /// This color should be a color that is slightly different from [BackgroundColor]
+      canvasColor: _kcSecondaryColor,
 
       hintColor: _kcBackgroundColorDark,
       shadowColor: _kcTertiaryColor,

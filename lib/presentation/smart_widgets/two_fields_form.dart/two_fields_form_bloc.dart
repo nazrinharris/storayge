@@ -113,56 +113,6 @@ class TwoFieldsFormBloc extends Bloc<TwoFieldsFormEvent, TwoFieldsFormState>
     );
   }
 
-  // @override
-  // Stream<TwoFieldsFormState> mapEventToState(
-  //   TwoFieldsFormEvent event,
-  // ) async* {
-  //   yield* event.map(
-  //     started: (_) async* {
-  //       yield TwoFieldsFormState.initial(
-  //         props: state.props,
-  //       );
-  //     },
-  //     unfocusAllNodes: (_) async* {
-  //       state.props.firstFieldFocusNode.unfocus();
-  //       state.props.secondFieldFocusNode.unfocus();
-  //       yield state;
-  //     },
-  //     firstFieldValueChanged:
-  //         (_TwoFieldsFormFirstFieldValueChanged event) async* {
-  //       yield state.copyWith(
-  //           props: state.props.copyWith(firstFieldValue: event.input));
-  //     },
-  //     secondFieldValueChanged:
-  //         (_TwoFieldsFormSecondFieldValueChanged event) async* {
-  //       yield state.copyWith(
-  //           props: state.props.copyWith(secondFieldValue: event.input));
-  //     },
-  //     firstFieldSubmitted: (_TwoFieldsFormFirstFieldSubmitted value) async* {
-  //       state.props.secondFieldFocusNode.requestFocus();
-
-  //       yield state.copyWith(
-  //           props: state.props.copyWith(
-  //         autovalidateModeFirstField: AutovalidateMode.always,
-  //       ));
-  //     },
-  //     secondFieldSubmitted: (_TwoFieldsFormSecondFieldSubmitted value) async* {
-  //       yield state.copyWith(
-  //           props: state.props.copyWith(
-  //         autovalidateModeSecondField: AutovalidateMode.always,
-  //       ));
-  //     },
-  //     enableAlwaysValidation:
-  //         (_TwoFieldsFormEnableAlwaysValidation value) async* {
-  //       yield state.copyWith(
-  //           props: state.props.copyWith(
-  //         autovalidateModeFirstField: AutovalidateMode.always,
-  //         autovalidateModeSecondField: AutovalidateMode.always,
-  //       ));
-  //     },
-  //   );
-  // }
-
   @override
   Future<void> close() {
     state

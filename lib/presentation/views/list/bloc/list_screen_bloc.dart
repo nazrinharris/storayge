@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:storayge/core/auth/auth_cubit/auth_cubit.dart';
 import 'package:storayge/core/errors/exceptions.dart';
-import 'package:storayge/features/cabinet/bloc/cabinet_cubit.dart';
+import 'package:storayge/features/cabinet/cubit/cabinet_cubit.dart';
 import 'package:storayge/features/cabinet/domain/entities/storayge_group.dart';
 
 part 'list_screen_event.dart';

@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:storayge/features/cabinet/domain/entities/item.dart';
 
 part 'storayge_group.freezed.dart';
 part 'storayge_group.g.dart';
@@ -11,6 +12,8 @@ class StoraygeGroup with _$StoraygeGroup {
     required String? sgName,
     required String? sgDesc,
     required List<String?>? sgImgPathList,
+    required List<StoraygeGroupSnippet> sgNestedSnippetList,
+    required List<Item> itemSnippetList,
   }) = _StoraygeGroup;
 
   const StoraygeGroup._();

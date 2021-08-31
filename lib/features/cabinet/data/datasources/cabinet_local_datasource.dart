@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:fpdart/fpdart.dart';
 
 import 'package:hive/hive.dart';
@@ -36,26 +38,13 @@ class CabinetLocalDataSource implements ICabinetLocalDataSource {
 
     final List<StoraygeGroupSnippet> retrievedList = <StoraygeGroupSnippet>[];
 
-    final boxMap = Map<String, dynamic>.from(allListSGSnipBox.toMap());
+    final rawBoxMap = allListSGSnipBox.toMap();
 
-    boxMap.forEach((sgId, sgSnippet) {
-      retrievedList.add(StoraygeGroupSnippet.fromJson(sgSnippet));
+    final Map<String, dynamic> boxMap = jsonDecode(jsonEncode(rawBoxMap));
+
+    boxMap.forEach((sgId, sgSnip) {
+      retrievedList.add(StoraygeGroupSnippet.fromJson(sgSnip));
     });
-
-    // bool isAtTheEnd = false;
-    // int index = 0;
-
-    // while (isAtTheEnd == false) {
-    //   Map<String, dynamic>? retrievedSnippetJson =
-    //       allListSGSnipBox.getAt(index);
-
-    //   if (retrievedSnippetJson != null) {
-    //     retrievedList.add(StoraygeGroupSnippet.fromJson(retrievedSnippetJson));
-    //     index++;
-    //   } else {
-    //     isAtTheEnd = true;
-    //   }
-    // }
 
     return retrievedList;
   }

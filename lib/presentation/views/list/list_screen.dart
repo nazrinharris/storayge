@@ -38,12 +38,14 @@ class ListScreen extends StatelessWidget {
                     physics: BouncingScrollPhysics(),
                     slivers: [
                       SliverPersistentHeader(
-                        delegate: StoraygeSliverDelegate(
+                        delegate: ListScreenHeaderDelegate(
                           maxExtent: 120,
-                          minExtent: 80,
+                          minExtent: 120,
                         ),
                       ),
-                      ResolveState(),
+                      StoraygeGroupHeadingSliver(),
+                      StoraygeGroupSliverBuilder(),
+                      SliverWhiteSpace(80),
                     ],
                   );
                 },
@@ -56,14 +58,46 @@ class ListScreen extends StatelessWidget {
   }
 }
 
-class ResolveState extends StatefulWidget {
-  ResolveState({Key? key}) : super(key: key);
+class StoraygeGroupHeadingSliver extends StatelessWidget {
+  const StoraygeGroupHeadingSliver({Key? key}) : super(key: key);
 
   @override
-  _ResolveStateState createState() => _ResolveStateState();
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildListDelegate(
+        [
+          Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                  left: 22,
+                  top: 20,
+                  bottom: 14,
+                  right: 14,
+                ),
+                child: Text(
+                  'Your Groups',
+                  style: appTextTheme(context).headline3,
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
 }
 
-class _ResolveStateState extends State<ResolveState> {
+class StoraygeGroupSliverBuilder extends StatefulWidget {
+  const StoraygeGroupSliverBuilder({Key? key}) : super(key: key);
+
+  @override
+  _StoraygeGroupSliverBuilderState createState() =>
+      _StoraygeGroupSliverBuilderState();
+}
+
+class _StoraygeGroupSliverBuilderState
+    extends State<StoraygeGroupSliverBuilder> {
   @override
   Widget build(BuildContext context) {
     final ListScreenState currentState = context.read<ListScreenBloc>().state;
@@ -72,11 +106,46 @@ class _ResolveStateState extends State<ResolveState> {
       return SliverList(
         delegate: SliverChildBuilderDelegate(
           (context, index) {
-            return Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-              color: Colors.grey,
-              child: Text(currentState.allListSgSnip[index].sgId),
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 7),
+              child: Material(
+                color: Theme.of(context).canvasColor,
+                borderRadius: BorderRadius.circular(20.0),
+                child: Ink(
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(20.0),
+                    onTap: () {},
+                    splashColor:
+                        Theme.of(context).primaryColor.withOpacity(0.20),
+                    highlightColor:
+                        Theme.of(context).primaryColor.withOpacity(0.15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 18,
+                            ),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              currentState.allListSgSnip[index].sgName,
+                              style: appTextTheme(context)
+                                  .headline2!
+                                  .copyWith(fontSize: 20),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(right: 14),
+                          child: Icon(Icons.navigate_next),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             );
           },
           childCount: currentState.allListSgSnip.length,
@@ -120,13 +189,13 @@ class _ResolveStateState extends State<ResolveState> {
   }
 }
 
-class StoraygeSliverDelegate extends SliverPersistentHeaderDelegate {
+class ListScreenHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   final double minExtent;
   @override
   final double maxExtent;
 
-  StoraygeSliverDelegate({
+  ListScreenHeaderDelegate({
     required this.minExtent,
     required this.maxExtent,
   });
@@ -235,6 +304,23 @@ class ListScreenHeader extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class SliverWhiteSpace extends StatelessWidget {
+  final double height;
+
+  const SliverWhiteSpace(this.height, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildListDelegate([
+        SizedBox(
+          height: height,
+        )
+      ]),
     );
   }
 }
