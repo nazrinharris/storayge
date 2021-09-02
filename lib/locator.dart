@@ -6,8 +6,8 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:storayge/features/cabinet/cubit/cabinet_cubit.dart';
 
 import 'core/auth/auth_cubit/auth_cubit.dart';
-import 'core/auth/data/datasources/auth_local_data_source.dart';
-import 'core/auth/data/datasources/auth_remote_data_source.dart';
+import 'core/auth/data/datasources/auth_local_datasource.dart';
+import 'core/auth/data/datasources/auth_remote_datasource.dart';
 import 'core/auth/data/repository/auth_repository.dart';
 import 'core/auth/domain/i_repository/i_auth_repository.dart';
 import 'core/network/network_info.dart';

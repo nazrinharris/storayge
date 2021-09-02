@@ -5,7 +5,7 @@ import '../entities/storayge_user.dart';
 
 abstract class IAuthRepository {
   // User Management
-  Future<Either<Failure, StoraygeUser>> getStoraygeUserDataFromRemote({
+  Future<Either<Failure, StoraygeUser>> getStoraygeUserData({
     required String uid,
   });
   Future<Either<Failure, String>> getUid();

@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,6 +43,11 @@ class ListScreen extends StatelessWidget {
                           maxExtent: 120,
                           minExtent: 120,
                         ),
+                      ),
+                      CupertinoSliverRefreshControl(
+                        onRefresh: () async {
+                          return Future.delayed(3.seconds);
+                        },
                       ),
                       StoraygeGroupHeadingSliver(),
                       StoraygeGroupSliverBuilder(),

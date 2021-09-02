@@ -34,21 +34,20 @@ void main() {
       expect: () => [],
     );
 
-    group('getStoraygeUserDataRun', () {
+    group('execGetStoraygeUserData() ->', () {
       test(
-        'should retrieve data from the GetStoraygeUserDataFromRemote usecase',
+        'should retrieve data by calling getStoraygeUserDataFromRemote from AuthRepository',
         () async {
           // arrange
-          when(() => mockAuthRepository.getStoraygeUserDataFromRemote(
+          when(() => mockAuthRepository.getStoraygeUserData(
                 uid: any(named: "uid"),
               )).thenAnswer((_) async => Right(tStoraygeUser));
           // act
           cubit.execGetStoraygeUserData(uid: tUid);
-          await untilCalled(() => mockAuthRepository
-              .getStoraygeUserDataFromRemote(uid: any(named: "uid")));
+          await untilCalled(() =>
+              mockAuthRepository.getStoraygeUserData(uid: any(named: "uid")));
           // assert
-          verify(() =>
-              mockAuthRepository.getStoraygeUserDataFromRemote(uid: tUid));
+          verify(() => mockAuthRepository.getStoraygeUserData(uid: tUid));
         },
       );
 
@@ -58,7 +57,7 @@ void main() {
                 authRepository: mockAuthRepository,
               ),
           act: (AuthCubit cubit) {
-            when(() => mockAuthRepository.getStoraygeUserDataFromRemote(
+            when(() => mockAuthRepository.getStoraygeUserData(
                   uid: any(named: "uid"),
                 )).thenAnswer((_) async => Right(tStoraygeUser));
             cubit.execGetStoraygeUserData(uid: tUid);
@@ -74,7 +73,7 @@ void main() {
                 authRepository: mockAuthRepository,
               ),
           act: (AuthCubit cubit) {
-            when(() => mockAuthRepository.getStoraygeUserDataFromRemote(
+            when(() => mockAuthRepository.getStoraygeUserData(
                   uid: any(named: 'uid'),
                 )).thenAnswer((_) async => Left(tFirestoreFailure));
             cubit.execGetStoraygeUserData(uid: tUid);
@@ -85,7 +84,7 @@ void main() {
               ]);
     });
 
-    group('loginWithEmailAndPasswordRun', () {
+    group('execLoginWithEmailAndPassword() ->', () {
       test(
         'should retrieve data from the GetStoraygeUserDataFromRemote usecase',
         () async {

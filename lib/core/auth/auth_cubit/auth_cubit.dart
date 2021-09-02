@@ -18,7 +18,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(
         const AuthLoading(currentOperationMessage: 'Retrieving storayge user'));
     final failureOrStoraygeUser =
-        await authRepository.getStoraygeUserDataFromRemote(uid: uid);
+        await authRepository.getStoraygeUserData(uid: uid);
     emit(
       failureOrStoraygeUser.fold(
           (failure) => AuthError(

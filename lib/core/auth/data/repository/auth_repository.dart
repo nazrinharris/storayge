@@ -8,8 +8,8 @@ import '../../../errors/failures.dart';
 import '../../../network/network_info.dart';
 import '../../domain/entities/storayge_user.dart';
 import '../../domain/i_repository/i_auth_repository.dart';
-import '../datasources/auth_local_data_source.dart';
-import '../datasources/auth_remote_data_source.dart';
+import '../datasources/auth_local_datasource.dart';
+import '../datasources/auth_remote_datasource.dart';
 import '../models/storayge_user_model.dart';
 
 class AuthRepository implements IAuthRepository {
@@ -24,7 +24,7 @@ class AuthRepository implements IAuthRepository {
   });
 
   @override
-  Future<Either<Failure, StoraygeUser>> getStoraygeUserDataFromRemote({
+  Future<Either<Failure, StoraygeUser>> getStoraygeUserData({
     required String uid,
   }) async {
     if (await networkInfo.isConnected) {
