@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:storayge/presentation/views/login/login_view.dart';
 import 'package:storayge/presentation/views/main/main_view.dart';
 import 'package:storayge/presentation/views/testing/navigate_view.dart';
 import 'package:storayge/presentation/views/testing/test_view.dart';
-import 'presentation/views/login/login_view.dart';
 import 'presentation/views/register/register_view.dart';
 import 'presentation/views/start/start_view.dart';
 

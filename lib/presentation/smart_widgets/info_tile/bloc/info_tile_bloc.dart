@@ -31,23 +31,6 @@ class InfoTileBloc extends Bloc<InfoTileEvent, InfoTileState> {
   ) {
     emit(state.copyWith(infoTileProps: event.infoTileProps));
   }
-
-  // @override
-  // Stream<InfoTileState> mapEventToState(
-  //   InfoTileEvent event,
-  // ) async* {
-  //   yield* event.map(
-  //     toggleExpansion: (_ToggleExpansion event) async* {
-  //       final bool _isExpanded = !state.infoTileProps.isExpanded;
-  //       yield state.copyWith(
-  //           infoTileProps:
-  //               state.infoTileProps.copyWith(isExpanded: _isExpanded));
-  //     },
-  //     triggerStateChange: (_TriggerStateChange event) async* {
-  //       yield state.copyWith(infoTileProps: event.infoTileProps);
-  //     },
-  //   );
-  // }
 }
 
 InfoTileProps infoTileIdle = const InfoTileProps(

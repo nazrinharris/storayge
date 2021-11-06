@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 const Color _kcPrimaryColor = Color(0xffFF916E);
 const Color _kcPrimaryColorDarker = Color(0xff8c6051);
 const Color _kcSecondaryColor = Color(0xff271700);
+const Color kcSecondaryLighterShadeColor = Color(0xff392201);
 const Color _kcTertiaryColor = Color(0xffFFE2BC);
 const Color _kcFourthColor = Color(0xffFFF0DC); // Also used for appbar light
 
@@ -61,6 +62,8 @@ mixin AppTheme {
 
       /// This color should be a color that is slightly different from [BackgroundColor]
       canvasColor: _kcSecondaryColor,
+
+      /// This color should be slightly lighter from [_kcSecondaryColor]
 
       shadowColor: _kcBlack,
       hintColor: _kcWhite,
