@@ -1,7 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:supercharged/supercharged.dart';
 
 import '../../../constants/app_const.dart';
 import '../../../errors/exceptions.dart';
@@ -9,8 +8,8 @@ import '../../../errors/failures.dart';
 import '../../../network/network_info.dart';
 import '../../domain/entities/storayge_user.dart';
 import '../../domain/i_repository/i_auth_repository.dart';
-import '../datasources/auth_local_data_source.dart';
-import '../datasources/auth_remote_data_source.dart';
+import '../datasources/auth_local_datasource.dart';
+import '../datasources/auth_remote_datasource.dart';
 import '../models/storayge_user_model.dart';
 
 class AuthRepository implements IAuthRepository {
@@ -25,14 +24,14 @@ class AuthRepository implements IAuthRepository {
   });
 
   @override
-  Future<Either<Failure, StoraygeUser>> getStoraygeUserDataFromRemote({
+  Future<Either<Failure, StoraygeUser>> getStoraygeUserData({
     required String uid,
   }) async {
     if (await networkInfo.isConnected) {
       try {
         final StoraygeUserModel remoteStoraygeUser =
             await remoteDataSource.getStoraygeUserDataFromRemote(uid: uid);
-        localDataSource.cacheStoraygeUser(remoteStoraygeUser);
+        localDataSource.storeStoraygeUser(remoteStoraygeUser);
         final storaygeUser = StoraygeUser(
           username: remoteStoraygeUser.username,
           email: remoteStoraygeUser.email,
@@ -70,7 +69,7 @@ class AuthRepository implements IAuthRepository {
       try {
         final storaygeUserModelAfterLogin = await remoteDataSource
             .loginWithEmailAndPassword(email: email, password: password);
-        localDataSource.cacheStoraygeUser(storaygeUserModelAfterLogin);
+        localDataSource.storeStoraygeUser(storaygeUserModelAfterLogin);
         final storaygeUser = StoraygeUser(
           username: storaygeUserModelAfterLogin.username,
           email: storaygeUserModelAfterLogin.email,
@@ -104,7 +103,7 @@ class AuthRepository implements IAuthRepository {
           password: password,
           username: username,
         );
-        await localDataSource.cacheStoraygeUser(result);
+        await localDataSource.storeStoraygeUser(result);
         final storaygeUser = StoraygeUser(
           username: result.username,
           email: result.email,
@@ -178,7 +177,7 @@ class AuthRepository implements IAuthRepository {
     // TODO: implement isEmailNotRegistered
     // TODO: create tests
     if (await networkInfo.isConnected) {
-      bool isEmailNotRegistered =
+      final bool isEmailNotRegistered =
           await remoteDataSource.isEmailNotRegistered(email);
       if (isEmailNotRegistered) {
         return const Right(true);

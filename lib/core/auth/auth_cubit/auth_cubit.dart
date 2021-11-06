@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import '../../constants/app_const.dart';
-import '../../usecases/params.dart';
 
 import '../domain/entities/storayge_user.dart';
 import '../domain/i_repository/i_auth_repository.dart';
@@ -15,11 +14,11 @@ class AuthCubit extends Cubit<AuthState> {
     required this.authRepository,
   }) : super(AuthIdle());
 
-  Future<void> getStoraygeUserDataRun({required String uid}) async {
+  Future<void> execGetStoraygeUserData({required String uid}) async {
     emit(
         const AuthLoading(currentOperationMessage: 'Retrieving storayge user'));
     final failureOrStoraygeUser =
-        await authRepository.getStoraygeUserDataFromRemote(uid: uid);
+        await authRepository.getStoraygeUserData(uid: uid);
     emit(
       failureOrStoraygeUser.fold(
           (failure) => AuthError(
@@ -30,7 +29,7 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  Future<void> registerWithEmailAndPasswordRun({
+  Future<void> execRegisterWithEmailAndPassword({
     required String username,
     required String email,
     required String password,
@@ -60,7 +59,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> loginWithEmailAndPasswordRun({
+  Future<void> execLoginWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
@@ -80,7 +79,7 @@ class AuthCubit extends Cubit<AuthState> {
     ));
   }
 
-  Future<void> isFirstTimeOpeningAppRun() async {
+  Future<void> execIsFirstTimeOpeningApp() async {
     // TODO : Create tests
     emit(const AuthLoading(
         currentOperationMessage:
@@ -94,7 +93,7 @@ class AuthCubit extends Cubit<AuthState> {
         (retrievedBool) => AuthGeneralCompleted(content: retrievedBool)));
   }
 
-  Future<void> isLoggedInRun() async {
+  Future<void> execIsLoggedIn() async {
     // TODO : Create tests
     emit(const AuthLoading(
         currentOperationMessage: 'Currently verifying if you are logged in'));
@@ -106,7 +105,7 @@ class AuthCubit extends Cubit<AuthState> {
             )));
   }
 
-  Future<void> isEmailNotRegisteredRun({
+  Future<void> execIsEmailNotRegistered({
     required String email,
   }) async {
     //TODO:create tests
@@ -120,6 +119,33 @@ class AuthCubit extends Cubit<AuthState> {
         (retrievedBool) => AuthGeneralCompleted(content: retrievedBool),
       ),
     );
+  }
+
+  Future<void> execGetUserUid() async {
+    emit(const AuthLoading(currentOperationMessage: 'Retrieving uid'));
+    final failureOrUid = await authRepository.getUid();
+
+    emit(failureOrUid.fold(
+      (failure) => AuthError(
+        message: failure.message ?? 'No error message was provided',
+      ),
+      (uid) => AuthGeneralCompleted(content: uid),
+    ));
+  }
+
+  Future<void> execSignOut() async {
+    emit(const AuthLoading(currentOperationMessage: 'Signing out...'));
+
+    final failureOrSignOut = await authRepository.signOut();
+
+    emit(failureOrSignOut.fold(
+      (f) => AuthError(
+        message: f.message ?? "No error message was provided",
+        code: f.code,
+      ),
+      (_) =>
+          const AuthGeneralCompleted(content: 'Sign out operation succesfull'),
+    ));
   }
 
   void emitIdle() {

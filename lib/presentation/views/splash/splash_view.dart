@@ -11,7 +11,7 @@ class SplashView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<AuthCubit>().isLoggedInRun();
+    context.read<AuthCubit>().execIsLoggedIn();
 
     return Scaffold(
       body: SafeArea(

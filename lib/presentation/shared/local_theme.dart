@@ -1,9 +1,12 @@
+// ignore_for_file: unused_element
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 const Color _kcPrimaryColor = Color(0xffFF916E);
 const Color _kcPrimaryColorDarker = Color(0xff8c6051);
 const Color _kcSecondaryColor = Color(0xff271700);
+const Color kcSecondaryLighterShadeColor = Color(0xff392201);
 const Color _kcTertiaryColor = Color(0xffFFE2BC);
 const Color _kcFourthColor = Color(0xffFFF0DC); // Also used for appbar light
 
@@ -29,6 +32,7 @@ const Color kcSuccessGreenBackground = Color(0xffF2FFDC);
 const Color kcSuccessGreenText = Color(0xff102700);
 const Color kcErrorRedBackground = Color(0xffFFBBBB);
 const Color kcErrorRedText = Color(0xff670000);
+const Color kcTertiaryColor = Color(0xffFFE2BC);
 
 double _kPrimaryHeadingTextSize = 40.0.sp;
 double _kSecondaryHeadingTextSize = 30.0.sp;
@@ -55,6 +59,11 @@ mixin AppTheme {
       /// These two colors are meant for (but not exclusively) [InfoBar]
       dialogBackgroundColor: _kcFourthColor,
       dividerColor: _kcTertiaryColor,
+
+      /// This color should be a color that is slightly different from [BackgroundColor]
+      canvasColor: _kcSecondaryColor,
+
+      /// This color should be slightly lighter from [_kcSecondaryColor]
 
       shadowColor: _kcBlack,
       hintColor: _kcWhite,
@@ -117,6 +126,9 @@ mixin AppTheme {
       /// These two colors are meant for (but not exclusively) [InfoBar]
       dialogBackgroundColor: _kcFourthColor, // Card Color
       dividerColor: _kcBackgroundColorDark, // Border Card Color
+
+      /// This color should be a color that is slightly different from [BackgroundColor]
+      canvasColor: _kcSecondaryColor,
 
       hintColor: _kcBackgroundColorDark,
       shadowColor: _kcTertiaryColor,

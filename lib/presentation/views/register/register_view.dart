@@ -449,7 +449,7 @@ class _BuildBottomButtons extends StatelessWidget {
       showInfoTile();
       await context
           .read<AuthCubit>()
-          .isEmailNotRegisteredRun(email: currentEmail!)
+          .execIsEmailNotRegistered(email: currentEmail!)
           .then((_) {
         final AuthState currentAuthState = context.read<AuthCubit>().state;
         if (currentAuthState is AuthGeneralCompleted) {
@@ -514,7 +514,7 @@ class _BuildBottomButtons extends StatelessWidget {
 
       await context
           .read<AuthCubit>()
-          .registerWithEmailAndPasswordRun(
+          .execRegisterWithEmailAndPassword(
             username: _currentUsername,
             email: _currentEmail,
             password: _currentPassword,
@@ -673,7 +673,7 @@ class _RegisterFormSecondPageState extends State<RegisterFormSecondPage> {
   String? validateConfirmPassword(String? input) {
     if (input == null || input.isEmpty) {
       return 'Sorry but this cannot be empty';
-    } else if ((input != null && !input.isEmpty) &&
+    } else if (input.isNotEmpty &&
         input != readSecondFormBloc(context).state.props.firstFieldValue) {
       return 'Your passwords do not match';
     } else {

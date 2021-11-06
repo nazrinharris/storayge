@@ -16,21 +16,23 @@ void main() {
         internetConnectionChecker: mockInternetConnectionChecker);
   });
 
-  group('isConnected', () {
-    test(
-      'should forward the call to InternetConnectionChecker.hasConnection',
-      () async {
-        // arrange
-        final tHasConnectionFuture = Future.value(true);
+  group('NetworkInfo', () {
+    group('isConnected() ->', () {
+      test(
+        'should forward the call to InternetConnectionChecker.hasConnection',
+        () async {
+          // arrange
+          final tHasConnectionFuture = Future.value(true);
 
-        when(() => mockInternetConnectionChecker.hasConnection)
-            .thenAnswer((_) => tHasConnectionFuture);
-        // act
-        final result = networkInfoImpl.isConnected;
-        // assert
-        verify(() => mockInternetConnectionChecker.hasConnection);
-        expect(result, equals(tHasConnectionFuture));
-      },
-    );
+          when(() => mockInternetConnectionChecker.hasConnection)
+              .thenAnswer((_) => tHasConnectionFuture);
+          // act
+          final result = networkInfoImpl.isConnected;
+          // assert
+          verify(() => mockInternetConnectionChecker.hasConnection);
+          expect(result, equals(tHasConnectionFuture));
+        },
+      );
+    });
   });
 }

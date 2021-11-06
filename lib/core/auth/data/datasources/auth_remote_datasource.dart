@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import '../../../constants/app_const.dart';
 import '../../../errors/exceptions.dart';
 
-import '../../../constants/app_const.dart';
 import '../models/storayge_user_model.dart';
 
 abstract class IAuthRemoteDataSource {
@@ -47,7 +48,7 @@ class AuthRemoteDataSource implements IAuthRemoteDataSource {
   }) async {
     try {
       final storaygeUserModel = await firebaseFirestore
-          .collection(FIRESTORE_USER_COLLECTION)
+          .collection(FS_USER_COLLECTION)
           .doc(uid)
           .get()
           .then((snapshot) => snapshot.data())
@@ -55,9 +56,7 @@ class AuthRemoteDataSource implements IAuthRemoteDataSource {
       return storaygeUserModel;
     } on FirebaseException catch (e) {
       throw FirebaseException(
-          plugin: FIRESTORE_PLUGIN,
-          code: e.code,
-          message: e.message ?? 'No message');
+          plugin: FS_PLUGIN, code: e.code, message: e.message ?? 'No message');
     }
   }
 
@@ -71,7 +70,7 @@ class AuthRemoteDataSource implements IAuthRemoteDataSource {
         )
         .then((user) => user.user!.uid);
     final storaygeUserModel = await firebaseFirestore
-        .collection(FIRESTORE_USER_COLLECTION)
+        .collection(FS_USER_COLLECTION)
         .doc(resultUid)
         .get()
         .then((snapshot) => snapshot.data())
@@ -91,14 +90,17 @@ class AuthRemoteDataSource implements IAuthRemoteDataSource {
           password: password,
         )
         .then((user) => user.user!.uid);
-    await firebaseFirestore
-        .collection(FIRESTORE_USER_COLLECTION)
-        .doc(resultUid)
-        .set({
+    await firebaseFirestore.collection(FS_USER_COLLECTION).doc(resultUid).set({
       'uid': resultUid,
       'email': email,
       'username': username,
     });
+    await firebaseFirestore
+        .collection(FS_USER_COLLECTION)
+        .doc(resultUid)
+        .collection(FS_MANAGEMENT_COLLECTION)
+        .doc('sgAllList')
+        .set({"sgSnippet": []});
     return StoraygeUserModel(
       uid: resultUid,
       username: username,
@@ -130,7 +132,7 @@ class AuthRemoteDataSource implements IAuthRemoteDataSource {
 
     if (loggedInUser != null) {
       final storaygeUserModel = await firebaseFirestore
-          .collection(FIRESTORE_USER_COLLECTION)
+          .collection(FS_USER_COLLECTION)
           .doc(loggedInUser.uid)
           .get()
           .then((snapshot) => snapshot.data())
@@ -143,7 +145,7 @@ class AuthRemoteDataSource implements IAuthRemoteDataSource {
 
   @override
   Future<bool> isEmailNotRegistered(String email) async {
-    // TODO: implement isEmailNotRegistered
+    //todo: tests?
     final List<String> availableSignInMethods =
         await firebaseAuth.fetchSignInMethodsForEmail(email);
 

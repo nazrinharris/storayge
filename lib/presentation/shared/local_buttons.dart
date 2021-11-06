@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:storayge/core/util/storayge_icons.dart';
 import 'package:storayge/presentation/shared/local_theme.dart';
 

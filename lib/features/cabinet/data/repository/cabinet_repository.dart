@@ -1,9 +1,9 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:storayge/core/errors/exceptions.dart';
 import 'package:storayge/core/errors/failures.dart';
 import 'package:storayge/features/cabinet/domain/entities/storayge_group.dart';
 
-import '../../../../core/errors/exceptions.dart';
 import '../../../../core/network/network_info.dart';
 import '../../domain/i_repository/i_cabinet_repository.dart';
 import '../datasources/cabinet_local_datasource.dart';
@@ -21,11 +21,50 @@ class CabinetRepository implements ICabinetRepository {
   });
 
   @override
-  Future<Either<Failure, Group>> getSingleStoraygeGroup({
+  Future<Either<Failure, StoraygeGroup>> getSingleStoraygeGroup({
     required String uid,
     required String storaygeGroupId,
   }) {
-    // TODO: implement getSingleStoraygeGroup
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, List<StoraygeGroupSnippet>>> getAllListSGSnip({
+    required String uid,
+  }) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final List<StoraygeGroupSnippet> sgAllListSnip =
+            await remoteDataSource.getAllListSGSnipFromRemote(uid: uid);
+
+        await localDataSource.storeAllListSGSnip(sgAllListSnip);
+
+        return Right(sgAllListSnip);
+      } on FirebaseException catch (e) {
+        return Left(FirestoreFailure(message: e.message, code: e.code));
+      } on StorageException catch (e) {
+        return Left(StorageFailure(code: e.code, message: e.message));
+      } catch (e) {
+        // TODO : Add an UNEXPECTED_FAILURE code and message to the code_library
+        print(e);
+        return const Left(
+          UnexpectedFailure(
+              code: 'CabinetRepository_Unexpected',
+              message: 'CabinetRepository_Unexpected'),
+        );
+      }
+    } else {
+      try {
+        final List<StoraygeGroupSnippet> sgAllListSnip =
+            await localDataSource.getAllListSGSnipFromLocal();
+
+        return Right(sgAllListSnip);
+      } on StorageException catch (e) {
+        return Left(StorageFailure(code: e.code, message: e.message));
+      } catch (e) {
+        return Left(UnexpectedFailure(
+            message: e.toString(), code: 'from getAllListSGSnipFromLocal()'));
+      }
+    }
   }
 }

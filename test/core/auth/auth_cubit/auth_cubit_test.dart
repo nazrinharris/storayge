@@ -6,7 +6,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storayge/core/auth/auth_cubit/auth_cubit.dart';
 import 'package:storayge/core/auth/data/repository/auth_repository.dart';
-import 'package:storayge/core/usecases/params.dart';
 
 import '../../../presets/entities_presets.dart';
 import '../../../presets/failures_exceptions_presets.dart';
@@ -35,21 +34,20 @@ void main() {
       expect: () => [],
     );
 
-    group('getStoraygeUserDataRun', () {
+    group('execGetStoraygeUserData() ->', () {
       test(
-        'should retrieve data from the GetStoraygeUserDataFromRemote usecase',
+        'should retrieve data by calling getStoraygeUserDataFromRemote from AuthRepository',
         () async {
           // arrange
-          when(() => mockAuthRepository.getStoraygeUserDataFromRemote(
+          when(() => mockAuthRepository.getStoraygeUserData(
                 uid: any(named: "uid"),
               )).thenAnswer((_) async => Right(tStoraygeUser));
           // act
-          cubit.getStoraygeUserDataRun(uid: tUid);
-          await untilCalled(() => mockAuthRepository
-              .getStoraygeUserDataFromRemote(uid: any(named: "uid")));
+          cubit.execGetStoraygeUserData(uid: tUid);
+          await untilCalled(() =>
+              mockAuthRepository.getStoraygeUserData(uid: any(named: "uid")));
           // assert
-          verify(() =>
-              mockAuthRepository.getStoraygeUserDataFromRemote(uid: tUid));
+          verify(() => mockAuthRepository.getStoraygeUserData(uid: tUid));
         },
       );
 
@@ -59,10 +57,10 @@ void main() {
                 authRepository: mockAuthRepository,
               ),
           act: (AuthCubit cubit) {
-            when(() => mockAuthRepository.getStoraygeUserDataFromRemote(
+            when(() => mockAuthRepository.getStoraygeUserData(
                   uid: any(named: "uid"),
                 )).thenAnswer((_) async => Right(tStoraygeUser));
-            cubit.getStoraygeUserDataRun(uid: tUid);
+            cubit.execGetStoraygeUserData(uid: tUid);
           },
           expect: () => [
                 AuthLoading(currentOperationMessage: 'message'),
@@ -75,10 +73,10 @@ void main() {
                 authRepository: mockAuthRepository,
               ),
           act: (AuthCubit cubit) {
-            when(() => mockAuthRepository.getStoraygeUserDataFromRemote(
+            when(() => mockAuthRepository.getStoraygeUserData(
                   uid: any(named: 'uid'),
-                )).thenAnswer((_) async => Left(testFirestoreFailure));
-            cubit.getStoraygeUserDataRun(uid: tUid);
+                )).thenAnswer((_) async => Left(tFirestoreFailure));
+            cubit.execGetStoraygeUserData(uid: tUid);
           },
           expect: () => [
                 AuthLoading(currentOperationMessage: 'message'),
@@ -86,7 +84,7 @@ void main() {
               ]);
     });
 
-    group('loginWithEmailAndPasswordRun', () {
+    group('execLoginWithEmailAndPassword() ->', () {
       test(
         'should retrieve data from the GetStoraygeUserDataFromRemote usecase',
         () async {
@@ -95,7 +93,7 @@ void main() {
                   email: any(named: 'email'), password: any(named: 'password')))
               .thenAnswer((_) async => Right(tStoraygeUser));
           // act
-          cubit.loginWithEmailAndPasswordRun(
+          cubit.execLoginWithEmailAndPassword(
             email: tEmail,
             password: tPassword,
           );
@@ -120,7 +118,7 @@ void main() {
                 email: any(named: 'email'),
                 password: any(named: 'password'),
               )).thenAnswer((_) async => Right(tStoraygeUser));
-          cubit.loginWithEmailAndPasswordRun(
+          cubit.execLoginWithEmailAndPassword(
             email: tEmail,
             password: tPassword,
           );
@@ -140,8 +138,8 @@ void main() {
           when(() => mockAuthRepository.loginWithEmailAndPassword(
                 email: any(named: 'email'),
                 password: any(named: 'password'),
-              )).thenAnswer((_) async => Left(testFirebaseAuthFailure));
-          cubit.loginWithEmailAndPasswordRun(
+              )).thenAnswer((_) async => Left(tFirebaseAuthFailure));
+          cubit.execLoginWithEmailAndPassword(
             email: tEmail,
             password: tPassword,
           );

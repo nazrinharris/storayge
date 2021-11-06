@@ -38,55 +38,78 @@ class TwoFieldsFormBloc extends Bloc<TwoFieldsFormEvent, TwoFieldsFormState>
               formKey: GlobalKey<FormState>(),
             ),
           ),
-        );
+        ) {
+    on<_TwoFieldsFormStarted>(startedEvent);
+    on<_TwoFieldsFormUnfocusAllNodes>(unfocusAllNodesEvent);
+    on<_TwoFieldsFormFirstFieldValueChanged>(firstFieldValueChangedEvent);
+    on<_TwoFieldsFormSecondFieldValueChanged>(secondFieldValueChangedEvent);
+    on<_TwoFieldsFormFirstFieldSubmitted>(firstFieldSubmittedEvent);
+    on<_TwoFieldsFormSecondFieldSubmitted>(secondFieldSubmittedEvent);
+    on<_TwoFieldsFormEnableAlwaysValidation>(enableAlwaysValidationEvent);
+  }
 
-  @override
-  Stream<TwoFieldsFormState> mapEventToState(
-    TwoFieldsFormEvent event,
-  ) async* {
-    yield* event.map(
-      started: (_) async* {
-        yield TwoFieldsFormState.initial(
-          props: state.props,
-        );
-      },
-      unfocusAllNodes: (_) async* {
-        state.props.firstFieldFocusNode.unfocus();
-        state.props.secondFieldFocusNode.unfocus();
-        yield state;
-      },
-      firstFieldValueChanged:
-          (_TwoFieldsFormFirstFieldValueChanged event) async* {
-        yield state.copyWith(
-            props: state.props.copyWith(firstFieldValue: event.input));
-      },
-      secondFieldValueChanged:
-          (_TwoFieldsFormSecondFieldValueChanged event) async* {
-        yield state.copyWith(
-            props: state.props.copyWith(secondFieldValue: event.input));
-      },
-      firstFieldSubmitted: (_TwoFieldsFormFirstFieldSubmitted value) async* {
-        state.props.secondFieldFocusNode.requestFocus();
+  FutureOr<void> startedEvent(
+    _TwoFieldsFormStarted event,
+    Emitter<TwoFieldsFormState> emit,
+  ) {
+    emit(TwoFieldsFormState.initial(props: state.props));
+  }
 
-        yield state.copyWith(
-            props: state.props.copyWith(
-          autovalidateModeFirstField: AutovalidateMode.always,
-        ));
-      },
-      secondFieldSubmitted: (_TwoFieldsFormSecondFieldSubmitted value) async* {
-        yield state.copyWith(
-            props: state.props.copyWith(
-          autovalidateModeSecondField: AutovalidateMode.always,
-        ));
-      },
-      enableAlwaysValidation:
-          (_TwoFieldsFormEnableAlwaysValidation value) async* {
-        yield state.copyWith(
-            props: state.props.copyWith(
-          autovalidateModeFirstField: AutovalidateMode.always,
-          autovalidateModeSecondField: AutovalidateMode.always,
-        ));
-      },
+  FutureOr<void> unfocusAllNodesEvent(
+    _TwoFieldsFormUnfocusAllNodes event,
+    Emitter<TwoFieldsFormState> emit,
+  ) {
+    state.props.firstFieldFocusNode.unfocus();
+    state.props.secondFieldFocusNode.unfocus();
+    emit(state);
+  }
+
+  FutureOr<void> firstFieldValueChangedEvent(
+    _TwoFieldsFormFirstFieldValueChanged event,
+    Emitter<TwoFieldsFormState> emit,
+  ) {
+    emit(state.copyWith.props(firstFieldValue: event.input));
+  }
+
+  FutureOr<void> secondFieldValueChangedEvent(
+    _TwoFieldsFormSecondFieldValueChanged event,
+    Emitter<TwoFieldsFormState> emit,
+  ) {
+    emit(state.copyWith.props(secondFieldValue: event.input));
+  }
+
+  FutureOr<void> firstFieldSubmittedEvent(
+    _TwoFieldsFormFirstFieldSubmitted event,
+    Emitter<TwoFieldsFormState> emit,
+  ) {
+    state.props.secondFieldFocusNode.requestFocus();
+    emit(
+      state.copyWith.props(
+        autovalidateModeFirstField: AutovalidateMode.always,
+      ),
+    );
+  }
+
+  FutureOr<void> secondFieldSubmittedEvent(
+    _TwoFieldsFormSecondFieldSubmitted event,
+    Emitter<TwoFieldsFormState> emit,
+  ) {
+    emit(
+      state.copyWith.props(
+        autovalidateModeSecondField: AutovalidateMode.always,
+      ),
+    );
+  }
+
+  FutureOr<void> enableAlwaysValidationEvent(
+    _TwoFieldsFormEnableAlwaysValidation event,
+    Emitter<TwoFieldsFormState> emit,
+  ) {
+    emit(
+      state.copyWith.props(
+        autovalidateModeFirstField: AutovalidateMode.always,
+        autovalidateModeSecondField: AutovalidateMode.always,
+      ),
     );
   }
 

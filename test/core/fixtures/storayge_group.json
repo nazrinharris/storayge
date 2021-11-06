@@ -1,25 +1,12 @@
 {
-    "storaygeGroupName": "test_storayge_group_name",
-    "storaygeGroupId": "test_storayge_group_id",
-    "storaygeGroupDesc": "test_storayge_group_desc",
-    "imgPath": "test_img_path",
-    "pathName": "test_path_name",
-    "storaygeGroupAmount": 1,
-    "itemAmount": 0,
-    "storaygeGroupList": [{
-        "storaygeGroupName": "nested_storayge_group_name",
-        "storaygeGroupId": "nested_storayge_group_id",
-        "storaygeGroupDesc": "nested_storayge_group_desc",
-        "imgPath": "nested_img_path",
-        "pathName": "nested_path_name",
-        "storaygeGroupAmount": 0,
-        "itemAmount": 0,
-        "storaygeGroupList": [],
-        "itemList": [],
-        "storaygeGroupImages": [],
-        "storaygeGroupPathName": "nested_storayge_group_path_name"
-        }],
-    "itemList": [],
-    "storaygeGroupImages": [],
-    "storaygeGroupPathName": "test_storayge_group_path_name"
+    "sgName": "test_storayge_group_name",
+    "sgId": "test_storayge_group_id",
+    "sgDesc": "test_storayge_group_desc",
+    "sgNestedListId": [
+        "sgId1","sgId2"
+    ],
+    "itemListId": [
+        "itemId1", "itemId2"
+    ],
+    "sgImgPathList": []
 }

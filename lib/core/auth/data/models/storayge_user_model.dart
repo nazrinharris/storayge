@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 import '../../domain/entities/storayge_user.dart';
 
 @HiveType(typeId: 0)
+// ignore: must_be_immutable
 class StoraygeUserModel extends StoraygeUser with HiveObjectMixin {
   StoraygeUserModel({
     required String uid,

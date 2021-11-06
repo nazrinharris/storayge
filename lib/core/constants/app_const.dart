@@ -9,23 +9,27 @@ const String HIVE_BOX_SHELF = 'shelf';
 const String HIVE_KEY_IS_FIRST_TIME_OPENING_APP = 'isFirstTimeOpeningApp';
 const String HIVE_KEY_STORAYGE_USER = 'current_storayge_user';
 
+const String HIVE_ALL_LIST_SG_SNIP = 'all_list_storayge_group_snippet';
+
 /// [CloudFirestore] collection and subcollection paths.
 ///
 /// Do not change.
-const String FIRESTORE_USER_COLLECTION = 'users';
-const String FIRESTORE_SHELF_COLLECTION = 'shelf';
+const String FS_USER_COLLECTION = 'users';
+const String FS_SHELF_COLLECTION = 'shelf';
+// * Management tree
+const String FS_MANAGEMENT_COLLECTION = 'management';
+const String FS_SGALLLIST_DOC = 'sgAllList';
 
 /// [FirebaseException] plugins.
 ///
 /// These have been set manually and can be changed but it is advised not to.
-const String FIRESTORE_PLUGIN = 'cloud_firestore';
+const String FS_PLUGIN = 'cloud_firestore';
 
 /// [FirebaseException] Messages and Codes
 ///
 /// Can be modified but care must be taken to not change it's purpose
-const String FIRESTORE_ERROR_DOCUMENT_NOT_FOUND =
-    'FIRESTORE_ERROR_DOCUMENT_NOT_FOUND';
-const String FIRESTORE_MESSAGE_DOCUMENT_NOT_FOUND =
+const String FS_ERROR_DOCUMENT_NOT_FOUND = 'FIRESTORE_ERROR_DOCUMENT_NOT_FOUND';
+const String FS_MESSAGE_DOCUMENT_NOT_FOUND =
     'Sorry, but the firestore document does not exist';
 
 /// Local App [ErrorCodes]
