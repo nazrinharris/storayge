@@ -39,10 +39,12 @@ class AuthRepository implements IAuthRepository {
         );
         return Right(storaygeUser);
       } on FirebaseException catch (e) {
-        return Left(FirestoreFailure(
-          code: e.code,
-          message: e.message,
-        ));
+        return Left(
+          FirestoreFailure(
+            code: e.code,
+            message: e.message,
+          ),
+        );
       }
     } else {
       try {

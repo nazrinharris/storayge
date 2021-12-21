@@ -25,5 +25,6 @@ abstract class IAuthRepository {
     required String password,
     required String username,
   });
+
   Future<Either<Failure, bool>> isEmailNotRegistered(String email);
 }
