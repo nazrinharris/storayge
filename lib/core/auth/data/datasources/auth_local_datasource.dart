@@ -46,7 +46,7 @@ class AuthLocalDataSource implements IAuthLocalDataSource {
   Future<void> storeStoraygeUser(
       StoraygeUserModel storaygeUserModelToCache) async {
     final box = await hiveInterface.openBox(HIVE_BOX_STORAYGE_USER);
-    return box.put(HIVE_KEY_STORAYGE_USER, storaygeUserModelToCache);
+    return box.put(HIVE_KEY_STORAYGE_USER, storaygeUserModelToCache.toJson());
   }
 
   @override

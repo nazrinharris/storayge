@@ -1,14 +1,15 @@
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: avoid_implementing_value_types
 
+import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:storayge/core/auth/data/datasources/auth_local_datasource.dart';
 import 'package:storayge/core/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:storayge/core/auth/data/models/storayge_user_model.dart';
 import 'package:storayge/core/auth/data/repository/auth_repository.dart';
 import 'package:storayge/core/network/network_info.dart';
+
 import '../../../../presets/entities_presets.dart';
 import '../../../../presets/failures_exceptions_presets.dart';
 
