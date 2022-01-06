@@ -22,7 +22,7 @@ Future<void> main() async {
   HydratedBloc.storage = await HydratedStorage.build(
       storageDirectory: await getApplicationDocumentsDirectory());
 
-  Bloc.observer = AppBlocObserver();
+  //Bloc.observer = AppBlocObserver();
 
   await Firebase.initializeApp();
 

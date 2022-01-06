@@ -34,8 +34,8 @@ dependencies:
   freezed_annotation:
 
   # Business Logic and Dependency Injection
-  flutter_bloc: ^8.0.0-dev.2
-  bloc: ^8.0.0-dev.3
+  flutter_bloc: ^8.0.1
+  bloc: ^8.0.2
   hydrated_bloc: ^8.0.0-dev.3
   get_it: ^7.2.0
 
@@ -48,17 +48,17 @@ dependencies:
   json_annotation: ^4.3.0
 
   # Render
-  flutter_svg: ^0.23.0+1
-  flutter_screenutil: ^5.0.0+2
+  flutter_svg: ^1.0.0
+  flutter_screenutil: ^5.0.3
   simple_animations: ^4.0.1
-  bottom_nav_layout: ^3.0.7
+  bottom_nav_layout: ^3.0.9
   google_nav_bar: ^5.0.5
-  boxy: ^2.0.4
+  boxy: ^2.0.5
 
   # Misc
-  lint: ^1.7.2
+  lint: ^1.8.1
   logger: ^1.1.0
-  path_provider: ^2.0.6
+  path_provider: ^2.0.8
   supercharged: ^2.1.1
 
 dev_dependencies:
@@ -73,7 +73,7 @@ dev_dependencies:
 
   # Mocking and Testing
   mocktail: ^0.2.0
-  bloc_test: ^9.0.0-dev.4
+  bloc_test: ^9.0.2
 
 flutter:
   uses-material-design: true
