@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_animations/simple_animations.dart';
+import 'package:supercharged/supercharged.dart';
+
 import 'package:storayge/core/util/storayge_icons.dart';
 import 'package:storayge/presentation/shared/local_buttons.dart';
 import 'package:storayge/presentation/shared/local_theme.dart';
@@ -10,7 +12,6 @@ import 'package:storayge/presentation/smart_widgets/info_tile/info_tile.dart';
 import 'package:storayge/presentation/smart_widgets/primary_button_aware/primary_button_aware_cubit.dart';
 import 'package:storayge/presentation/smart_widgets/two_fields_form.dart/two_fields_form_bloc.dart';
 import 'package:storayge/presentation/views/login/bloc/login_view_bloc.dart';
-import 'package:supercharged/supercharged.dart';
 
 import '../../../locator.dart';
 import '../../../presentation/shared/ui_helpers.dart';
