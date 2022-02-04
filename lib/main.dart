@@ -20,8 +20,8 @@ Future<void> main() async {
 
   await Hive.initFlutter();
 
-  HydratedBloc.storage = await HydratedStorage.build(
-      storageDirectory: await getApplicationDocumentsDirectory());
+  //HydratedBloc.storage = await HydratedStorage.build(
+  //    storageDirectory: await getApplicationDocumentsDirectory());
 
   //Bloc.observer = AppBlocObserver();
 

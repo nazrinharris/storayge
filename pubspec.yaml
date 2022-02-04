@@ -36,7 +36,7 @@ dependencies:
   # Business Logic and Dependency Injection
   flutter_bloc: ^8.0.1
   bloc: ^8.0.2
-  hydrated_bloc: ^8.0.0-dev.3
+  hydrated_bloc: ^8.0.0
   get_it: ^7.2.0
 
   # Local Storage

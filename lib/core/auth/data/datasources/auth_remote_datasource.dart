@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import '../../../constants/app_const.dart';
-import '../../../errors/exceptions.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:storayge/core/errors/exceptions.dart';
 
+import '../../../constants/app_const.dart';
 import '../models/storayge_user_model.dart';
 
 abstract class IAuthRemoteDataSource {
@@ -85,10 +84,7 @@ class AuthRemoteDataSource implements IAuthRemoteDataSource {
     required String username,
   }) async {
     final resultUid = await firebaseAuth
-        .createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        )
+        .createUserWithEmailAndPassword(email: email, password: password)
         .then((user) => user.user!.uid);
     await firebaseFirestore.collection(FS_USER_COLLECTION).doc(resultUid).set({
       'uid': resultUid,

@@ -31,15 +31,19 @@ class MainView extends StatelessWidget {
               ],
               bottomNavigationBar: (currentIndex, onTap) {
                 return Container(
-                  height: 60,
+                  height: 110,
                   decoration: BoxDecoration(
                     color: Theme.of(context).bottomAppBarColor,
                     borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16),
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
                     ),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  padding: EdgeInsets.only(
+                      top: 14,
+                      left: 14,
+                      right: 14,
+                      bottom: MediaQuery.of(context).padding.bottom),
                   child: GNav(
                     padding: const EdgeInsets.symmetric(horizontal: 35),
                     tabBackgroundColor: Theme.of(context).cardColor,

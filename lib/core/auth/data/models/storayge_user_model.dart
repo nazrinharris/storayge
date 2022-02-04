@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-import '../../domain/entities/storayge_user.dart';
+import 'package:storayge/core/auth/domain/entities/storayge_user.dart';
 
 @HiveType(typeId: 0)
 // ignore: must_be_immutable
