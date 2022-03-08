@@ -1,3 +1,6 @@
+#Big Note:
+Currently working on another project, so I have to pause Storayge development for now. I would love to show the other project as well but it's with a client and is private (bummer). Anyhow, have a good day!
+
 # Storayge
 
 
